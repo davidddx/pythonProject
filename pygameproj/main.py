@@ -321,27 +321,16 @@ darkmap = Map(collidablegroup = pygame.sprite.Group(), noncollidablegroup = pyga
 plrx = 8;
 plry = 3;
 plr = Plr(plrpos = (plrx * 64, plry * 64), plrsurf = pygame.image.load(plrspriteloc))
+print("plr.plrpos: ", plr.rect)
 current_level = Level(currentmap = lightmap, plr = plr);
+plr.rect.x = current_level.getplrspawnx()
+plr.rect.y = current_level.getplrspawny()
+# print(plr.rect)
 current_map = current_level.currentmap
-
-
-camxpos = 0
-camypos = 0
-camvelocity = 0.5
-camonplayer = true
-cooldown = 1000;  # cooldown is in MILLISECONDS
-timelastpressed = 0;
-
-#changetomodenight is executed by pressing the "r" key.
-camoffsetxinst = 0;
-camoffsetyinst = 0;
-camxposinst = 0;
-camyposinst = 0;
 
 
 def updatescreenpos(thismap):
     spritegroup = thismap.fullspritegroup;
-
     for sprite in spritegroup:
         screen.blit(sprite.image, (sprite.rect.x, sprite.rect.y - 64*6))
 
