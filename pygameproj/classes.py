@@ -10,7 +10,6 @@ class Map():
         self.noncollidablegroup = noncollidablegroup;
         self.tmxdata = tmxdata;
         self.fullspritegroup = fullspritegroup
-        self.enemygroup = pygame.sprite.Group()
         self.tilelist = []
     def printallproperties(self):
         print("tilelist", self.tilelist);
@@ -28,6 +27,11 @@ class Tile(pygame.sprite.Sprite):
         self.tile_id = tile_id;
         self.collidable = collidable;
 
+class Door(pygame.sprite.Sprite):
+    def __init__(self, surface, pos):
+        pygame.sprite.Sprite.__init__(self);
+        self.image = surface
+        self.rect = self.image.get_rect(topleft = pos)
 
 class physics():
     def __init__(self, gravity, onground, plrxvel, jumppow):
@@ -95,8 +99,33 @@ class Plr(pygame.sprite.Sprite):
         if self.onground:
             self.physics.direction.y = self.physics.jumppow
 
+class Enemy(pygame.sprite.Sprite):
+    #pos is the enemy position
+    def __init__(self, surface, pos):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = surface
+        self.gravity = 0.5
+        self.direction = pygame.math.Vector2(-1,0);
+        self.jumppow = -15
+        self.rect = self.image.get_rect(topleft=pos);
+        self.onground = false
+        self.xvel = 4
+
+    def applygravity(self):
+        self.direction.y += self.gravity
+        self.rect.y += self.direction.y
+
+    def jump(self):
+        if self.onground:
+            self.direction.y = self.jumppow
+            self.onground = false
 
 
+
+
+
+    def update(self):
+        self.jump()
 
 
 class Level:
@@ -110,16 +139,34 @@ class Level:
         self.current_x = 0
         self.enemies = self.findenemies(currentmap)
         self.markers = self.findmarkers(currentmap)
+        self.timeplrlastcollidedwithenemy = 0
+        self.door = self.finddoor(currentmap)
+
+    def finddoor(self, mapinst):
+        door = 0
+        doorlayer = mapinst.tmxdata.get_layer_by_name("Door")
+        for door in doorlayer:
+            # print(dir(door))
+            # print(door.properties)
+            # print(door.parent)
+            if door.name == "door":
+
+                print("line 150 reached")
+                door = Door(surface = door.image, pos = (door.x, door.y))
+        return door
+
 
     def findenemies(self, mapinst):
-        enemylist = []
-        enemylayer = mapinst.tmxdata.get_layer_by_name("Enemies")
+        enemygroup = pygame.sprite.Group()
+        enemyimage = pygame.image.load(enemyspriteloc)
+        enemyspawnpointlayer = mapinst.tmxdata.get_layer_by_name("EnemySpawnPoints")
 
-        for aobject in enemylayer:
+        for aobject in enemyspawnpointlayer:
             print(dir(aobject))
-            enemylist.append(aobject)
+            thisenemy = Enemy(surface = enemyimage, pos = (aobject.x, aobject.y))
+            enemygroup.add(thisenemy)
 
-        return enemylist
+        return enemygroup
 
 # we will use the markers object.x and object.y property for logic and stuff
 #
@@ -127,12 +174,11 @@ class Level:
         markerlist = []
         markerlayer = mapinst.tmxdata.get_layer_by_name("Markers")
         for aobject in markerlayer:
-            markerlist.append(aobject)
+
             if aobject.name == "PlayerSpawnPoint":
                 self.plrspawnpoint.x = aobject.x
                 self.plrspawnpoint.y = aobject.y
-                # print("plrspawnpoint position: ", self.plrspawnpoint)
-            # print("dir(aobject): ", dir(aobject))
+            markerlist.append(aobject)
 
         return markerlist
 
@@ -186,31 +232,11 @@ class Level:
 
                 instmap.tilelist.append(tileinstance);
 
-        enemylayer = mapinst.tmxdata.get_layer_by_name("Enemies")
-        enemylist = []
-        for aobject in enemylayer:
-            print(dir(aobject))
-            tile_id = aobject.id
-            surf = aobject.image;
-            pos = (aobject.x,aobject.y)
-            collidable = "maybe"
-            tile_info = {
-                "pos": pos,
-                "surf": surf,
-                "groups": spritegroup,
-                "tile_id": tile_id,
-                "collidable": collidable
-            }
-            tileinst = Tile(**tile_info)
-            enemylist.append(tileinst)
-            instmap.tilelist.append(tileinst)
 
         instmap.noncollidablegroup.add(groupn);
         instmap.collidablegroup.add(groupc);
-        instmap.enemygroup.add(enemylist);
         instmap.fullspritegroup.add(groupn);
         instmap.fullspritegroup.add(groupc);
-        instmap.fullspritegroup.add(enemylist);
         return instmap;
 
     def get_player_on_ground(self):
@@ -232,9 +258,8 @@ class Level:
                 elif plrphysdirx > 0:
                     player.rect.right = sprite.rect.left
 
-#detect vertical movement collision
+#detect vertical movement collision for players and enemies
     def vertmovecoll(self):
-
         player = self.player;
         player.applygravity()
         for sprite in self.currentmap.collidablegroup.sprites():
@@ -246,24 +271,62 @@ class Level:
                 elif -player.physics.direction.y > 0:
                     player.rect.top = sprite.rect.bottom
                     player.physics.direction.y = 0;
+
         # THE REASON WHY I USE -player.physics.direction.y INSTEAD OF player.physics.direction.y
         #in pygame, the Y-axis is oriented from top to bottom,
         # so positive values in the Y-direction mean moving
         # down on the screen, while negative values mean moving up.
 
-    def checkenemycoll(self):
+    def checkplrenemycoll(self):
+        timenow = pygame.time.get_ticks()
         player = self.player
-        thismap = self.currentmap.enemygroup.sprites()
-        for sprite in thismap:
-            if sprite.rect.colliderect(player.rect):
+        cooldown = 3000; #planning to make invincibility 3 seconds
+        enemygroup = self.enemies.sprites()
+        for enemy in enemygroup:
+            if enemy.rect.colliderect(player.rect) and timenow - self.timeplrlastcollidedwithenemy >= cooldown:
                 #enemy collision now works
-                if player.rect.x <= sprite.rect.x:
-                    player.rect.x -= 128
-                else:
-                    player.rect.x += 128
+                print("enemy player collision has occured")
+                self.timeplrlastcollidedwithenemy = timenow
+                # if player.rect.x <= enemy.rect.x:
+                #     player.rect.x -= 128
+                # else:
+                #     player.rect.x += 128
 
+    def enemygroundcoll(self):
+        for enemy in self.enemies.sprites():
+            enemy.applygravity()
+            diry = enemy.direction.y
+            dirx = enemy.direction.x
+            for sprite in self.currentmap.collidablegroup.sprites():
+                if enemy.rect.colliderect(sprite.rect):
+                    if -diry < 0:
+                        enemy.rect.bottom = sprite.rect.top
+                        enemy.direction.y = 0
+                        enemy.onground = True
+                    elif -diry > 0:
+                        enemy.rect.top = sprite.rect.bottom
+                        enemy.direction.y = 0
 
+    def enemywallcoll(self):
+        for enemy in self.enemies.sprites():
+            dirx = enemy.direction.x
+            enemy.rect.x += enemy.direction.x * enemy.xvel
+            collidedwithrect = false
+            for sprite in self.currentmap.collidablegroup.sprites():
+                if enemy.rect.colliderect(sprite.rect):
+                    collidedwithrect = true
+                    if dirx < 0:
+                        enemy.rect.left = sprite.rect.right
+                        enemy.direction.x = 1
+                    elif dirx > 0:
+                        enemy.rect.right = sprite.rect.left
+                        enemy.direction.x = -1
 
+    def checkdoorplrcoll(self):
+        plr = self.player
+        door = self.door
+        if plr.rect.colliderect(door):
+            print("plr has collided with door")
 
     def scroller(self):
         player = self.player;
@@ -284,15 +347,26 @@ class Level:
     def updatetilepos(self, xscroll):
         for sprite in self.currentmap.fullspritegroup.sprites():
             sprite.rect.x += xscroll
+        for enemy in self.enemies.sprites():
+            enemy.rect.x+=xscroll
+        self.door.rect.x+=xscroll
+
+    def jumpenemy(self):
+        for enemy in self.enemies:
+            enemy.update()
 
 
     def run(self):
         #Level
         self.scroller();
         self.updatetilepos(self.world_shift)
-
         #PLAYER
         self.player.update(self.currentmap)
         self.horizontalmovecoll()
         self.vertmovecoll()
-        self.checkenemycoll()
+        self.checkplrenemycoll()
+        self.checkdoorplrcoll()
+        #Enemy
+        self.jumpenemy()
+        self.enemygroundcoll()
+        self.enemywallcoll()

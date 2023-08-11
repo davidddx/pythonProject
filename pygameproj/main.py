@@ -318,7 +318,7 @@ darkmap = Map(collidablegroup = pygame.sprite.Group(), noncollidablegroup = pyga
 
 
 
-plrx = 8;
+plrx = 18;
 plry = 3;
 plr = Plr(plrpos = (plrx * 64, plry * 64), plrsurf = pygame.image.load(plrspriteloc))
 print("plr.plrpos: ", plr.rect)
@@ -329,13 +329,16 @@ plr.rect.y = current_level.getplrspawny()
 current_map = current_level.currentmap
 
 
-def updatescreenpos(thismap):
-    spritegroup = thismap.fullspritegroup;
+def updatescreenpos(thislevel):
+    spritegroup = thislevel.currentmap.fullspritegroup;
+    enemygroup = thislevel.enemies
+    door = thislevel.door
     for sprite in spritegroup:
         screen.blit(sprite.image, (sprite.rect.x, sprite.rect.y - 64*6))
-
+    for enemy in enemygroup:
+        screen.blit(enemy.image, (enemy.rect.x, enemy.rect.y - 64*6))
     screen.blit(plr.image, (plr.rect.x, plr.rect.y - 64*6));
-
+    screen.blit(door.image, (door.rect.x, door.rect.y - 64*6))
 
 
 
@@ -354,7 +357,7 @@ while running:
             sys.exit();
     screen.fill((0,0,0));
 
-    updatescreenpos(current_map);
+    updatescreenpos(current_level);
 
     pygame.display.update();
 
