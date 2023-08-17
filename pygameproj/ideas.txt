@@ -1,0 +1,11 @@
+add archetypes that plr can choose in the beginning of game
+add abilities with cooldown for the future
+archetype ideas:
+    glide = player can double jump, is less affected by gravity, fast in air, and jumps slightly higher than average, but is very slow on ground, has 3 health
+    athlete = player can move slightly faster than average and jumps slightly higher than average, has 3 health
+    ninja = player is extremely fast with high jump and can double jump, but has 1 health
+    tank = player is slightly slow and jumps slightly lower than average, but cannot die to enemies
+    all-rounder = player does everything average
+
+
+
