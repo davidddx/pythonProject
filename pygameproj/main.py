@@ -24,8 +24,8 @@ globals.levelhandler = levelhandler()
 
 running = true;
 while running:
-    clock.tick(45) # makes max fps 45
-    print("fps: ", clock.get_fps())
+    clock.tick(10) # makes max fps 45
+    # print("fps: ", clock.get_fps())
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit();

@@ -10,11 +10,11 @@ class Map():
         self.collidablegroup = pygame.sprite.Group();
         self.noncollidablegroup = pygame.sprite.Group();
         self.tmxdata = tmxdata;
-        self.fullspritegroup = pygame.sprite.Group();
+        # self.fullspritegroup = pygame.sprite.Group();
         self.tilelist = []
     def printallproperties(self):
         print("tilelist", self.tilelist);
-        print("fullspritegroup", self.fullspritegroup);
+        # print("fullspritegroup", self.fullspritegroup);
         print("collidablegroup", self.collidablegroup);
         print("noncollidablegroup", self.noncollidablegroup);
         print("tmxdata", self.tmxdata);
@@ -24,11 +24,11 @@ class Map():
             tiles.kill()
         for tiles in self.noncollidablegroup:
             tiles.kill()
-        for tiles in self.fullspritegroup:
-            tiles.kill()
+        # for tiles in self.fullspritegroup:
+        #     tiles.kill()
         self.collidablegroup.empty()
         self.noncollidablegroup.empty()
-        self.fullspritegroup.empty()
+        # self.fullspritegroup.empty()
         del self.tmxdata
         self.tmxdata = None
         self.tilelist.clear()
@@ -62,7 +62,7 @@ class Plr(pygame.sprite.Sprite):
         self.image = plrsurf;
         self.rect = self.image.get_rect(topleft = plrpos);
         self.onground = false;
-        self.physics = physics(gravity = 1, onground = false, plrxvel = 30, jumppow = -32);
+        self.physics = physics(gravity = 10, onground = false, plrxvel = 180, jumppow = -128);
         self.facingright = true;
         self.jumpcounter = 0;
         self.timelastjump = 0;
@@ -70,7 +70,7 @@ class Plr(pygame.sprite.Sprite):
         self.numjumpsinair = 0
         self.timelastdashed = 0;
         self.defaultxvelocity = 15
-        self.dashfactor = 20
+        self.dashfactor = 180
         self.timelastran = 0
         self.ondash = false
         self.adjustcamerayfactor = 0
@@ -242,7 +242,6 @@ class Level:
         enemyspawnpointlayer = mapinst.tmxdata.get_layer_by_name("EnemySpawnPoints")
 
         for aobject in enemyspawnpointlayer:
-            print(dir(aobject))
             thisenemy = Enemy(surface = enemyimage, pos = (aobject.x, aobject.y))
             enemygroup.add(thisenemy)
 
@@ -255,14 +254,11 @@ class Level:
         for aobject in markerlayer:
             properties = aobject.properties
             objname = properties["name"]
-            print("objname: ", objname)
             if objname == "plrspawn":
                 self.setplrspawnpos(spawnpointx = aobject.x, spawnpointy = aobject.y)
             elif objname == "OutOfBounds":
                 self.oobpos.x = aobject.x
                 self.oobpos.y = aobject.y
-                print("self.oobpos.x: ", self.oobpos.x)
-                print("self.oobpos.y: ", self.oobpos.y)
             markerlist.append(aobject)
 
         return markerlist
@@ -272,7 +268,7 @@ class Level:
 
 #func below inits tiles and enemies
     def inittiles(self, mapinst):
-        mapinst.fullspritegroup.empty()
+        # mapinst.fullspritegroup.empty()
         mapinst.collidablegroup.empty()
         mapinst.noncollidablegroup.empty()
         instmap = mapinst
@@ -280,7 +276,8 @@ class Level:
         groupc = []
         groupn = []
         enemylist = []
-        spritegroup = mapinst.fullspritegroup;
+        collidablegroup = mapinst.collidablegroup
+        noncollidablegroup = mapinst.noncollidablegroup
         visiblelayers = mapinst.tmxdata.visible_layers
         for layer in visiblelayers:
             if not hasattr(layer, "data"):
@@ -294,12 +291,17 @@ class Level:
                 pos = (64*x, 64*y);
                 props = mapinst.tmxdata.get_tile_properties(x, y, layerindex)
                 tile_id = props["id"]
-                collidable = "no"
+                spritegroup = 0
                 if ((tile_id >= 4 and tile_id <= 7) or tile_id == 19 or tile_id == 18):
                     collidable = "yes"
+                    spritegroup = collidablegroup
+                else:
+                    collidable = "no"
+                    spritegroup = noncollidablegroup
 
-                print("props: ", props);
-                print("props(""id""): ", props["id"])
+
+                # print("props: ", props);
+                # print("props(""id""): ", props["id"])
                 # print("collidable?: ", collidable)
                 tile_info = {
                     "pos": pos,
@@ -319,8 +321,8 @@ class Level:
 
         instmap.noncollidablegroup.add(groupn);
         instmap.collidablegroup.add(groupc);
-        instmap.fullspritegroup.add(groupn);
-        instmap.fullspritegroup.add(groupc);
+        # instmap.fullspritegroup.add(groupn);
+        # instmap.fullspritegroup.add(groupc);
         return instmap;
 
 #detect movement, wall, ground, and door collision for players and enemies
@@ -429,7 +431,9 @@ class Level:
             self.world_shift = 0
             self.player.physics.plrxvelocity = plrxvel
     def updatetilepos(self, xscroll):
-        for sprite in self.currentmap.fullspritegroup.sprites():
+        for sprite in self.currentmap.collidablegroup.sprites():
+            sprite.rect.x += xscroll
+        for sprite in self.currentmap.noncollidablegroup.sprites():
             sprite.rect.x += xscroll
         for enemy in self.enemies.sprites():
             enemy.rect.x+=xscroll
@@ -470,18 +474,19 @@ class Level:
         self.markers = []
 class levelhandler:
     def __init__(self):
-        self.levelnum = 0
-        self.nextlevel = 0
-        self.worldnum = 0
-        self.maxlevelnum = 2
+        self.levelnum = globals.savedlevelnum
+        self.nextlevel = globals.savedlevelnum + 1
+        self.worldnum = globals.savedworldnum
         self.changinglevel = false
         self.tmxdata = 0
         self.nextmap = 0
         self.tmxdatalocs = [
             cwd + '/Maps/testmap/testmappygame1.tmx',
+            cwd + '/Maps/testmap/level1.tmx',
             cwd + '/Maps/testmap/testmappygame2.tmx',
             cwd + '/Maps/testmap/testmappygame3.tmx',
         ]
+        self.maxlevelnum = len(self.tmxdatalocs)
         self.currentlevel = self.initlevel(levelnum = self.levelnum)
     def initlevel(self, levelnum):
         tmxdata = load_pygame(self.tmxdatalocs[self.levelnum])
@@ -540,13 +545,18 @@ class levelhandler:
         self.currentlevel.run();
         screen.fill((0, 0, 0));
         thislevel = self.currentlevel
-        spritegroup = thislevel.currentmap.fullspritegroup;
+        # spritegroup = thislevel.currentmap.fullspritegroup;
+        collgroup = thislevel.currentmap.collidablegroup
+        noncollgroup = thislevel.currentmap.noncollidablegroup
         enemygroup = thislevel.enemies
         otherobjgroup = thislevel.nontiledobjects
         plr = thislevel.player
         door = thislevel.door
-        for sprite in spritegroup:
+        for sprite in collgroup:
             screen.blit(sprite.image, (sprite.rect.x, sprite.rect.y + adjustcamerayfactor))
+        for sprite in noncollgroup:
+            screen.blit(sprite.image, (sprite.rect.x, sprite.rect.y + adjustcamerayfactor))
+
         for enemy in enemygroup:
             screen.blit(enemy.image, (enemy.rect.x, enemy.rect.y + adjustcamerayfactor))
         for obj in otherobjgroup:
