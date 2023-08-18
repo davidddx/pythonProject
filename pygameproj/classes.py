@@ -78,6 +78,7 @@ class Plr(pygame.sprite.Sprite):
         self.alreadypressedq = false
         self.alreadypressede = false
         self.isOob = false
+        self.lives = 5
 
     def update(self, currmap):
         if self.onground:
@@ -283,12 +284,13 @@ class Level:
         noncollidablegroup = mapinst.noncollidablegroup
         visiblelayers = mapinst.tmxdata.visible_layers
         for layer in visiblelayers:
+            # print("hasattr(layer, 'data'", hasattr(layer, "data"))
             if not hasattr(layer, "data"):
                 continue;
 
             layerindex+=1;
             # print("layer.name: ", layer.name);
-            # print("layer.index: ", lightlayerindex);
+            # print("layerindex: ", layerindex);
 
             for x,y,surf in layer.tiles():
                 pos = (64*x, 64*y);
@@ -367,7 +369,8 @@ class Level:
         for enemy in enemygroup:
             if enemy.rect.colliderect(player.rect) and timenow - self.timeplrlastcollidedwithenemy >= cooldown:
                 #enemy collision now works
-                print("enemy player collision has occured")
+                self.player.lives -= 1
+                print("enemy player collision has occured. plr has lost 1 life. plr lives are now ", self.player.lives)
                 self.timeplrlastcollidedwithenemy = timenow
                 # if player.rect.x <= enemy.rect.x:
                 #     player.rect.x -= 128
@@ -414,13 +417,14 @@ class Level:
         alreadycollided = self.doorcollisionoccured
         if plr.rect.colliderect(door) and not alreadycollided:
             self.doorcollisionoccured = true
-            print("plr has collided with door")
+            # print("plr has collided with door")
             globals.levelhandler.changeleveltonext()
 
-#oob logic coming soon
+#oob logic
     def checkifplroob(self):
         if self.player.rect.y >= self.oobpos.y:
-            print("player is out of bounds")
+            self.player.lives -= 1
+            print("player is out of bounds, has lost one life. player.lives is now ", self.player.lives)
             self.player.isOob = true
 
 # level scroller and tile position updates
@@ -463,9 +467,10 @@ class levelhandler:
             cwd + '/Maps/testmap/level1.tmx',
             cwd + '/Maps/testmap/testmappygame2.tmx',
             cwd + '/Maps/testmap/testmappygame3.tmx',
-        ]
+        ] #contains locations of all map data
         self.maxlevelnum = len(self.tmxdatalocs)
         self.currentlevel = self.initlevel(levelnum = self.levelnum)
+        self.plrlives = self.currentlevel.player.lives #need to add gui element to plr lives
     def initlevel(self, levelnum):
         tmxdata = load_pygame(self.tmxdatalocs[self.levelnum])
         map = Map(tmxdata = tmxdata)
@@ -487,6 +492,8 @@ class levelhandler:
 
 #returns the next level
     def changeleveltonext(self):
+        self.plrlives = self.currentlevel.player.lives
+        print(self.plrlives)
         self.currentlevel.deletelevel()
         del self.currentlevel
         self.currentlevel = 0
@@ -495,6 +502,7 @@ class levelhandler:
         plrx = 18;
         plry = 3;
         plr = Plr(plrpos=(plrx * 64, plry * 64), plrsurf=pygame.image.load(plrspriteloc))
+        plr.lives = self.plrlives
         self.tmxdata = load_pygame(self.tmxdatalocs[self.levelnum])
         tmxdata = self.tmxdata
         map = Map(tmxdata = tmxdata)
@@ -503,16 +511,25 @@ class levelhandler:
     def checkrestartlevel(self):
         if self.currentlevel.player.isOob == false:
             return None
+        self.plrlives = self.currentlevel.player.lives
         self.currentlevel.deletelevel()
         del self.currentlevel
         levelnum = self.levelnum
         plrx = 18;
         plry = 3;
         plr = Plr(plrpos=(plrx * 64, plry * 64), plrsurf=pygame.image.load(plrspriteloc))
+        plr.lives = self.plrlives
         self.tmxdata = load_pygame(self.tmxdatalocs[levelnum])
         tmxdata = self.tmxdata
         map = Map(tmxdata=tmxdata)
         self.currentlevel = Level(currentmap=map, plr=plr)
+    def checkifgameover(self, plrlives):
+        if not plrlives <= 0:
+            return None
+
+        print("game over, you have lost all your lives. Exiting the application...")
+        pygame.quit()
+        sys.exit()
 
 #levelhandler update function and render function just puts everything on the screen
 
@@ -555,7 +572,6 @@ class levelhandler:
             objy = obj.rect.y
             if viewleft <= objx <= viewright and viewup <= objy <= viewdown:  # pygame has upward as negative so the inequality is up <= y <= down instead of down <= y <= up
                 screen.blit(obj.image, (objx + adjcamx, obj.rect.y + adjustcamerayfactor))
-
     def update(self):
         screen = globals.screen
         adjustcamerayfactor = -(self.currentlevel.player.rect.y - self.currentlevel.player.adjustcamerayfactor)
@@ -565,3 +581,4 @@ class levelhandler:
         thislevel = self.currentlevel
         self.render(thislevel = thislevel, screen = screen, adjustcamerayfactor = adjustcamerayfactor, adjcamx = adjustcameraxfactor)
         self.checkrestartlevel()
+        self.checkifgameover(self.currentlevel.player.lives)

@@ -1,5 +1,5 @@
 
 levelhandler = 0
-savedlevelnum = 1
+savedlevelnum = 0
 savedworldnum = 0
 screen = 0
