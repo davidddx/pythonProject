@@ -62,7 +62,7 @@ class Plr(pygame.sprite.Sprite):
         self.image = plrsurf;
         self.rect = self.image.get_rect(topleft = plrpos);
         self.onground = false;
-        self.physics = physics(gravity = 10, onground = false, plrxvel = 180, jumppow = -128);
+        self.physics = physics(gravity = 1, onground = false, plrxvel = 128, jumppow = -30);
         self.facingright = true;
         self.jumpcounter = 0;
         self.timelastjump = 0;
@@ -70,7 +70,7 @@ class Plr(pygame.sprite.Sprite):
         self.numjumpsinair = 0
         self.timelastdashed = 0;
         self.defaultxvelocity = 15
-        self.dashfactor = 180
+        self.dashfactor = 20
         self.timelastran = 0
         self.ondash = false
         self.adjustcamerayfactor = 0
@@ -180,6 +180,7 @@ class Enemy(pygame.sprite.Sprite):
     def __init__(self, surface, pos):
         pygame.sprite.Sprite.__init__(self)
         self.image = surface
+        self.enemyisinrange = false
         self.gravity = 0.5
         self.direction = pygame.math.Vector2(-1,0);
         self.jumppow = -15
@@ -196,7 +197,8 @@ class Enemy(pygame.sprite.Sprite):
     def delete(self):
         self.kill()
     def update(self):
-        self.jump()
+        if self.enemyisinrange:
+            self.jump()
 class Level:
 
     def __init__(self, currentmap, plr):
@@ -551,14 +553,37 @@ class levelhandler:
         enemygroup = thislevel.enemies
         otherobjgroup = thislevel.nontiledobjects
         plr = thislevel.player
+        plrx = plr.rect.x
+        plry = plr.rect.y
         door = thislevel.door
+        extrarendering = 64 * 6
+        viewleft = plrx - screenwidth / 2 - extrarendering
+        viewright = plrx + screenwidth / 2 + extrarendering
+        viewup = plry - screenheight / 2 - extrarendering
+        viewdown = plry + screenheight/2 + extrarendering
+
         for sprite in collgroup:
-            screen.blit(sprite.image, (sprite.rect.x, sprite.rect.y + adjustcamerayfactor))
+            spritex = sprite.rect.x
+            spritey = sprite.rect.y
+            if viewleft <= spritex <= viewright and viewup <= spritey <= viewdown:
+                screen.blit(sprite.image, (sprite.rect.x, sprite.rect.y + adjustcamerayfactor))
         for sprite in noncollgroup:
-            screen.blit(sprite.image, (sprite.rect.x, sprite.rect.y + adjustcamerayfactor))
+            spritex = sprite.rect.x
+            spritey = sprite.rect.y
+            if viewleft <= spritex <= viewright and viewup <= spritey <= viewdown:
+                screen.blit(sprite.image, (sprite.rect.x, sprite.rect.y + adjustcamerayfactor))
+
 
         for enemy in enemygroup:
-            screen.blit(enemy.image, (enemy.rect.x, enemy.rect.y + adjustcamerayfactor))
+            enemyx = enemy.rect.x
+            enemyy = enemy.rect.y
+            if viewleft <= enemyx <= viewright and viewup <= enemyy <= viewdown:
+                screen.blit(enemy.image, (enemy.rect.x, enemy.rect.y + adjustcamerayfactor))
+                continue
+            enemy.enemyisinrange
         for obj in otherobjgroup:
-            screen.blit(obj.image, (obj.rect.x, obj.rect.y + adjustcamerayfactor))
+            objx = obj.rect.x
+            objy = obj.rect.y
+            if viewleft <= objx <= viewright and viewup <= objy <= viewdown: #pygame has upward as negative so the inequality is up <= y <= down instead of down <= y <= up
+                screen.blit(obj.image, (objx, obj.rect.y + adjustcamerayfactor))
         self.checkrestartlevel()
