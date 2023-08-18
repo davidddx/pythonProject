@@ -62,7 +62,7 @@ class Plr(pygame.sprite.Sprite):
         self.image = plrsurf;
         self.rect = self.image.get_rect(topleft = plrpos);
         self.onground = false;
-        self.physics = physics(gravity = 1, onground = false, plrxvel = 128, jumppow = -30);
+        self.physics = physics(gravity = 1, onground = false, plrxvel = 30, jumppow = -30);
         self.facingright = true;
         self.jumpcounter = 0;
         self.timelastjump = 0;
@@ -70,10 +70,11 @@ class Plr(pygame.sprite.Sprite):
         self.numjumpsinair = 0
         self.timelastdashed = 0;
         self.defaultxvelocity = 15
-        self.dashfactor = 20
+        self.dashfactor = 30
         self.timelastran = 0
         self.ondash = false
         self.adjustcamerayfactor = 0
+        self.adjustcameraxfactor = screenwidth / 2
         self.alreadypressedq = false
         self.alreadypressede = false
         self.isOob = false
@@ -92,7 +93,8 @@ class Plr(pygame.sprite.Sprite):
         timenow = pygame.time.get_ticks();
         dashfinishcd = 200
         if timenow - timelastdashed >= dashfinishcd:
-            self.defaultxvelocity -= dashfactor
+            print("dash has finished")
+            self.physics.plrxvelocity -= dashfactor
             self.ondash = false
 
     def inputmap(self):
@@ -142,8 +144,9 @@ class Plr(pygame.sprite.Sprite):
         if key[pygame.K_SPACE] and timenow - timelastdashed >= dashcooldown:
             #space causes dash
             self.ondash = true
-            self.defaultxvelocity += self.dashfactor
+            self.physics.plrxvelocity += self.dashfactor
             self.timelastdashed = timenow
+
         if key[pygame.K_ESCAPE]:
             pygame.quit();
             sys.exit();
@@ -200,13 +203,11 @@ class Enemy(pygame.sprite.Sprite):
         if self.enemyisinrange:
             self.jump()
 class Level:
-
     def __init__(self, currentmap, plr):
         self.levelcurrentlychanging = false
         self.currentmap = self.inittiles(currentmap);
         self.playeronground = false;
         self.player = plr;
-        self.world_shift = 0
         self.current_x = 0
         self.oobpos = pygame.math.Vector2(0,0)
         self.enemies = self.findenemies(currentmap)
@@ -249,7 +250,7 @@ class Level:
 
         return enemygroup
 
-#markers used for spawning and some logic
+#markers used for spawning plrs/enemys and setting oob
     def findmarkers(self, mapinst):
         markerlist = []
         markerlayer = mapinst.tmxdata.get_layer_by_name("Markers")
@@ -388,6 +389,9 @@ class Level:
                         enemy.direction.y = 0
     def enemywallcoll(self):
         for enemy in self.enemies.sprites():
+            if not enemy.enemyisinrange:
+                continue
+
             dirx = enemy.direction.x
             enemy.rect.x += enemy.direction.x * enemy.xvel
             collidedwithrect = false
@@ -401,6 +405,9 @@ class Level:
                         enemy.rect.right = sprite.rect.left
 
                         enemy.direction.x = -1
+    def updateenemies(self):
+        for enemy in self.enemies:
+            enemy.update()
     def checkdoorplrcoll(self):
         plr = self.player
         door = self.door
@@ -417,40 +424,9 @@ class Level:
             self.player.isOob = true
 
 # level scroller and tile position updates
-    def scrollerx(self):
-        player = self.player;
-        plrxvel = player.defaultxvelocity
-        playerx = player.rect.centerx
-        directionx = player.physics.direction.x
-        mapscrollconst = 2.5
-        if playerx < screenwidth/mapscrollconst and directionx < 0:
-            self.world_shift = plrxvel
-            self.player.physics.plrxvelocity = 0;
-        elif playerx > screenwidth - (screenwidth / mapscrollconst) and directionx > 0:
-            self.world_shift = -plrxvel
-            self.player.physics.plrxvelocity = 0
-        else:
-            self.world_shift = 0
-            self.player.physics.plrxvelocity = plrxvel
-    def updatetilepos(self, xscroll):
-        for sprite in self.currentmap.collidablegroup.sprites():
-            sprite.rect.x += xscroll
-        for sprite in self.currentmap.noncollidablegroup.sprites():
-            sprite.rect.x += xscroll
-        for enemy in self.enemies.sprites():
-            enemy.rect.x+=xscroll
-        self.door.rect.x+=xscroll
-
-#updates all the enemies in the level
-    def updateenemies(self):
-        for enemy in self.enemies:
-            enemy.update()
 
 #run function is what the level should check/do every frame while running
     def run(self):
-        #Level
-        self.scrollerx();
-        self.updatetilepos(self.world_shift)
         #PLAYER
         self.player.update(self.currentmap)
         self.horizontalmovecoll()
@@ -497,8 +473,6 @@ class levelhandler:
         level = Level(currentmap = map, plr = plr)
         return level
 
-
-
 #will add stuff to getmaxlevelnum function when i have world and level organization situated
     def getmaxlevelnum(self):
         thismaxlevelnum = 0
@@ -540,14 +514,9 @@ class levelhandler:
         map = Map(tmxdata=tmxdata)
         self.currentlevel = Level(currentmap=map, plr=plr)
 
-#levelhandler update function just puts everything on the screen
-    def update(self):
-        screen = globals.screen
-        adjustcamerayfactor = -(self.currentlevel.player.rect.y - self.currentlevel.player.adjustcamerayfactor)
-        self.currentlevel.run();
-        screen.fill((0, 0, 0));
-        thislevel = self.currentlevel
-        # spritegroup = thislevel.currentmap.fullspritegroup;
+#levelhandler update function and render function just puts everything on the screen
+
+    def render(self, thislevel, screen, adjustcamerayfactor, adjcamx):
         collgroup = thislevel.currentmap.collidablegroup
         noncollgroup = thislevel.currentmap.noncollidablegroup
         enemygroup = thislevel.enemies
@@ -560,30 +529,39 @@ class levelhandler:
         viewleft = plrx - screenwidth / 2 - extrarendering
         viewright = plrx + screenwidth / 2 + extrarendering
         viewup = plry - screenheight / 2 - extrarendering
-        viewdown = plry + screenheight/2 + extrarendering
+        viewdown = plry + screenheight / 2 + extrarendering
 
         for sprite in collgroup:
             spritex = sprite.rect.x
             spritey = sprite.rect.y
             if viewleft <= spritex <= viewright and viewup <= spritey <= viewdown:
-                screen.blit(sprite.image, (sprite.rect.x, sprite.rect.y + adjustcamerayfactor))
+                screen.blit(sprite.image, (sprite.rect.x + adjcamx, sprite.rect.y + adjustcamerayfactor))
         for sprite in noncollgroup:
             spritex = sprite.rect.x
             spritey = sprite.rect.y
             if viewleft <= spritex <= viewright and viewup <= spritey <= viewdown:
-                screen.blit(sprite.image, (sprite.rect.x, sprite.rect.y + adjustcamerayfactor))
-
+                screen.blit(sprite.image, (sprite.rect.x + adjcamx, sprite.rect.y + adjustcamerayfactor))
 
         for enemy in enemygroup:
             enemyx = enemy.rect.x
             enemyy = enemy.rect.y
             if viewleft <= enemyx <= viewright and viewup <= enemyy <= viewdown:
-                screen.blit(enemy.image, (enemy.rect.x, enemy.rect.y + adjustcamerayfactor))
-                continue
-            enemy.enemyisinrange
+                enemy.enemyisinrange = true
+                screen.blit(enemy.image, (enemy.rect.x + adjcamx, enemy.rect.y + adjustcamerayfactor))
+            else:
+                enemy.enemyisinrange = false
         for obj in otherobjgroup:
             objx = obj.rect.x
             objy = obj.rect.y
-            if viewleft <= objx <= viewright and viewup <= objy <= viewdown: #pygame has upward as negative so the inequality is up <= y <= down instead of down <= y <= up
-                screen.blit(obj.image, (objx, obj.rect.y + adjustcamerayfactor))
+            if viewleft <= objx <= viewright and viewup <= objy <= viewdown:  # pygame has upward as negative so the inequality is up <= y <= down instead of down <= y <= up
+                screen.blit(obj.image, (objx + adjcamx, obj.rect.y + adjustcamerayfactor))
+
+    def update(self):
+        screen = globals.screen
+        adjustcamerayfactor = -(self.currentlevel.player.rect.y - self.currentlevel.player.adjustcamerayfactor)
+        adjustcameraxfactor = -(self.currentlevel.player.rect.x - self.currentlevel.player.adjustcameraxfactor)
+        self.currentlevel.run();
+        screen.fill((0, 0, 0));
+        thislevel = self.currentlevel
+        self.render(thislevel = thislevel, screen = screen, adjustcamerayfactor = adjustcamerayfactor, adjcamx = adjustcameraxfactor)
         self.checkrestartlevel()
