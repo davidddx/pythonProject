@@ -59,6 +59,11 @@ class physics():
 class Plr(pygame.sprite.Sprite):
     def __init__(self, plrpos, plrsurf):
         pygame.sprite.Sprite.__init__(self);
+        self.animating = true
+        self.spritelist = []
+        self.spritelist.append(plrsurf)
+        self.spritelist.append(pygame.image.load(enemyspriteloc))
+        self.currentspriteidx = 0
         self.image = plrsurf;
         self.rect = self.image.get_rect(topleft = plrpos);
         self.onground = false;
@@ -83,7 +88,13 @@ class Plr(pygame.sprite.Sprite):
     def update(self, currmap):
         if self.onground:
             self.numberjumpsinair = 0;
-
+        #code from line 90-95 is animation logic that i will set in the future after i make a definitive player sprite
+        if self.animating == true:
+            print("animating")
+            self.currentspriteidx+=0.5
+            if self.currentspriteidx >= len(self.spritelist):
+                self.currentspriteidx = 0
+            self.image = self.spritelist[int(self.currentspriteidx)]
         self.inputmap()
         self.checkifdashdone(timelastdashed = self.timelastdashed, dashfactor = self.dashfactor) #dashfactor is how much player's x velocity increases on dash
 
