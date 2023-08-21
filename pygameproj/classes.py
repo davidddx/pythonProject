@@ -62,7 +62,17 @@ class Plr(pygame.sprite.Sprite):
         self.animating = true
         self.spritelist = []
         self.spritelist.append(plrsurf)
-        self.spritelist.append(pygame.image.load(enemyspriteloc))
+        self.spritelist.append(pygame.image.load(cwd + '/tiles/plrjumpframe0.5.png'))
+        self.spritelist.append(pygame.image.load(cwd + '/tiles/plrjumpframe1.png'))
+        self.spritelist.append(pygame.image.load(cwd + '/tiles/plrjumpframe1.5.png'))
+        self.spritelist.append(pygame.image.load(cwd + '/tiles/plrjumpframe2.png'))
+        self.spritelist.append(pygame.image.load(cwd + '/tiles/plrjumpframe2.5.png'))
+        self.spritelist.append(pygame.image.load(cwd + '/tiles/plrjumpframe3.png'))
+        self.spritelist.append(pygame.image.load(cwd + '/tiles/plrjumpframe3.5.png'))
+        self.spritelist.append(pygame.image.load(cwd + '/tiles/plrjumpframe4.png'))
+        self.spritelist.append(pygame.image.load(cwd + '/tiles/plrjumpframe4.5.png'))
+        self.spritelist.append(pygame.image.load(cwd + '/tiles/plrjumpframe5.png'))
+
         self.currentspriteidx = 0
         self.image = plrsurf;
         self.rect = self.image.get_rect(topleft = plrpos);
@@ -88,15 +98,31 @@ class Plr(pygame.sprite.Sprite):
     def update(self, currmap):
         if self.onground:
             self.numberjumpsinair = 0;
-        #code from line 90-95 is animation logic that i will set in the future after i make a definitive player sprite
-        if self.animating == true:
-            print("animating")
-            self.currentspriteidx+=0.5
-            if self.currentspriteidx >= len(self.spritelist):
-                self.currentspriteidx = 0
-            self.image = self.spritelist[int(self.currentspriteidx)]
+        self.animatejump()
         self.inputmap()
         self.checkifdashdone(timelastdashed = self.timelastdashed, dashfactor = self.dashfactor) #dashfactor is how much player's x velocity increases on dash
+
+    def animatejump(self):
+        if self.animating == true:
+            # print("animating")
+            idxstep = 1
+            self.currentspriteidx+=idxstep
+            self.image = self.spritelist[int(self.currentspriteidx)]
+            if self.currentspriteidx >= len(self.spritelist) - idxstep:
+                self.animating = false
+                self.currentspriteidx = 0
+            if not self.facingright:
+                self.image = pygame.transform.flip(self.image, true, false)
+        else:
+            if self.onground:
+
+                self.image = self.spritelist[0] #change to 0 when back on ground
+            else:
+                self.image = self.spritelist[len(self.spritelist) - 1]
+            if not self.facingright:
+                self.image = pygame.transform.flip(self.image, true, false)
+
+
 
 #function restores plr to speed after dashed
     def checkifdashdone(self, timelastdashed, dashfactor):
@@ -105,7 +131,7 @@ class Plr(pygame.sprite.Sprite):
         timenow = pygame.time.get_ticks();
         dashfinishcd = 200
         if timenow - timelastdashed >= dashfinishcd:
-            print("dash has finished")
+            # print("dash has finished")
             self.physics.plrxvelocity -= dashfactor
             self.ondash = false
 
@@ -169,6 +195,7 @@ class Plr(pygame.sprite.Sprite):
     def jump(self, cooldown, timenow, timelastpressed):
         #jump function assures doublejump capability and platform hanging when below platform block
         if self.onground:
+            self.animating = true;
             self.numjumpsinair = 1
             self.physics.plryvelocity = self.physics.jumppow
             self.physics.direction.y = self.physics.jumppow
@@ -184,6 +211,8 @@ class Plr(pygame.sprite.Sprite):
 
         elif self.numjumpsinair < 2 and self.onground == false:
             if timenow - timelastpressed >= cooldown:
+                self.animating = true
+                self.animatejump()
                 self.numjumpsinair+=1
                 self.physics.plryvelocity = self.physics.jumppow
                 self.physics.direction.y = self.physics.jumppow
