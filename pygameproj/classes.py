@@ -59,7 +59,8 @@ class physics():
 class Plr(pygame.sprite.Sprite):
     def __init__(self, plrpos, plrsurf):
         pygame.sprite.Sprite.__init__(self);
-        self.animating = true
+        self.animatingjump = false
+        self.jumpanimreversed = true
         self.spritelist = []
         self.spritelist.append(plrsurf)
         self.spritelist.append(pygame.image.load(cwd + '/tiles/plrjumpframe0.5.png'))
@@ -95,32 +96,48 @@ class Plr(pygame.sprite.Sprite):
         self.isOob = false
         self.lives = 5
 
+
     def update(self, currmap):
         if self.onground:
             self.numberjumpsinair = 0;
-        self.animatejump()
+        self.animate()
         self.inputmap()
         self.checkifdashdone(timelastdashed = self.timelastdashed, dashfactor = self.dashfactor) #dashfactor is how much player's x velocity increases on dash
 
-    def animatejump(self):
-        if self.animating == true:
+    def animate(self):
+        justswitched = false
+        if self.animatingjump == true:
             # print("animating")
-            idxstep = 1
-            self.currentspriteidx+=idxstep
-            self.image = self.spritelist[int(self.currentspriteidx)]
-            if self.currentspriteidx >= len(self.spritelist) - idxstep:
-                self.animating = false
-                self.currentspriteidx = 0
-            if not self.facingright:
-                self.image = pygame.transform.flip(self.image, true, false)
+            if self.jumpanimreversed:
+                idxstep = 1
+                self.currentspriteidx+=idxstep
+                self.image = self.spritelist[int(self.currentspriteidx)]
+                if self.currentspriteidx >= len(self.spritelist) - idxstep:
+                    self.animatingjump = false
+                    self.jumpanimreversed = true
+                    justswitched = true
+                if not self.facingright:
+                    self.image = pygame.transform.flip(self.image, true, false)
         else:
+            if justswitched:
+                return
             if self.onground:
+                currentspriteidx = self.currentspriteidx
+                if currentspriteidx > 0:
+                    idxstep = 1
+                    self.currentspriteidx -= idxstep
+                    self.image = self.spritelist[int(self.currentspriteidx)] #change to 0 when back on ground
+                    if not self.facingright:
+                        self.image = pygame.transform.flip(self.image, true, false)
+                else:
+                    self.jumpanimreversed = true
 
-                self.image = self.spritelist[0] #change to 0 when back on ground
             else:
-                self.image = self.spritelist[len(self.spritelist) - 1]
-            if not self.facingright:
-                self.image = pygame.transform.flip(self.image, true, false)
+                currentspriteidx = len(self.spritelist) - 1
+                self.image = self.spritelist[currentspriteidx]
+                self.currentspriteidx = currentspriteidx
+                if not self.facingright:
+                    self.image = pygame.transform.flip(self.image, true, false)
 
 
 
@@ -195,7 +212,7 @@ class Plr(pygame.sprite.Sprite):
     def jump(self, cooldown, timenow, timelastpressed):
         #jump function assures doublejump capability and platform hanging when below platform block
         if self.onground:
-            self.animating = true;
+            self.animatingjump = true;
             self.numjumpsinair = 1
             self.physics.plryvelocity = self.physics.jumppow
             self.physics.direction.y = self.physics.jumppow
@@ -211,8 +228,6 @@ class Plr(pygame.sprite.Sprite):
 
         elif self.numjumpsinair < 2 and self.onground == false:
             if timenow - timelastpressed >= cooldown:
-                self.animating = true
-                self.animatejump()
                 self.numjumpsinair+=1
                 self.physics.plryvelocity = self.physics.jumppow
                 self.physics.direction.y = self.physics.jumppow
