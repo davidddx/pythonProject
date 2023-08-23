@@ -61,18 +61,36 @@ class Plr(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self);
         self.animatingjump = false
         self.jumpanimreversed = true
-        self.spritelist = []
-        self.spritelist.append(plrsurf)
-        self.spritelist.append(pygame.image.load(cwd + '/tiles/plrjumpframe0.5.png'))
-        self.spritelist.append(pygame.image.load(cwd + '/tiles/plrjumpframe1.png'))
-        self.spritelist.append(pygame.image.load(cwd + '/tiles/plrjumpframe1.5.png'))
-        self.spritelist.append(pygame.image.load(cwd + '/tiles/plrjumpframe2.png'))
-        self.spritelist.append(pygame.image.load(cwd + '/tiles/plrjumpframe2.5.png'))
-        self.spritelist.append(pygame.image.load(cwd + '/tiles/plrjumpframe3.png'))
-        self.spritelist.append(pygame.image.load(cwd + '/tiles/plrjumpframe3.5.png'))
-        self.spritelist.append(pygame.image.load(cwd + '/tiles/plrjumpframe4.png'))
-        self.spritelist.append(pygame.image.load(cwd + '/tiles/plrjumpframe4.5.png'))
-        self.spritelist.append(pygame.image.load(cwd + '/tiles/plrjumpframe5.png'))
+        self.jumpanimlist = []
+        self.idleanim = plrsurf
+        self.jumpanimlist.append(self.idleanim)
+        self.jumpanimlist.append(pygame.image.load(cwd + '/tiles/plrjumpframe0.5.png'))
+        self.jumpanimlist.append(pygame.image.load(cwd + '/tiles/plrjumpframe1.png'))
+        self.jumpanimlist.append(pygame.image.load(cwd + '/tiles/plrjumpframe1.5.png'))
+        self.jumpanimlist.append(pygame.image.load(cwd + '/tiles/plrjumpframe2.png'))
+        self.jumpanimlist.append(pygame.image.load(cwd + '/tiles/plrjumpframe2.5.png'))
+        self.jumpanimlist.append(pygame.image.load(cwd + '/tiles/plrjumpframe3.png'))
+        self.jumpanimlist.append(pygame.image.load(cwd + '/tiles/plrjumpframe3.5.png'))
+        self.jumpanimlist.append(pygame.image.load(cwd + '/tiles/plrjumpframe4.png'))
+        self.jumpanimlist.append(pygame.image.load(cwd + '/tiles/plrjumpframe4.5.png'))
+        self.plrjumpapex = pygame.image.load(cwd + '/tiles/plrjumpframe5.png')
+        self.jumpanimlist.append(self.plrjumpapex)
+        self.djanimlist = []
+        self.animatingdj = false;
+        self.djanimreversed = false;
+        self.djlistidx = 0;
+        self.djanimlist.append(self.plrjumpapex)
+        self.djanimlist.append(pygame.image.load(cwd + '/tiles/plrdjframe1.png'))
+        self.djanimlist.append(pygame.image.load(cwd + '/tiles/djframe2.png'))
+        self.finishedlandanim = false;
+        self.landanimidx = 0;
+        self.landanimlist = []
+        self.landanimlist.append(pygame.image.load(cwd + '/tiles/plrlandframe1.png'))
+        self.landanimlist.append(pygame.image.load(cwd + '/tiles/plrlandframe2.png'))
+        self.landanimlist.append(pygame.image.load(cwd + '/tiles/plrlandframe3.png'))
+        self.landanimlist.append(pygame.image.load(cwd + '/tiles/plrlandframe4.png'))
+        self.landanimlist.append(pygame.image.load(cwd + '/tiles/plrlandframe5.png'))
+        self.landanimlist.append(pygame.image.load(cwd + '/tiles/plrlandframe6.png'))
 
         self.currentspriteidx = 0
         self.image = plrsurf;
@@ -103,41 +121,87 @@ class Plr(pygame.sprite.Sprite):
         self.animate()
         self.inputmap()
         self.checkifdashdone(timelastdashed = self.timelastdashed, dashfactor = self.dashfactor) #dashfactor is how much player's x velocity increases on dash
-
     def animate(self):
+        self.animatejump();
+        self.animatedj();
+        # self.animatewalk();
+    def animatejump(self):
         justswitched = false
         if self.animatingjump == true:
             # print("animating")
             if self.jumpanimreversed:
                 idxstep = 1
                 self.currentspriteidx+=idxstep
-                self.image = self.spritelist[int(self.currentspriteidx)]
-                if self.currentspriteidx >= len(self.spritelist) - idxstep:
+                self.image = self.jumpanimlist[int(self.currentspriteidx)]
+                if self.currentspriteidx >= len(self.jumpanimlist) - idxstep:
                     self.animatingjump = false
                     self.jumpanimreversed = true
+                    self.finishedlandanim = false;
                     justswitched = true
                 if not self.facingright:
                     self.image = pygame.transform.flip(self.image, true, false)
         else:
             if justswitched:
-                return
+                return None;
             if self.onground:
-                currentspriteidx = self.currentspriteidx
-                if currentspriteidx > 0:
-                    idxstep = 1
-                    self.currentspriteidx -= idxstep
-                    self.image = self.spritelist[int(self.currentspriteidx)] #change to 0 when back on ground
-                    if not self.facingright:
-                        self.image = pygame.transform.flip(self.image, true, false)
-                else:
-                    self.jumpanimreversed = true
+                self.currentspriteidx = 0
+                self.animatelanding();
 
             else:
-                currentspriteidx = len(self.spritelist) - 1
-                self.image = self.spritelist[currentspriteidx]
+                currentspriteidx = len(self.jumpanimlist) - 1
+                self.image = self.jumpanimlist[currentspriteidx]
                 self.currentspriteidx = currentspriteidx
                 if not self.facingright:
                     self.image = pygame.transform.flip(self.image, true, false)
+    def animatelanding(self):
+        if self.finishedlandanim:
+            return None;
+        idxstep = 1;
+        self.landanimidx += idxstep;
+        self.image = self.landanimlist[int(self.landanimidx)];
+        if not self.facingright: #need this line every time i change pygame image
+            self.image = pygame.transform.flip(self.image, true, false)
+        if self.landanimidx >= len(self.landanimlist) - idxstep:
+            self.image = self.idleanim;
+            self.jumpanimreversed = true;
+            if not self.facingright:
+                self.image = pygame.transform.flip(self.image, true, false)
+            self.finishedlandanim = true
+            self.landanimidx = 0
+            return None;
+    def animatedj(self):
+        justswitched = false
+        if self.animatingdj:
+            if self.djanimreversed:
+                idxstep = 1
+                self.djlistidx += idxstep
+                if self.djlistidx >= len(self.djanimlist) - idxstep:
+                    self.animatingdj = false
+                    self.djanimreversed = false;
+                    justswitched = true;
+                self.image = self.djanimlist[int(self.djlistidx)]
+
+                if not self.facingright:
+                    self.image = pygame.transform.flip(self.image, true, false)
+        else:
+            if justswitched:
+                return None;
+            idxstep = -1
+            if self.djlistidx < abs(idxstep):
+                self.djanimreversed = true;
+                self.djlistidx = 0;
+                return None;
+            self.djlistidx += idxstep
+            self.image = self.djanimlist[int(self.djlistidx)]
+            if not self.facingright:
+                self.image = pygame.transform.flip(self.image, true, false)
+    #make more dj animation frames for better animation and add walk animation
+    def animatewalk(self):
+        print("walking")
+
+
+
+
 
 
 
@@ -231,6 +295,7 @@ class Plr(pygame.sprite.Sprite):
                 self.numjumpsinair+=1
                 self.physics.plryvelocity = self.physics.jumppow
                 self.physics.direction.y = self.physics.jumppow
+                self.animatingdj = true;
     def delete(self):
         self.kill()
 
@@ -283,8 +348,8 @@ class Level:
             # print(dir(door))
             # print(door.parent)
             if doorname == "door":
-                print("door.properties: ", door.properties)
-                print("door created")
+                # print("door.properties: ", door.properties)
+                # print("door created")
                 door = Door(surface = door.image, pos = (door.x, door.y))
         return door
     def groupnontiledobjects(self):

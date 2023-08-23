@@ -11,6 +11,6 @@ darkmaploc = cwd + '/Maps/testmap/testmappygame2.tmx';
 altmaploc = cwd + '/Maps/testmap/testmappygame3.tmx';
 plrspriteloc = cwd + '/tiles/colorplrsprite.png'
 enemyspriteloc = cwd + '/tiles/EnemySprite.png'
-print("my testmap loc: ", lightmaploc);
-print("darkmap: ", darkmaploc);
+# print("my testmap loc: ", lightmaploc);
+# print("darkmap: ", darkmaploc);
 
