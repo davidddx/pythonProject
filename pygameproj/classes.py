@@ -81,6 +81,11 @@ class Plr(pygame.sprite.Sprite):
         self.walkanimlist = self.initwalkanimlist();
         self.walkanimidx = 0;
         self.moving = false;
+            #dashing
+        self.dashanimlist = self.initdashanimlist();
+        self.dashanimidx = 0;
+        self.dashfullyreversed = true;
+        ###self.ondash is declared under "#dash, movement, camera vars" comment
 
         #image and physics vars
         self.image = plrsurf;
@@ -143,10 +148,21 @@ class Plr(pygame.sprite.Sprite):
     def initwalkanimlist(self):
         thislist = []
         thislist.append(pygame.image.load(cwd + '/tiles/walkframe1.png'))
+        thislist.append(pygame.image.load(cwd + '/tiles/walkframe1.5.png'))
         thislist.append(pygame.image.load(cwd + '/tiles/walkframe2.png'))
+        thislist.append(pygame.image.load(cwd + '/tiles/walkframe2.5.png'))
         thislist.append(pygame.image.load(cwd + '/tiles/walkframe3.png'))
+        thislist.append(pygame.image.load(cwd + '/tiles/walkframe3.5.png'))
         thislist.append(pygame.image.load(cwd + '/tiles/walkframe4.png'))
         return thislist
+    def initdashanimlist(self):
+        thislist = [];
+        thislist.append(pygame.image.load(cwd + '/tiles/plrdashframe1.png'));
+        thislist.append(pygame.image.load(cwd + '/tiles/plrdashframe2.png'));
+        thislist.append(pygame.image.load(cwd + '/tiles/plrdashframe3.png'));
+        thislist.append(pygame.image.load(cwd + '/tiles/plrdashframe4.png'));
+        thislist.append(pygame.image.load(cwd + '/tiles/plrdashframe5.png'));
+        return thislist;
 
     def update(self, currmap):
         if self.onground:
@@ -155,9 +171,11 @@ class Plr(pygame.sprite.Sprite):
         self.inputmap()
         self.checkifdashdone(timelastdashed = self.timelastdashed, dashfactor = self.dashfactor) #dashfactor is how much player's x velocity increases on dash
     def animate(self):
+
         self.animatejump();
         self.animatedj();
         self.animatewalk();
+        self.animatedash();
     def animatejump(self):
         justswitched = false
         if self.animatingjump == true:
@@ -228,11 +246,36 @@ class Plr(pygame.sprite.Sprite):
             self.image = self.djanimlist[int(self.djlistidx)]
             if not self.facingright:
                 self.image = pygame.transform.flip(self.image, true, false)
+    def animatedash(self):
+        if self.ondash:
+
+            idxstep = 1;
+            if self.dashanimidx >= len(self.dashanimlist) - idxstep:
+                self.dashanimidx -= idxstep;
+            self.dashanimidx += idxstep;
+            self.image = self.dashanimlist[int(self.dashanimidx)]
+            if not self.facingright:
+                self.image = pygame.transform.flip(self.image, true, false)
+        else:
+            if self.dashfullyreversed:
+                return None;
+            idxstep = 1;
+            if self.dashanimidx < idxstep:
+                self.dashfullyrversed = true;
+                return None;
+            elif self.dashanimidx < len(self.dashanimlist) - idxstep:
+                self.dashanimidx += idxstep;
+            else:
+                self.dashanimidx -= idxstep;
+            self.image = self.dashanimlist[int(self.dashanimidx)]
+            if not self.facingright:
+                self.image = pygame.transform.flip(self.image, true, false)
+
     def animatewalk(self):
         if self.moving:
             if not self.onground:
                 return None;
-            idxstep = 1;
+            idxstep = 0.7;
             if self.walkanimidx >= len(self.walkanimlist) - idxstep:
                 self.walkanimidx = 0;
             self.walkanimidx += idxstep;
