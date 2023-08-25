@@ -59,49 +59,43 @@ class physics():
 class Plr(pygame.sprite.Sprite):
     def __init__(self, plrpos, plrsurf):
         pygame.sprite.Sprite.__init__(self);
+
+        #animvars
+            #regjump
         self.animatingjump = false
         self.jumpanimreversed = true
-        self.jumpanimlist = []
-        self.idleanim = plrsurf
-        self.jumpanimlist.append(self.idleanim)
-        self.jumpanimlist.append(pygame.image.load(cwd + '/tiles/plrjumpframe0.5.png'))
-        self.jumpanimlist.append(pygame.image.load(cwd + '/tiles/plrjumpframe1.png'))
-        self.jumpanimlist.append(pygame.image.load(cwd + '/tiles/plrjumpframe1.5.png'))
-        self.jumpanimlist.append(pygame.image.load(cwd + '/tiles/plrjumpframe2.png'))
-        self.jumpanimlist.append(pygame.image.load(cwd + '/tiles/plrjumpframe2.5.png'))
-        self.jumpanimlist.append(pygame.image.load(cwd + '/tiles/plrjumpframe3.png'))
-        self.jumpanimlist.append(pygame.image.load(cwd + '/tiles/plrjumpframe3.5.png'))
-        self.jumpanimlist.append(pygame.image.load(cwd + '/tiles/plrjumpframe4.png'))
-        self.jumpanimlist.append(pygame.image.load(cwd + '/tiles/plrjumpframe4.5.png'))
         self.plrjumpapex = pygame.image.load(cwd + '/tiles/plrjumpframe5.png')
-        self.jumpanimlist.append(self.plrjumpapex)
-        self.djanimlist = []
+        self.idleanim = plrsurf
+        self.jumpanimlist = self.initjumpanimlist();
+            #doublejump(dj)
         self.animatingdj = false;
         self.djanimreversed = false;
         self.djlistidx = 0;
-        self.djanimlist.append(self.plrjumpapex)
-        self.djanimlist.append(pygame.image.load(cwd + '/tiles/plrdjframe1.png'))
-        self.djanimlist.append(pygame.image.load(cwd + '/tiles/djframe2.png'))
+        self.djanimlist = self.initdjanimlist();
+            #landing
         self.finishedlandanim = false;
         self.landanimidx = 0;
-        self.landanimlist = []
-        self.landanimlist.append(pygame.image.load(cwd + '/tiles/plrlandframe1.png'))
-        self.landanimlist.append(pygame.image.load(cwd + '/tiles/plrlandframe2.png'))
-        self.landanimlist.append(pygame.image.load(cwd + '/tiles/plrlandframe3.png'))
-        self.landanimlist.append(pygame.image.load(cwd + '/tiles/plrlandframe4.png'))
-        self.landanimlist.append(pygame.image.load(cwd + '/tiles/plrlandframe5.png'))
-        self.landanimlist.append(pygame.image.load(cwd + '/tiles/plrlandframe6.png'))
-
+        self.landanimlist = self.initlandanimlist();
         self.currentspriteidx = 0
+            #walking
+        self.walkanimlist = self.initwalkanimlist();
+        self.walkanimidx = 0;
+        self.moving = false;
+
+        #image and physics vars
         self.image = plrsurf;
         self.rect = self.image.get_rect(topleft = plrpos);
         self.onground = false;
         self.physics = physics(gravity = 1, onground = false, plrxvel = 30, jumppow = -30);
         self.facingright = true;
+
+        #jumping vars
         self.jumpcounter = 0;
         self.timelastjump = 0;
         self.belowplatform = false
         self.numjumpsinair = 0
+
+        #dash, movement, camera vars
         self.timelastdashed = 0;
         self.defaultxvelocity = 15
         self.dashfactor = 30
@@ -109,11 +103,50 @@ class Plr(pygame.sprite.Sprite):
         self.ondash = false
         self.adjustcamerayfactor = 0
         self.adjustcameraxfactor = screenwidth / 2
+
+        #cooldowns/lives/oob vars
         self.alreadypressedq = false
         self.alreadypressede = false
         self.isOob = false
         self.lives = 5
-
+    def initjumpanimlist(self):
+        thislist = []
+        thislist.append(self.idleanim)
+        thislist.append(pygame.image.load(cwd + '/tiles/plrjumpframe0.5.png'))
+        thislist.append(pygame.image.load(cwd + '/tiles/plrjumpframe1.png'))
+        thislist.append(pygame.image.load(cwd + '/tiles/plrjumpframe1.5.png'))
+        thislist.append(pygame.image.load(cwd + '/tiles/plrjumpframe2.png'))
+        thislist.append(pygame.image.load(cwd + '/tiles/plrjumpframe2.5.png'))
+        thislist.append(pygame.image.load(cwd + '/tiles/plrjumpframe3.png'))
+        thislist.append(pygame.image.load(cwd + '/tiles/plrjumpframe3.5.png'))
+        thislist.append(pygame.image.load(cwd + '/tiles/plrjumpframe4.png'))
+        thislist.append(pygame.image.load(cwd + '/tiles/plrjumpframe4.5.png'))
+        thislist.append(self.plrjumpapex)
+        return thislist
+    def initdjanimlist(self):
+        thislist = []
+        thislist.append(self.plrjumpapex)
+        thislist.append(pygame.image.load(cwd + '/tiles/plrdjframe1.png'))
+        thislist.append(pygame.image.load(cwd + '/tiles/djframe2.png'))
+        thislist.append(pygame.image.load(cwd + '/tiles/djframe3.png'))
+        thislist.append(pygame.image.load(cwd + '/tiles/djframe4.png'))
+        return thislist
+    def initlandanimlist(self):
+        thislist = [];
+        thislist.append(pygame.image.load(cwd + '/tiles/plrlandframe1.png'))
+        thislist.append(pygame.image.load(cwd + '/tiles/plrlandframe2.png'))
+        thislist.append(pygame.image.load(cwd + '/tiles/plrlandframe3.png'))
+        thislist.append(pygame.image.load(cwd + '/tiles/plrlandframe4.png'))
+        thislist.append(pygame.image.load(cwd + '/tiles/plrlandframe5.png'))
+        thislist.append(pygame.image.load(cwd + '/tiles/plrlandframe6.png'))
+        return thislist;
+    def initwalkanimlist(self):
+        thislist = []
+        thislist.append(pygame.image.load(cwd + '/tiles/walkframe1.png'))
+        thislist.append(pygame.image.load(cwd + '/tiles/walkframe2.png'))
+        thislist.append(pygame.image.load(cwd + '/tiles/walkframe3.png'))
+        thislist.append(pygame.image.load(cwd + '/tiles/walkframe4.png'))
+        return thislist
 
     def update(self, currmap):
         if self.onground:
@@ -124,7 +157,7 @@ class Plr(pygame.sprite.Sprite):
     def animate(self):
         self.animatejump();
         self.animatedj();
-        # self.animatewalk();
+        self.animatewalk();
     def animatejump(self):
         justswitched = false
         if self.animatingjump == true:
@@ -159,7 +192,7 @@ class Plr(pygame.sprite.Sprite):
         idxstep = 1;
         self.landanimidx += idxstep;
         self.image = self.landanimlist[int(self.landanimidx)];
-        if not self.facingright: #need this line every time i change pygame image
+        if not self.facingright: #need this line every time i change an image in pygame
             self.image = pygame.transform.flip(self.image, true, false)
         if self.landanimidx >= len(self.landanimlist) - idxstep:
             self.image = self.idleanim;
@@ -195,15 +228,25 @@ class Plr(pygame.sprite.Sprite):
             self.image = self.djanimlist[int(self.djlistidx)]
             if not self.facingright:
                 self.image = pygame.transform.flip(self.image, true, false)
-    #make more dj animation frames for better animation and add walk animation
     def animatewalk(self):
-        print("walking")
+        if self.moving:
+            if not self.onground:
+                return None;
+            idxstep = 1;
+            if self.walkanimidx >= len(self.walkanimlist) - idxstep:
+                self.walkanimidx = 0;
+            self.walkanimidx += idxstep;
+            self.image = self.walkanimlist[int(self.walkanimidx)]
+            if not self.facingright:
+                self.image = pygame.transform.flip(self.image, true, false)
+        else:
+            if self.onground:
+                if not self.finishedlandanim:
+                    return None;
 
-
-
-
-
-
+                self.image = self.idleanim
+                if not self.facingright:
+                    self.image = pygame.transform.flip(self.image, true, false)
 
 #function restores plr to speed after dashed
     def checkifdashdone(self, timelastdashed, dashfactor):
@@ -216,6 +259,9 @@ class Plr(pygame.sprite.Sprite):
             self.physics.plrxvelocity -= dashfactor
             self.ondash = false
 
+
+############INPUT MAPPING
+
     def inputmap(self):
         plrvelx = 2;
         jumpheight = 10;
@@ -227,17 +273,20 @@ class Plr(pygame.sprite.Sprite):
         timelastdashed = self.timelastdashed
 
         if key[pygame.K_d]:
+            self.moving = true;
             if not self.facingright:
                 self.image = pygame.transform.flip(self.image, true, false)
                 self.facingright = true;
             self.physics.direction.x = 1;
         elif key[pygame.K_a]:
+            self.moving = true
             if self.facingright:
                 self.image = pygame.transform.flip(self.image, true, false)
                 self.facingright = false
             self.physics.direction.x = -1;
         else:
             self.physics.direction.x = 0;
+            self.moving = false;
         if key[pygame.K_w]:
             self.jump(cooldown = doublejumpcooldown, timenow = timenow, timelastpressed = self.timelastjump);
             self.onground = false;
@@ -269,6 +318,10 @@ class Plr(pygame.sprite.Sprite):
         if key[pygame.K_ESCAPE]:
             pygame.quit();
             sys.exit();
+
+############INPUT MAPPING
+
+
     def applygravity(self):
         self.physics.plryvelocity += self.physics.gravity
         self.physics.direction.y = self.physics.plryvelocity
@@ -613,7 +666,7 @@ class levelhandler:
 #returns the next level
     def changeleveltonext(self):
         self.plrlives = self.currentlevel.player.lives
-        print(self.plrlives)
+        print("lives left: ", self.plrlives)
         self.currentlevel.deletelevel()
         del self.currentlevel
         self.currentlevel = 0
@@ -627,7 +680,7 @@ class levelhandler:
         tmxdata = self.tmxdata
         map = Map(tmxdata = tmxdata)
         self.currentlevel = Level(currentmap=map, plr=plr)
-        print("level has been changed!")
+        # print("level has been changed!")
     def checkrestartlevel(self):
         if self.currentlevel.player.isOob == false:
             return None
