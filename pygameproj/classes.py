@@ -402,7 +402,7 @@ class Enemy(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.image = surface
         self.enemyisinrange = false
-        self.enemyshirtcolor = shirtcolor;
+        self.shirtcolor = shirtcolor;
         self.gravity = 0.5
         self.direction = pygame.math.Vector2(-1,0);
         self.jumppow = -15
@@ -419,10 +419,11 @@ class Enemy(pygame.sprite.Sprite):
             self.landanimidx = 0
             self.landanimlist = self.initlandanimlist(shirtcolor);
             self.landed = false;
+        if self.canmove:
+            self.walkanimlist = self.initwalkanimlist(shirtcolor);
+            self.walkanimidx = 0;
         self.haseyes = self.checkifhaseyes(shirtcolor);
         self.facingright = false;
-
-
     def animate(self, canjump, canwalk):
         if not (canjump or canwalk):
             return None;
@@ -444,7 +445,7 @@ class Enemy(pygame.sprite.Sprite):
         self.jumpanimidx += idxstep
         if self.facingright:
             self.image = pygame.transform.flip(self.image, true, false)
-        print("animating jump")
+        # print("animating jump")
     def animateland(self, canjump):
         if not canjump: return None;
         if not self.onground: return None;
@@ -460,9 +461,15 @@ class Enemy(pygame.sprite.Sprite):
             self.image = pygame.transform.flip(self.image, true, false)
 
     def animatewalk(self, canwalk):
-        if not canwalk:
+        if not (canwalk and self.shirtcolor == "green"):
             return None;
-        print("animatingwalk")
+        idxstep = 0.5
+        if self.walkanimidx >= len(self.walkanimlist) - idxstep:
+            self.walkanimidx = 0
+        self.image = self.walkanimlist[int(self.walkanimidx)]
+        self.walkanimidx += idxstep;
+        if self.facingright:
+            self.image = pygame.transform.flip(self.image, true, false)
     def initlandanimlist(self, shirtcolor):
         if not (shirtcolor == "blue" or shirtcolor == "purple"):
             return None;
@@ -474,7 +481,16 @@ class Enemy(pygame.sprite.Sprite):
         landanimlist.append(pygame.image.load(cwd + '/tiles/EnemySprites/idle' + shirtcolor + 'enemy.png'))
 
         return landanimlist;
-
+    def initwalkanimlist(self, shirtcolor):
+        if not shirtcolor == "green":
+            return None;
+        walkanimlist =[]
+        walkanimlist.append(pygame.image.load(cwd + '/tiles/EnemySprites/' + shirtcolor + 'enemywalkframe1.png'))
+        walkanimlist.append(pygame.image.load(cwd + '/tiles/EnemySprites/' + shirtcolor + 'enemywalkframe2.png'))
+        walkanimlist.append(pygame.image.load(cwd + '/tiles/EnemySprites/' + shirtcolor + 'enemywalkframe3.png'))
+        walkanimlist.append(pygame.image.load(cwd + '/tiles/EnemySprites/' + shirtcolor + 'enemywalkframe4.png'))
+        walkanimlist.append(pygame.image.load(cwd + '/tiles/EnemySprites/' + shirtcolor + 'enemywalkframe5.png'))
+        return walkanimlist;
     def initjumpanimlist(self, shirtcolor):
         if shirtcolor == "blue" or shirtcolor == "purple":
             jumpanimlist = []
