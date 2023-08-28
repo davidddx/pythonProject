@@ -91,7 +91,7 @@ class Plr(pygame.sprite.Sprite):
         self.image = plrsurf;
         self.rect = self.image.get_rect(topleft = plrpos);
         self.onground = false;
-        self.physics = physics(gravity = 1, onground = false, plrxvel = 30, jumppow = -30);
+        self.physics = physics(gravity = 2, onground = false, plrxvel = 30, jumppow = -35);
         self.facingright = true;
 
         #jumping vars
@@ -296,7 +296,9 @@ class Plr(pygame.sprite.Sprite):
         if not self.ondash:
             return None
         timenow = pygame.time.get_ticks();
-        dashfinishcd = 200
+        dashfinishcd = 300
+
+
         if timenow - timelastdashed >= dashfinishcd:
             # print("dash has finished")
             self.physics.plrxvelocity -= dashfactor
@@ -396,24 +398,45 @@ class Plr(pygame.sprite.Sprite):
         self.kill()
 
 class Enemy(pygame.sprite.Sprite):
-    #pos is the enemy position
-    def __init__(self, surface, pos):
+    def __init__(self, surface, pos, shirtcolor):
         pygame.sprite.Sprite.__init__(self)
         self.image = surface
         self.enemyisinrange = false
+        self.enemyshirtcolor = shirtcolor;
         self.gravity = 0.5
         self.direction = pygame.math.Vector2(-1,0);
         self.jumppow = -15
         self.rect = self.image.get_rect(topleft=pos);
         self.onground = false
         self.xvel = 4
+        self.lastcoll = 0;
+        self.canmove = self.checkifcanmove(shirtcolor)
+        self.canjump = self.checkifcanjump(shirtcolor);
+        self.haseyes = self.checkifhaseyes(shirtcolor);
+        self.facingright = false;
+    def checkifcanjump(self, shirtcolor):
+        if not (shirtcolor == "blue" or shirtcolor == "purple"):
+            return false;
+        return true;
+    def checkifcanmove(self, shirtcolor):
+        if not (shirtcolor == "green" or shirtcolor == "purple"):
+            return false;
+        return true;
+    def checkifhaseyes(self, shirtcolor):
+        if not shirtcolor == "green":
+            return false;
+        return true;
     def applygravity(self):
         self.direction.y += self.gravity
-        self.rect.y += self.direction.y
+        self.rect.y += self.direction.y;
     def jump(self):
-        if self.onground:
+        if self.onground and self.canjump:
             self.direction.y = self.jumppow
             self.onground = false
+    def moveforward(self):
+        if not self.canmove:
+            return None;
+        self.rect.x += self.direction.x * self.xvel
     def delete(self):
         self.kill()
     def update(self):
@@ -433,6 +456,8 @@ class Level:
         self.door = self.finddoor(currentmap)
         self.nontiledobjects = self.groupnontiledobjects() #enemy is not included in this spritegroup
         self.doorcollisionoccured = false
+        self.checkedenemieswitheyes = false;
+        self.hasenemieswitheyes = false;
 
 #finddoor, findenemies, findmarkers, etc functions find and return important info like spritelocs/positions/etc
     def finddoor(self, mapinst):
@@ -457,12 +482,39 @@ class Level:
 
         return nontiledobjectsgroup
     def findenemies(self, mapinst):
+        #think of this function as an enemy factory
         enemygroup = pygame.sprite.Group()
         enemyimage = pygame.image.load(enemyspriteloc)
+        enemyshirtcolor = "blue"
         enemyspawnpointlayer = mapinst.tmxdata.get_layer_by_name("EnemySpawnPoints")
 
         for aobject in enemyspawnpointlayer:
-            thisenemy = Enemy(surface = enemyimage, pos = (aobject.x, aobject.y))
+            # print("aobject.properties: ", aobject.properties);
+            props = aobject.properties;
+            name = props["name"];
+            if name == "BlueEnemySpawner":
+                enemyimage = pygame.image.load(cwd + '/tiles/EnemySprites/idleblueenemy.png')
+                enemyshirtcolor = "blue"
+            elif name == "RedEnemySpawner":
+                enemyimage = pygame.image.load(cwd + '/tiles/EnemySprites/idleredenemy.png')
+                enemyshirtcolor = "red"
+            elif name == "GreenEnemySpawner":
+                enemyimage = pygame.image.load(cwd + '/tiles/EnemySprites/idlegreenenemy.png')
+                enemyshirtcolor = "green"
+
+            elif name == "PurpleEnemySpawner":
+                enemyimage = pygame.image.load(cwd + '/tiles/EnemySprites/idlepurpleenemy.png')
+                enemyshirtcolor = "purple"
+
+            elif name == "CamoEnemySpawner":
+                enemyimage = pygame.image.load(cwd + '/tiles/EnemySprites/idlecamoenemy.png')
+                enemyshirtcolor = "camo"
+            else:
+                enemyimage = pygame.image.load(cwd + '/tiles/EnemySprites/idleredenemy.png')
+                enemyshirtcolor = "red"
+
+
+            thisenemy = Enemy(surface = enemyimage, pos = (aobject.x, aobject.y), shirtcolor = enemyshirtcolor);
             enemygroup.add(thisenemy)
 
         return enemygroup
@@ -610,20 +662,44 @@ class Level:
         for enemy in self.enemies.sprites():
             if not enemy.enemyisinrange:
                 continue
+            if not enemy.canmove:
+                continue;
 
-            dirx = enemy.direction.x
-            enemy.rect.x += enemy.direction.x * enemy.xvel
-            collidedwithrect = false
+            dirx = enemy.direction.x;
+            enemy.moveforward();
+            collidedwithrect = false;
             for sprite in self.currentmap.collidablegroup.sprites():
                 if enemy.rect.colliderect(sprite.rect):
-                    collidedwithrect = true
+                    collidedwithrect = true;
                     if dirx < 0:
-                        enemy.rect.left = sprite.rect.right
-                        enemy.direction.x = 1
+                        enemy.rect.left = sprite.rect.right;
+                        enemy.direction.x = -enemy.direction.x;
+                        enemy.image = pygame.transform.flip(enemy.image, true, false)
+                        enemy.facingright = not enemy.facingright;
                     elif dirx > 0:
-                        enemy.rect.right = sprite.rect.left
+                        enemy.rect.right = sprite.rect.left;
+                        enemy.direction.x = -enemy.direction.x;
+                        enemy.image = pygame.transform.flip(enemy.image, true, false)
+                        enemy.facingright = not enemy.facingright;
 
-                        enemy.direction.x = -1
+    def enemyhaseyes(self):
+        if not (self.hasenemieswitheyes or not self.checkedenemieswitheyes):
+            return None; #this if statement is just to save the potential amount of times looping
+        for enemy in self.enemies:
+            if not enemy.haseyes:
+                continue;
+            self.hasenemieswitheyes = true;
+            if self.player.rect.x > enemy.rect.x and not enemy.facingright:
+                enemy.image = pygame.transform.flip(enemy.image, true, false);
+                enemy.facingright = not enemy.facingright;
+                enemy.direction.x = 1;
+            elif self.player.rect.x < enemy.rect.x and enemy.facingright:
+                enemy.image = pygame.transform.flip(enemy.image, true, false);
+                enemy.facingright = not enemy.facingright;
+                enemy.direction.x = -1
+
+
+
     def updateenemies(self):
         for enemy in self.enemies:
             enemy.update()
@@ -658,6 +734,7 @@ class Level:
         self.updateenemies()
         self.enemygroundcoll()
         self.enemywallcoll()
+        self.enemyhaseyes();
     def deletelevel(self):
         self.levelcurrentlychanging = true
         self.currentmap.clearmap()

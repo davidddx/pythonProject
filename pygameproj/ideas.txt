@@ -6,5 +6,28 @@ archetype ideas:
     ninja = player is extremely fast with high jump and can double jump, but has 1 health
     all-rounder = player does everything average
 
+enemy type ideas:
+    #plan of stuff to implement
+    #redEnemy cannot jump or move
+    #blueEnemy can jump but cant move
+    #greenEnemy can move but cant jump
+    #purple enemy can move and jump
+    #camo enemy can shoot projectiles, cannot jump or move
+types of levels to add:
+-snow level
+-sunset level
+-cuban level
+-glasses level
+-longer hair level
+-flower/planty level
+-water level- dolphin enemies, mermaids
+-sports world: basketball level, futbol level, football level
+-hair product level, comb platforms, hair changes when stepping on hair gel;
+-aesthetics world- makeup level, hair product level,
+-school level;
+-library level; has a love interests that meets; enemies to lovers(turn lovers here, but enemies beforehand)
+-dog level(rides a big cute dog like gintama dog)
+-main character almost cheats but says no in sportsworld>basketballlevel
+
 
 
