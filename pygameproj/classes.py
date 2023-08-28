@@ -412,8 +412,78 @@ class Enemy(pygame.sprite.Sprite):
         self.lastcoll = 0;
         self.canmove = self.checkifcanmove(shirtcolor)
         self.canjump = self.checkifcanjump(shirtcolor);
+        if self.canjump:
+            self.jumpanimlist = self.initjumpanimlist(shirtcolor);
+            self.jumpanimidx = 0;
+            self.animatingjump = false;
+            self.landanimidx = 0
+            self.landanimlist = self.initlandanimlist(shirtcolor);
+            self.landed = false;
         self.haseyes = self.checkifhaseyes(shirtcolor);
         self.facingright = false;
+
+
+    def animate(self, canjump, canwalk):
+        if not (canjump or canwalk):
+            return None;
+        self.animatejump(canjump);
+        self.animatewalk(canwalk);
+        self.animateland(canjump);
+    def animatejump(self, canjump):
+        if not canjump:
+            return None;
+        if not self.animatingjump:
+            return None
+        idxstep = 0.5;
+        if self.jumpanimidx >= len(self.jumpanimlist) - idxstep:
+            self.landed = false;
+            self.animatingjump = false;
+            self.jumpanimidx = 0;
+            return None;
+        self.image = self.jumpanimlist[int(self.jumpanimidx)]
+        self.jumpanimidx += idxstep
+        if self.facingright:
+            self.image = pygame.transform.flip(self.image, true, false)
+        print("animating jump")
+    def animateland(self, canjump):
+        if not canjump: return None;
+        if not self.onground: return None;
+        if self.landed: return None;
+        idxstep = 0.5
+        if self.landanimidx >= len(self.landanimlist) - idxstep:
+            self.landed = true
+            self.landanimidx = 0
+            return None;
+        self.image = self.landanimlist[int(self.landanimidx)]
+        self.landanimidx += idxstep
+        if self.facingright:
+            self.image = pygame.transform.flip(self.image, true, false)
+
+    def animatewalk(self, canwalk):
+        if not canwalk:
+            return None;
+        print("animatingwalk")
+    def initlandanimlist(self, shirtcolor):
+        if not (shirtcolor == "blue" or shirtcolor == "purple"):
+            return None;
+        landanimlist = []
+        landanimlist.append(pygame.image.load(cwd + '/tiles/EnemySprites/' + shirtcolor + 'enemyjumpframe4.png'))
+        landanimlist.append(pygame.image.load(cwd + '/tiles/EnemySprites/' + shirtcolor + 'enemyjumpframe3.png'))
+        landanimlist.append(pygame.image.load(cwd + '/tiles/EnemySprites/' + shirtcolor + 'enemyjumpframe2.png'))
+        landanimlist.append(pygame.image.load(cwd + '/tiles/EnemySprites/' + shirtcolor + 'enemyjumpframe1.png'))
+        landanimlist.append(pygame.image.load(cwd + '/tiles/EnemySprites/idle' + shirtcolor + 'enemy.png'))
+
+        return landanimlist;
+
+    def initjumpanimlist(self, shirtcolor):
+        if shirtcolor == "blue" or shirtcolor == "purple":
+            jumpanimlist = []
+            jumpanimlist.append(pygame.image.load(cwd + '/tiles/EnemySprites/' + shirtcolor + 'enemyjumpframe1.png'))
+            jumpanimlist.append(pygame.image.load(cwd + '/tiles/EnemySprites/' + shirtcolor + 'enemyjumpframe2.png'))
+            jumpanimlist.append(pygame.image.load(cwd + '/tiles/EnemySprites/' + shirtcolor + 'enemyjumpframe3.png'))
+            jumpanimlist.append(pygame.image.load(cwd + '/tiles/EnemySprites/' + shirtcolor + 'enemyjumpframe4.png'))
+            jumpanimlist.append(pygame.image.load(cwd + '/tiles/EnemySprites/' + shirtcolor + 'enemyjumpapex.png'))
+        return jumpanimlist
     def checkifcanjump(self, shirtcolor):
         if not (shirtcolor == "blue" or shirtcolor == "purple"):
             return false;
@@ -425,14 +495,15 @@ class Enemy(pygame.sprite.Sprite):
     def checkifhaseyes(self, shirtcolor):
         if not shirtcolor == "green":
             return false;
-        return true;
+        return true;#switch to return true when i decide what/when enemies have eyes
     def applygravity(self):
         self.direction.y += self.gravity
         self.rect.y += self.direction.y;
     def jump(self):
-        if self.onground and self.canjump:
+        if self.onground and self.canjump and self.landed:
             self.direction.y = self.jumppow
             self.onground = false
+            self.animatingjump = true;
     def moveforward(self):
         if not self.canmove:
             return None;
@@ -441,7 +512,8 @@ class Enemy(pygame.sprite.Sprite):
         self.kill()
     def update(self):
         if self.enemyisinrange:
-            self.jump()
+            self.jump();
+            self.animate(self.canjump, self.canmove);
 class Level:
     def __init__(self, currentmap, plr):
         self.levelcurrentlychanging = false
