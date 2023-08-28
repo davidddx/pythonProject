@@ -697,9 +697,6 @@ class Level:
                 enemy.image = pygame.transform.flip(enemy.image, true, false);
                 enemy.facingright = not enemy.facingright;
                 enemy.direction.x = -1
-
-
-
     def updateenemies(self):
         for enemy in self.enemies:
             enemy.update()
@@ -764,6 +761,7 @@ class levelhandler:
         self.maxlevelnum = len(self.tmxdatalocs)
         self.currentlevel = self.initlevel(levelnum = self.levelnum)
         self.plrlives = self.currentlevel.player.lives #need to add gui element to plr lives
+        self.heartsymbol = pygame.image.load(cwd + '/tiles/heartsymbol.png')
     def initlevel(self, levelnum):
         tmxdata = load_pygame(self.tmxdatalocs[self.levelnum])
         map = Map(tmxdata = tmxdata)
@@ -865,6 +863,12 @@ class levelhandler:
             objy = obj.rect.y
             if viewleft <= objx <= viewright and viewup <= objy <= viewdown:  # pygame has upward as negative so the inequality is up <= y <= down instead of down <= y <= up
                 screen.blit(obj.image, (objx + adjcamx, obj.rect.y + adjustcamerayfactor))
+        if not self.changinglevel:
+            #displays lives
+            livesfont = pygame.font.SysFont("Times New Roman", 64)
+            livesimg = livesfont.render(str(plr.lives), 1, (255,255,255))
+            screen.blit(self.heartsymbol, (0, 0))
+            screen.blit(livesimg, (64, 0))
     def update(self):
         screen = globals.screen
         adjustcamerayfactor = -(self.currentlevel.player.rect.y - self.currentlevel.player.adjustcamerayfactor)
