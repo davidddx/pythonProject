@@ -56,6 +56,58 @@ class physics():
         self.plrxvelocity = plrxvel;
         self.jumppow = jumppow;
         self.direction = pygame.math.Vector2(1,0);
+class shuriken(pygame.sprite.Sprite):
+    def __init__(self, surface, pos, throwerfacingright, initialxval):
+        pygame.sprite.Sprite.__init__(self)
+        self.initialxvalue = initialxval
+        self.isinrange = false;
+        self.shurikenanimlist = self.initanimlist();
+        self.shurikenanimidx = 0;
+        self.velocity = 15;
+        self.image = surface;
+        self.shurikenmaxdist = 64 * 18
+        self.traveledmaxdist = false;
+        if throwerfacingright:
+            self.image = pygame.transform.flip(self.image, true, false)
+            self.direction = 1;
+            self.rect = self.image.get_rect(topleft=pos);
+            self.rect.x += 60
+        else:
+            self.direction = -1;
+            self.rect = self.image.get_rect(topleft=pos);
+            self.rect.x -= 10
+        self.rect.y += 60
+        # print(self.rect.x)
+    def initanimlist(self):
+        animlist = []
+        animlist.append(pygame.image.load(cwd + "/tiles/shurikenframe1.png"))
+        animlist.append(pygame.image.load(cwd + "/tiles/shurikenframe2.png"))
+        animlist.append(pygame.image.load(cwd + "/tiles/shurikenframe3.png"))
+        animlist.append(pygame.image.load(cwd + "/tiles/shurikenframe4.png"))
+        return animlist
+    def checkdisttraveled(self, shurikenmaxdist, initx, currx):
+        if shurikenmaxdist > abs(initx - currx):
+            return None;
+        else:
+            self.traveledmaxdist = true;
+            # print(self.traveledmaxdist)
+    def update(self):
+        self.rect.x += self.direction * self.velocity #shurikens can only move horizontal
+        self.animate(self.shurikenanimlist)
+        self.checkdisttraveled(self.shurikenmaxdist, self.initialxvalue, self.rect.x)
+    def animate(self, animlist):
+        idxstep = 0.5;
+        if self.shurikenanimidx > len(animlist) - idxstep:
+            self.shurikenanimidx = 0
+        self.image = animlist[int(self.shurikenanimidx)]
+        if self.direction == -1:
+            self.image = pygame.transform.flip(self.image, true, false)
+        self.shurikenanimidx += idxstep
+    def printvalues(self):
+        print("self.rect.x: ", self.rect.x)
+        print("self.rect.y: ", self.rect.y)
+        print("self.direction: ", self.direction);
+        print("self.velocity: ", self.velocity)
 class Plr(pygame.sprite.Sprite):
     def __init__(self, plrpos, plrsurf):
         pygame.sprite.Sprite.__init__(self);
@@ -113,7 +165,7 @@ class Plr(pygame.sprite.Sprite):
         self.alreadypressedq = false
         self.alreadypressede = false
         self.isOob = false
-        self.lives = 5
+        self.lives = 50
     def initjumpanimlist(self):
         thislist = []
         thislist.append(self.idleanim)
@@ -305,7 +357,7 @@ class Plr(pygame.sprite.Sprite):
             self.ondash = false
 
 
-############INPUT MAPPING
+############INPUT MAPPING BEGIN
 
     def inputmap(self):
         plrvelx = 2;
@@ -364,7 +416,7 @@ class Plr(pygame.sprite.Sprite):
             pygame.quit();
             sys.exit();
 
-############INPUT MAPPING
+############INPUT MAPPING END
 
 
     def applygravity(self):
@@ -396,34 +448,6 @@ class Plr(pygame.sprite.Sprite):
                 self.animatingdj = true;
     def delete(self):
         self.kill()
-class shuriken(pygame.sprite.Sprite):
-    def __init__(self, surface, pos, throwerfacingright):
-        pygame.sprite.Sprite.__init__(self)
-        self.image = surface;
-        self.isinrange = false;
-        self.shurikenanimlist = self.initanimlist();
-        self.shurikenanimidx = 0;
-        if throwerfacingright:
-            self.direction = 1;
-        else:
-            self.direction = -1;
-        self.velocity = 4;
-        self.rect = self.image.get_rect(topleft=pos);
-        # print(self.rect.x)
-    def initanimlist(self):
-        animlist = []
-        animlist.append(pygame.image.load(cwd + "/tiles/shurikenframe1.png"))
-        animlist.append(pygame.image.load(cwd + "/tiles/shurikenframe2.png"))
-        animlist.append(pygame.image.load(cwd + "/tiles/shurikenframe3.png"))
-        animlist.append(pygame.image.load(cwd + "/tiles/shurikenframe4.png"))
-        return animlist
-    def update(self):
-        self.rect.x += self.direction * self.velocity #shurikens can only move horizontal
-    def printvalues(self):
-        print("self.rect.x: ", self.rect.x)
-        print("self.rect.y: ", self.rect.y)
-        print("self.direction: ", self.direction);
-        print("self.velocity: ", self.velocity)
 class Enemy(pygame.sprite.Sprite):
     def __init__(self, surface, pos, shirtcolor):
         pygame.sprite.Sprite.__init__(self)
@@ -451,7 +475,7 @@ class Enemy(pygame.sprite.Sprite):
             self.walkanimlist = self.initwalkanimlist(shirtcolor);
             self.walkanimidx = 0;
         if self.hasshuriken:
-            self.shurikenobjlist = []; #list contains all thrown shurikens currently in the scene
+            self.shurikengroup = pygame.sprite.Group(); #list contains all thrown shurikens currently in the scene
             self.timeshurikenlastthrown = 0
             self.imgshuriken = pygame.image.load(cwd + "/tiles/shuriken.png")
 
@@ -547,17 +571,20 @@ class Enemy(pygame.sprite.Sprite):
     def checkifhasshuriken(self, shirtcolor):
         if shirtcolor != "black":
             return false;
+
         return true;
     def updateshurikens(self):
-        for shuriken in self.shurikenobjlist:
+        for shuriken in self.shurikengroup:
             shuriken.update()
+            if shuriken.traveledmaxdist:
+                shuriken.kill()
         timenow = pygame.time.get_ticks();
-        shurikenthrowcd = 500 #milliseconds
+        shurikenthrowcd = 1000 #milliseconds
         if timenow - self.timeshurikenlastthrown < shurikenthrowcd:
             return None;
         self.throwshuriken(timenow);
     def throwshuriken(self, timenow):
-        self.shurikenobjlist.append(shuriken(self.imgshuriken, (self.rect.x, self.rect.y), self.facingright));
+        self.shurikengroup.add(shuriken(surface = self.imgshuriken, pos = (self.rect.x, self.rect.y), throwerfacingright = self.facingright, initialxval = self.rect.x));
         self.timeshurikenlastthrown = timenow;
     def applygravity(self):
         self.direction.y += self.gravity
@@ -577,8 +604,8 @@ class Enemy(pygame.sprite.Sprite):
         if self.enemyisinrange:
             self.jump();
             self.animate(self.canjump, self.canmove);
-            if self.hasshuriken:
-                self.updateshurikens();
+        if self.hasshuriken:
+            self.updateshurikens();
 class Level:
     def __init__(self, currentmap, plr):
         self.levelcurrentlychanging = false
@@ -767,20 +794,25 @@ class Level:
         # so positive values in the Y-direction mean moving
         # down on the screen, while negative values mean moving up.
     def checkplrenemycoll(self):
-        timenow = pygame.time.get_ticks()
-        player = self.player
+        timenow = pygame.time.get_ticks();
+        player = self.player;
         cooldown = 3000; #planning to make invincibility 3 seconds
-        enemygroup = self.enemies.sprites()
+        enemygroup = self.enemies.sprites();
         for enemy in enemygroup:
             if enemy.rect.colliderect(player.rect) and timenow - self.timeplrlastcollidedwithenemy >= cooldown:
                 #enemy collision now works
-                self.player.lives -= 1
+                self.player.lives -= 1;
                 # print("enemy player collision has occured. plr has lost 1 life. plr lives are now ", self.player.lives)
-                self.timeplrlastcollidedwithenemy = timenow
+                self.timeplrlastcollidedwithenemy = timenow;
                 # if player.rect.x <= enemy.rect.x:
                 #     player.rect.x -= 128
                 # else:
                 #     player.rect.x += 128
+            if enemy.hasshuriken:
+                for shuriken in enemy.shurikengroup:
+                    if shuriken.rect.colliderect(player.rect) and timenow - self.timeplrlastcollidedwithenemy >= cooldown:
+                        self.player.lives -= 1;
+                        self.timeplrlastcollidedwithenemy = timenow;
     def enemygroundcoll(self):
         for enemy in self.enemies.sprites():
             enemy.applygravity()
@@ -995,8 +1027,8 @@ class levelhandler:
                 screen.blit(enemy.image, (enemy.rect.x + adjcamx, enemy.rect.y + adjustcamerayfactor))
             else:
                 enemy.enemyisinrange = false
-            if enemy.hasshuriken and len(enemy.shurikenobjlist) != 0:
-                for thisshuriken in enemy.shurikenobjlist:
+            if enemy.hasshuriken and len(enemy.shurikengroup) != 0:
+                for thisshuriken in enemy.shurikengroup:
                     # thisshuriken.printvalues();
                     shurikenx = thisshuriken.rect.x
                     shurikeny = thisshuriken.rect.y
