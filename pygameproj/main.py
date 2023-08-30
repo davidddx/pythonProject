@@ -3,15 +3,7 @@ import globals
 from settings import *
 from classes import *
 from pytmx.util_pygame import load_pygame;
-
-
-
-print("Current Working Dir: ", os.getcwd())
-
-
-
-
-
+# print("Current Working Dir: ", os.getcwd())
 
 #====================code after pygame.init() below=====================
 

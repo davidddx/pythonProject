@@ -409,7 +409,7 @@ class shuriken(pygame.sprite.Sprite):
             self.direction = -1;
         self.velocity = 4;
         self.rect = self.image.get_rect(topleft=pos);
-        print(self.rect.x)
+        # print(self.rect.x)
     def initanimlist(self):
         animlist = []
         animlist.append(pygame.image.load(cwd + "/tiles/shurikenframe1.png"))
@@ -775,7 +775,7 @@ class Level:
             if enemy.rect.colliderect(player.rect) and timenow - self.timeplrlastcollidedwithenemy >= cooldown:
                 #enemy collision now works
                 self.player.lives -= 1
-                print("enemy player collision has occured. plr has lost 1 life. plr lives are now ", self.player.lives)
+                # print("enemy player collision has occured. plr has lost 1 life. plr lives are now ", self.player.lives)
                 self.timeplrlastcollidedwithenemy = timenow
                 # if player.rect.x <= enemy.rect.x:
                 #     player.rect.x -= 128
@@ -850,7 +850,7 @@ class Level:
     def checkifplroob(self):
         if self.player.rect.y >= self.oobpos.y:
             self.player.lives -= 1
-            print("player is out of bounds, has lost one life. player.lives is now ", self.player.lives)
+            # print("player is out of bounds, has lost one life. player.lives is now ", self.player.lives)
             self.player.isOob = true
 
 # level scroller and tile position updates
@@ -921,7 +921,7 @@ class levelhandler:
 #returns the next level
     def changeleveltonext(self):
         self.plrlives = self.currentlevel.player.lives
-        print("lives left: ", self.plrlives)
+        # print("lives left: ", self.plrlives)
         self.currentlevel.deletelevel()
         del self.currentlevel
         self.currentlevel = 0
