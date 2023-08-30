@@ -830,13 +830,15 @@ class Level:
             if enemy.rect.colliderect(player.rect) and timenow - self.timeplrlastcollidedwithenemy >= cooldown:
                 self.player.lives -= 1;
                 self.timeplrlastcollidedwithenemy = timenow;
-            if enemy.hasprojectile:
-                for projectile in enemy.projectilegroup:
-                    if projectile.rect.colliderect(player.rect):
-                        if timenow - self.timeplrlastcollidedwithenemy >= cooldown:
-                            self.player.lives -= 1;
-                            self.timeplrlastcollidedwithenemy = timenow;
-                        projectile.deletenextframe = true
+            if not enemy.hasprojectile:
+                continue;
+            for projectile in enemy.projectilegroup:
+                if not projectile.rect.colliderect(player.rect):
+                    continue;
+                if timenow - self.timeplrlastcollidedwithenemy >= cooldown:
+                    self.player.lives -= 1;
+                    self.timeplrlastcollidedwithenemy = timenow;
+                projectile.deletenextframe = true
     def enemygroundcoll(self):
         for enemy in self.enemies.sprites():
             if not enemy.isinrange:
@@ -1031,56 +1033,57 @@ class levelhandler:
 #levelhandler update function and render function just puts everything on the screen
 
     def render(self, thislevel, screen, adjustcamerayfactor, adjcamx):
-        collgroup = thislevel.currentmap.collidablegroup
-        noncollgroup = thislevel.currentmap.noncollidablegroup
-        enemygroup = thislevel.enemies
-        otherobjgroup = thislevel.nontiledobjects
-        plr = thislevel.player
-        plrx = plr.rect.x
-        plry = plr.rect.y
-        door = thislevel.door
-        extrarendering = 64 * 6
-        viewleft = plrx - screenwidth / 2 - extrarendering
-        viewright = plrx + screenwidth / 2 + extrarendering
-        viewup = plry - screenheight / 2 - extrarendering
-        viewdown = plry + screenheight / 2 + extrarendering
+        collgroup = thislevel.currentmap.collidablegroup;
+        noncollgroup = thislevel.currentmap.noncollidablegroup;
+        enemygroup = thislevel.enemies;
+        otherobjgroup = thislevel.nontiledobjects;
+        plr = thislevel.player;
+        plrx = plr.rect.x;
+        plry = plr.rect.y;
+        door = thislevel.door;
+        extrarendering = 64 * 6;
+        viewleft = plrx - screenwidth / 2 - extrarendering;
+        viewright = plrx + screenwidth / 2 + extrarendering;
+        viewup = plry - screenheight / 2 - extrarendering;
+        viewdown = plry + screenheight / 2 + extrarendering;
 
         for sprite in collgroup:
-            spritex = sprite.rect.x
-            spritey = sprite.rect.y
+            spritex = sprite.rect.x;
+            spritey = sprite.rect.y;
             if viewleft <= spritex <= viewright and viewup <= spritey <= viewdown:
                 sprite.isinrange = true; #matters for performance
-                screen.blit(sprite.image, (sprite.rect.x + adjcamx, sprite.rect.y + adjustcamerayfactor))
+                screen.blit(sprite.image, (sprite.rect.x + adjcamx, sprite.rect.y + adjustcamerayfactor));
             else:
-                sprite.isinrange = false
+                sprite.isinrange = false;
         for sprite in noncollgroup:
-            spritex = sprite.rect.x
-            spritey = sprite.rect.y
+            spritex = sprite.rect.x;
+            spritey = sprite.rect.y;
             if viewleft <= spritex <= viewright and viewup <= spritey <= viewdown:
-                screen.blit(sprite.image, (sprite.rect.x + adjcamx, sprite.rect.y + adjustcamerayfactor))
+                screen.blit(sprite.image, (sprite.rect.x + adjcamx, sprite.rect.y + adjustcamerayfactor));
+
 
         for enemy in enemygroup:
-            enemyx = enemy.rect.x
-            enemyy = enemy.rect.y
+            enemyx = enemy.rect.x;
+            enemyy = enemy.rect.y;
             if viewleft <= enemyx <= viewright and viewup <= enemyy <= viewdown:
-                enemy.isinrange = true
-                screen.blit(enemy.image, (enemy.rect.x + adjcamx, enemy.rect.y + adjustcamerayfactor))
+                enemy.isinrange = true;
+                screen.blit(enemy.image, (enemy.rect.x + adjcamx, enemy.rect.y + adjustcamerayfactor));
             else:
                 enemy.isinrange = false
             if enemy.hasprojectile and len(enemy.projectilegroup) != 0:
                 for thisprojectile in enemy.projectilegroup:
                     # thisprojectile.printvalues();
-                    projectilex = thisprojectile.rect.x
-                    projectiley = thisprojectile.rect.y
+                    projectilex = thisprojectile.rect.x;
+                    projectiley = thisprojectile.rect.y;
                     if viewleft <= projectilex <= viewright and viewup <= projectiley <= viewdown:
-                        thisprojectile.isinrange = true
+                        thisprojectile.isinrange = true;
                         screen.blit(thisprojectile.image, (thisprojectile.rect.x + adjcamx, thisprojectile.rect.y + adjustcamerayfactor))
                     else:
-                        thisprojectile.isinrange = false
+                        thisprojectile.isinrange = false;
 
         for obj in otherobjgroup:
-            objx = obj.rect.x
-            objy = obj.rect.y
+            objx = obj.rect.x;
+            objy = obj.rect.y;
             if viewleft <= objx <= viewright and viewup <= objy <= viewdown:  # pygame has upward as negative so the inequality is up <= y <= down instead of down <= y <= up
                 screen.blit(obj.image, (objx + adjcamx, obj.rect.y + adjustcamerayfactor))
         if not self.changinglevel:
