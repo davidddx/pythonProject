@@ -396,7 +396,34 @@ class Plr(pygame.sprite.Sprite):
                 self.animatingdj = true;
     def delete(self):
         self.kill()
-
+class shuriken(pygame.sprite.Sprite):
+    def __init__(self, surface, pos, throwerfacingright):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = surface;
+        self.isinrange = false;
+        self.shurikenanimlist = self.initanimlist();
+        self.shurikenanimidx = 0;
+        if throwerfacingright:
+            self.direction = 1;
+        else:
+            self.direction = -1;
+        self.velocity = 4;
+        self.rect = self.image.get_rect(topleft=pos);
+        print(self.rect.x)
+    def initanimlist(self):
+        animlist = []
+        animlist.append(pygame.image.load(cwd + "/tiles/shurikenframe1.png"))
+        animlist.append(pygame.image.load(cwd + "/tiles/shurikenframe2.png"))
+        animlist.append(pygame.image.load(cwd + "/tiles/shurikenframe3.png"))
+        animlist.append(pygame.image.load(cwd + "/tiles/shurikenframe4.png"))
+        return animlist
+    def update(self):
+        self.rect.x += self.direction * self.velocity #shurikens can only move horizontal
+    def printvalues(self):
+        print("self.rect.x: ", self.rect.x)
+        print("self.rect.y: ", self.rect.y)
+        print("self.direction: ", self.direction);
+        print("self.velocity: ", self.velocity)
 class Enemy(pygame.sprite.Sprite):
     def __init__(self, surface, pos, shirtcolor):
         pygame.sprite.Sprite.__init__(self)
@@ -412,6 +439,7 @@ class Enemy(pygame.sprite.Sprite):
         self.lastcoll = 0;
         self.canmove = self.checkifcanmove(shirtcolor)
         self.canjump = self.checkifcanjump(shirtcolor);
+        self.hasshuriken = self.checkifhasshuriken(shirtcolor);
         if self.canjump:
             self.jumpanimlist = self.initjumpanimlist(shirtcolor);
             self.jumpanimidx = 0;
@@ -422,6 +450,11 @@ class Enemy(pygame.sprite.Sprite):
         if self.canmove:
             self.walkanimlist = self.initwalkanimlist(shirtcolor);
             self.walkanimidx = 0;
+        if self.hasshuriken:
+            self.shurikenobjlist = []; #list contains all thrown shurikens currently in the scene
+            self.timeshurikenlastthrown = 0
+            self.imgshuriken = pygame.image.load(cwd + "/tiles/shuriken.png")
+
         self.haseyes = self.checkifhaseyes(shirtcolor);
         self.facingright = false;
     def animate(self, canjump, canwalk):
@@ -459,7 +492,6 @@ class Enemy(pygame.sprite.Sprite):
         self.landanimidx += idxstep
         if self.facingright:
             self.image = pygame.transform.flip(self.image, true, false)
-
     def animatewalk(self, canwalk):
         if not (canwalk and self.shirtcolor == "green"):
             return None;
@@ -509,9 +541,24 @@ class Enemy(pygame.sprite.Sprite):
             return false;
         return true;
     def checkifhaseyes(self, shirtcolor):
-        if not shirtcolor == "green":
+        if not (shirtcolor == "green" or shirtcolor == "black"):
             return false;
-        return true;#switch to return true when i decide what/when enemies have eyes
+        return true;
+    def checkifhasshuriken(self, shirtcolor):
+        if shirtcolor != "black":
+            return false;
+        return true;
+    def updateshurikens(self):
+        for shuriken in self.shurikenobjlist:
+            shuriken.update()
+        timenow = pygame.time.get_ticks();
+        shurikenthrowcd = 500 #milliseconds
+        if timenow - self.timeshurikenlastthrown < shurikenthrowcd:
+            return None;
+        self.throwshuriken(timenow);
+    def throwshuriken(self, timenow):
+        self.shurikenobjlist.append(shuriken(self.imgshuriken, (self.rect.x, self.rect.y), self.facingright));
+        self.timeshurikenlastthrown = timenow;
     def applygravity(self):
         self.direction.y += self.gravity
         self.rect.y += self.direction.y;
@@ -530,6 +577,8 @@ class Enemy(pygame.sprite.Sprite):
         if self.enemyisinrange:
             self.jump();
             self.animate(self.canjump, self.canmove);
+            if self.hasshuriken:
+                self.updateshurikens();
 class Level:
     def __init__(self, currentmap, plr):
         self.levelcurrentlychanging = false
@@ -594,9 +643,9 @@ class Level:
                 enemyimage = pygame.image.load(cwd + '/tiles/EnemySprites/idlepurpleenemy.png')
                 enemyshirtcolor = "purple"
 
-            elif name == "CamoEnemySpawner":
-                enemyimage = pygame.image.load(cwd + '/tiles/EnemySprites/idlecamoenemy.png')
-                enemyshirtcolor = "camo"
+            elif name == "BlackEnemySpawner":
+                enemyimage = pygame.image.load(cwd + '/tiles/EnemySprites/idleblackenemy.png')
+                enemyshirtcolor = "black"
             else:
                 enemyimage = pygame.image.load(cwd + '/tiles/EnemySprites/idleredenemy.png')
                 enemyshirtcolor = "red"
@@ -946,6 +995,17 @@ class levelhandler:
                 screen.blit(enemy.image, (enemy.rect.x + adjcamx, enemy.rect.y + adjustcamerayfactor))
             else:
                 enemy.enemyisinrange = false
+            if enemy.hasshuriken and len(enemy.shurikenobjlist) != 0:
+                for thisshuriken in enemy.shurikenobjlist:
+                    # thisshuriken.printvalues();
+                    shurikenx = thisshuriken.rect.x
+                    shurikeny = thisshuriken.rect.y
+                    if viewleft <= shurikenx <= viewright and viewup <= shurikeny <= viewdown:
+                        shuriken.isinrange = true
+                        screen.blit(thisshuriken.image, (thisshuriken.rect.x + adjcamx, thisshuriken.rect.y + adjustcamerayfactor))
+                    else:
+                        shuriken.isinrange = false
+
         for obj in otherobjgroup:
             objx = obj.rect.x
             objy = obj.rect.y

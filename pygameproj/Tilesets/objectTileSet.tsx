@@ -51,7 +51,7 @@
  </tile>
  <tile id="8">
   <properties>
-   <property name="name" value="CamoEnemySpawner"/>
+   <property name="name" value="BlackEnemySpawner"/>
   </properties>
   <image width="128" height="128" source="../tiles/useAsTiledSpawners/camoenemyspawner.png"/>
  </tile>
