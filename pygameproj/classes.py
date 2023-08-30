@@ -66,7 +66,7 @@ class shuriken(pygame.sprite.Sprite):
         self.velocity = 15;
         self.image = surface;
         self.shurikenmaxdist = 64 * 18
-        self.traveledmaxdist = false;
+        self.deletenextframe = false;
         if throwerfacingright:
             self.image = pygame.transform.flip(self.image, true, false)
             self.direction = 1;
@@ -77,7 +77,6 @@ class shuriken(pygame.sprite.Sprite):
             self.rect = self.image.get_rect(topleft=pos);
             self.rect.x -= 10
         self.rect.y += 60
-        # print(self.rect.x)
     def initanimlist(self):
         animlist = []
         animlist.append(pygame.image.load(cwd + "/tiles/shurikenframe1.png"))
@@ -89,7 +88,7 @@ class shuriken(pygame.sprite.Sprite):
         if shurikenmaxdist > abs(initx - currx):
             return None;
         else:
-            self.traveledmaxdist = true;
+            self.deletenextframe = true;
             # print(self.traveledmaxdist)
     def update(self):
         self.rect.x += self.direction * self.velocity #shurikens can only move horizontal
@@ -576,7 +575,7 @@ class Enemy(pygame.sprite.Sprite):
     def updateshurikens(self):
         for shuriken in self.shurikengroup:
             shuriken.update()
-            if shuriken.traveledmaxdist:
+            if shuriken.deletenextframe:
                 shuriken.kill()
         timenow = pygame.time.get_ticks();
         shurikenthrowcd = 1000 #milliseconds
@@ -810,9 +809,11 @@ class Level:
                 #     player.rect.x += 128
             if enemy.hasshuriken:
                 for shuriken in enemy.shurikengroup:
-                    if shuriken.rect.colliderect(player.rect) and timenow - self.timeplrlastcollidedwithenemy >= cooldown:
-                        self.player.lives -= 1;
-                        self.timeplrlastcollidedwithenemy = timenow;
+                    if shuriken.rect.colliderect(player.rect):
+                        if timenow - self.timeplrlastcollidedwithenemy >= cooldown:
+                            self.player.lives -= 1;
+                            self.timeplrlastcollidedwithenemy = timenow;
+                        shuriken.deletenextframe = true
     def enemygroundcoll(self):
         for enemy in self.enemies.sprites():
             enemy.applygravity()
@@ -827,6 +828,13 @@ class Level:
                     elif -diry > 0:
                         enemy.rect.top = sprite.rect.bottom
                         enemy.direction.y = 0
+                if not enemy.hasshuriken:
+                    continue;
+                for shuriken in enemy.shurikengroup:
+                    if shuriken.rect.colliderect(sprite.rect):
+                        shuriken.deletenextframe = true;
+
+
     def enemywallcoll(self):
         for enemy in self.enemies.sprites():
             if not enemy.enemyisinrange:
