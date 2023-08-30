@@ -40,6 +40,7 @@ class Tile(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(topleft = pos);
         self.tile_id = tile_id;
         self.collidable = collidable;
+        self.isinrange = false;
 class Door(pygame.sprite.Sprite):
     def __init__(self, surface, pos):
         pygame.sprite.Sprite.__init__(self);
@@ -792,6 +793,8 @@ class Level:
         player.rect.x += player.physics.direction.x * player.physics.plrxvelocity
 
         for sprite in self.currentmap.collidablegroup.sprites():
+            if not sprite.isinrange:
+                continue
             if sprite.rect.colliderect(player.rect):
                 plrphysdirx = player.physics.direction.x
                 if plrphysdirx < 0:
@@ -802,6 +805,7 @@ class Level:
         player = self.player;
         player.applygravity()
         for sprite in self.currentmap.collidablegroup.sprites():
+            if not sprite.isinrange: continue;
             if sprite.rect.colliderect(player.rect):
                 if -player.physics.plryvelocity < 0:
                     self.player.onground = true
@@ -824,14 +828,8 @@ class Level:
         enemygroup = self.enemies.sprites();
         for enemy in enemygroup:
             if enemy.rect.colliderect(player.rect) and timenow - self.timeplrlastcollidedwithenemy >= cooldown:
-                #enemy collision now works
                 self.player.lives -= 1;
-                # print("enemy player collision has occured. plr has lost 1 life. plr lives are now ", self.player.lives)
                 self.timeplrlastcollidedwithenemy = timenow;
-                # if player.rect.x <= enemy.rect.x:
-                #     player.rect.x -= 128
-                # else:
-                #     player.rect.x += 128
             if enemy.hasprojectile:
                 for projectile in enemy.projectilegroup:
                     if projectile.rect.colliderect(player.rect):
@@ -847,6 +845,7 @@ class Level:
             diry = enemy.direction.y
             dirx = enemy.direction.x
             for sprite in self.currentmap.collidablegroup.sprites():
+                if not sprite.isinrange: continue;
                 if enemy.rect.colliderect(sprite.rect):
                     if -diry < 0:
                         enemy.rect.bottom = sprite.rect.top
@@ -857,6 +856,8 @@ class Level:
                         enemy.direction.y = 0
                 if not enemy.hasprojectile:
                     continue;
+
+                # need to change code below, it causes lag
                 for projectile in enemy.projectilegroup:
                     if not projectile.isinrange: continue;
                     if projectile.rect.colliderect(sprite.rect):
@@ -872,6 +873,7 @@ class Level:
             enemy.moveforward();
             collidedwithrect = false;
             for sprite in self.currentmap.collidablegroup.sprites():
+                if not sprite.isinrange: continue;
                 if enemy.rect.colliderect(sprite.rect):
                     collidedwithrect = true;
                     if dirx < 0:
@@ -1047,7 +1049,10 @@ class levelhandler:
             spritex = sprite.rect.x
             spritey = sprite.rect.y
             if viewleft <= spritex <= viewright and viewup <= spritey <= viewdown:
+                sprite.isinrange = true; #matters for performance
                 screen.blit(sprite.image, (sprite.rect.x + adjcamx, sprite.rect.y + adjustcamerayfactor))
+            else:
+                sprite.isinrange = false
         for sprite in noncollgroup:
             spritex = sprite.rect.x
             spritey = sprite.rect.y
