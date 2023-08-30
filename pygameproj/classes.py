@@ -1073,10 +1073,10 @@ class levelhandler:
                     projectilex = thisprojectile.rect.x
                     projectiley = thisprojectile.rect.y
                     if viewleft <= projectilex <= viewright and viewup <= projectiley <= viewdown:
-                        projectile.isinrange = true
+                        thisprojectile.isinrange = true
                         screen.blit(thisprojectile.image, (thisprojectile.rect.x + adjcamx, thisprojectile.rect.y + adjustcamerayfactor))
                     else:
-                        projectile.isinrange = false
+                        thisprojectile.isinrange = false
 
         for obj in otherobjgroup:
             objx = obj.rect.x
