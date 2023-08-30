@@ -425,7 +425,6 @@ class Plr(pygame.sprite.Sprite):
             self.ondash = true
             self.physics.plrxvelocity += self.dashfactor
             self.timelastdashed = timenow
-
         if key[pygame.K_ESCAPE]:
             pygame.quit();
             sys.exit();
@@ -464,7 +463,7 @@ class Enemy(pygame.sprite.Sprite):
     def __init__(self, surface, pos, shirtcolor):
         pygame.sprite.Sprite.__init__(self)
         self.image = surface
-        self.enemyisinrange = false
+        self.isinrange = false
         self.shirtcolor = shirtcolor;
         self.gravity = 0.5
         self.direction = pygame.math.Vector2(-1,0);
@@ -598,7 +597,8 @@ class Enemy(pygame.sprite.Sprite):
         projectilethrowcd = 1000 #milliseconds
         if timenow - self.timeprojectilelastthrown < projectilethrowcd:
             return None;
-        self.throwprojectile(timenow);
+        if self.isinrange:
+            self.throwprojectile(timenow);
     def throwprojectile(self, timenow):
         self.projectilegroup.add(projectile(surface = self.imgprojectile, pos = (self.rect.x, self.rect.y), throwerfacingright = self.facingright, initialxval = self.rect.x, type = self.projectiletype));
         self.timeprojectilelastthrown = timenow;
@@ -622,7 +622,7 @@ class Enemy(pygame.sprite.Sprite):
     def delete(self):
         self.kill()
     def update(self):
-        if self.enemyisinrange:
+        if self.isinrange:
             self.jump();
             self.animate(self.canjump, self.canmove);
         if self.hasprojectile:
@@ -753,7 +753,7 @@ class Level:
                 props = mapinst.tmxdata.get_tile_properties(x, y, layerindex)
                 tile_id = props["id"]
                 spritegroup = 0
-                if ((tile_id >= 4 and tile_id <= 7) or tile_id == 19 or tile_id == 18):
+                if ((tile_id >= 2 and tile_id <= 7) or tile_id == 19 or tile_id == 18 or tile_id == 13 or tile_id == 12):
                     collidable = "yes"
                     spritegroup = collidablegroup
                 else:
@@ -841,6 +841,8 @@ class Level:
                         projectile.deletenextframe = true
     def enemygroundcoll(self):
         for enemy in self.enemies.sprites():
+            if not enemy.isinrange:
+                continue;
             enemy.applygravity()
             diry = enemy.direction.y
             dirx = enemy.direction.x
@@ -856,14 +858,15 @@ class Level:
                 if not enemy.hasprojectile:
                     continue;
                 for projectile in enemy.projectilegroup:
+                    if not projectile.isinrange: continue;
                     if projectile.rect.colliderect(sprite.rect):
                         projectile.deletenextframe = true;
     def enemywallcoll(self):
         for enemy in self.enemies.sprites():
-            if not enemy.enemyisinrange:
-                continue
             if not enemy.canmove:
                 continue;
+            if not enemy.isinrange:
+                continue
 
             dirx = enemy.direction.x;
             enemy.moveforward();
@@ -945,6 +948,7 @@ class Level:
         self.markers = []
 class levelhandler:
     def __init__(self):
+        self.islevel = true
         self.levelnum = globals.savedlevelnum
         self.nextlevel = globals.savedlevelnum + 1
         self.worldnum = globals.savedworldnum
@@ -952,8 +956,9 @@ class levelhandler:
         self.tmxdata = 0
         self.nextmap = 0
         self.tmxdatalocs = [
+            cwd + '/Maps/testmap/level2.tmx',
+            cwd + "/Maps/testmap/level1.tmx",
             cwd + '/Maps/testmap/testmappygame1.tmx',
-            cwd + '/Maps/testmap/level1.tmx',
             cwd + '/Maps/testmap/testmappygame2.tmx',
             cwd + '/Maps/testmap/testmappygame3.tmx',
         ] #contains locations of all map data
@@ -1053,10 +1058,10 @@ class levelhandler:
             enemyx = enemy.rect.x
             enemyy = enemy.rect.y
             if viewleft <= enemyx <= viewright and viewup <= enemyy <= viewdown:
-                enemy.enemyisinrange = true
+                enemy.isinrange = true
                 screen.blit(enemy.image, (enemy.rect.x + adjcamx, enemy.rect.y + adjustcamerayfactor))
             else:
-                enemy.enemyisinrange = false
+                enemy.isinrange = false
             if enemy.hasprojectile and len(enemy.projectilegroup) != 0:
                 for thisprojectile in enemy.projectilegroup:
                     # thisprojectile.printvalues();
