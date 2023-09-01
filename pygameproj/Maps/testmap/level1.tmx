@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="135" height="90" tilewidth="64" tileheight="64" infinite="0" nextlayerid="6" nextobjectid="437">
+<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="135" height="90" tilewidth="64" tileheight="64" infinite="0" nextlayerid="6" nextobjectid="462">
  <tileset firstgid="1" source="../../Tilesets/TestTileSet.tsx"/>
  <tileset firstgid="21" source="../../Tilesets/objectTileSet.tsx"/>
  <tileset firstgid="32" source="../../Tilesets/backgroundimages.tsx"/>
@@ -103,7 +103,13 @@
   <object id="3" gid="25" x="460.921" y="761.65" width="256" height="256"/>
   <object id="5" gid="24" x="-5071.74" y="5938.31" width="16338.3" height="172.728"/>
   <object id="4" gid="23" x="321.463" y="3206.79" width="192" height="256"/>
-  <object id="434" gid="37" x="1654" y="1700" width="640" height="640"/>
-  <object id="435" gid="37" x="632" y="1774" width="640" height="640"/>
+  <object id="454" gid="2147483698" x="265" y="1801" width="750" height="450"/>
+  <object id="455" gid="2147483694" x="1011.88" y="1801.97" width="600" height="450"/>
+  <object id="456" gid="46" x="1608" y="1800.33" width="600" height="450"/>
+  <object id="457" gid="2147483694" x="2208" y="1800.33" width="600" height="450"/>
+  <object id="458" gid="46" x="2806.67" y="1801.67" width="600" height="450"/>
+  <object id="459" gid="2147483694" x="3401.33" y="1803" width="600" height="450"/>
+  <object id="460" gid="46" x="3998.67" y="1803" width="600" height="450"/>
+  <object id="461" gid="50" x="4598.33" y="1803.67" width="750" height="450"/>
  </objectgroup>
 </map>

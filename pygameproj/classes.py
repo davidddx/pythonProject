@@ -47,8 +47,7 @@ class object(pygame.sprite.Sprite): #basically sprites that are not tiles
         self.inrange = false;
     def delete(self):
         self.kill()
-    def update(self, plrdirectionmoving, scrollspeed):
-        self.rect.x +=  scrollspeed * plrdirectionmoving
+
 class physics():
     def __init__(self, gravity, onground, plrxvel, jumppow):
         self.gravity = gravity;
@@ -950,9 +949,7 @@ class levelhandler:
         self.tmxdata = 0
         self.nextmap = 0
         self.tmxdatalocs = [
-            # cwd + '/Maps/testmap/testmappygame4.tmx',
-            # cwd + '/Maps/testmap/testmappygame1.tmx',
-            # cwd + '/Maps/testmap/level1.tmx',
+            cwd + '/Maps/testmap/level1.tmx',
             cwd + "/Maps/testmap/level2.tmx",
             # cwd + '/Maps/testmap/testmappygame1.tmx',
             # cwd + '/Maps/testmap/testmappygame2.tmx',
@@ -1032,7 +1029,7 @@ class levelhandler:
         for sprite in backgroundgroup:
             x = sprite.rect.x;
             y = sprite.rect.y;
-            if viewleft <= x <= viewright and viewup <= y <= viewdown:
+            if viewleft - 64*6 <= x <= viewright + 64*6 and viewup - 64 * 6 <= y <= viewdown + 64*6:
                 screen.blit(sprite.image, (x + adjcamx, y + adjustcamerayfactor));
                 sprite.inrange = true
             else:

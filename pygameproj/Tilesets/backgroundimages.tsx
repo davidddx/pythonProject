@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.10.1" name="backgroundimages" tilewidth="1000" tileheight="1000" tilecount="8" columns="0">
+<tileset version="1.10" tiledversion="1.10.1" name="backgroundimages" tilewidth="1600" tileheight="880" tilecount="12" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="5">
   <properties>
@@ -12,12 +12,6 @@
    <property name="name" value="background"/>
   </properties>
   <image width="480" height="480" source="../tiles/background/tree.png"/>
- </tile>
- <tile id="7">
-  <properties>
-   <property name="name" value="background"/>
-  </properties>
-  <image width="450" height="450" source="../tiles/background/mountains.png"/>
  </tile>
  <tile id="8">
   <properties>
@@ -43,10 +37,40 @@
   </properties>
   <image width="450" height="450" source="../tiles/background/cloud1.png"/>
  </tile>
- <tile id="12">
+ <tile id="13">
   <properties>
    <property name="name" value="background"/>
   </properties>
-  <image width="1000" height="1000" source="../tiles/background/bigmountains.png"/>
+  <image width="1297" height="880" source="../tiles/background/bigmountains.png"/>
+ </tile>
+ <tile id="14">
+  <properties>
+   <property name="name" value="background"/>
+  </properties>
+  <image width="600" height="450" source="../tiles/background/mountains.png"/>
+ </tile>
+ <tile id="15">
+  <properties>
+   <property name="name" value="background"/>
+  </properties>
+  <image width="1600" height="880" source="../tiles/background/bigmountainend.png"/>
+ </tile>
+ <tile id="16">
+  <properties>
+   <property name="name" value="background"/>
+  </properties>
+  <image width="1600" height="880" source="../tiles/background/bigmountainend2.png"/>
+ </tile>
+ <tile id="17">
+  <properties>
+   <property name="name" value="background"/>
+  </properties>
+  <image width="750" height="450" source="../tiles/background/mountainend.png"/>
+ </tile>
+ <tile id="18">
+  <properties>
+   <property name="name" value="background"/>
+  </properties>
+  <image width="750" height="450" source="../tiles/background/mountainend2.png"/>
  </tile>
 </tileset>
