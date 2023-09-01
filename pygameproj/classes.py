@@ -39,6 +39,7 @@ class Tile(pygame.sprite.Sprite):
         self.tile_id = tile_id;
         self.collidable = collidable;
         self.isinrange = false;
+
 class object(pygame.sprite.Sprite): #basically sprites that are not tiles
     def __init__(self, surface, pos):
         pygame.sprite.Sprite.__init__(self);
@@ -47,6 +48,8 @@ class object(pygame.sprite.Sprite): #basically sprites that are not tiles
         self.inrange = false;
     def delete(self):
         self.kill()
+    def scroll(self, speed, direction):
+        self.rect.x += speed * direction
 
 class physics():
     def __init__(self, gravity, onground, plrxvel, jumppow):
@@ -664,7 +667,9 @@ class Level:
         for obj in objlayer:
             props = obj.properties
             name = props["name"]
-
+            print(dir(obj))
+            obj.apply_transformations()
+            print(props)
             if name == "door":
                 self.door = object(surface = obj.image, pos = (obj.x, obj.y));
             elif name == "BlueEnemySpawner":
@@ -1031,9 +1036,6 @@ class levelhandler:
             y = sprite.rect.y;
             if viewleft - 64*6 <= x <= viewright + 64*6 and viewup - 64 * 6 <= y <= viewdown + 64*6:
                 screen.blit(sprite.image, (x + adjcamx, y + adjustcamerayfactor));
-                sprite.inrange = true
-            else:
-                sprite.inrange = false
         for sprite in collgroup:
             spritex = sprite.rect.x;
             spritey = sprite.rect.y;

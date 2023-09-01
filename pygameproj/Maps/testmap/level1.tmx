@@ -103,13 +103,5 @@
   <object id="3" gid="25" x="460.921" y="761.65" width="256" height="256"/>
   <object id="5" gid="24" x="-5071.74" y="5938.31" width="16338.3" height="172.728"/>
   <object id="4" gid="23" x="321.463" y="3206.79" width="192" height="256"/>
-  <object id="454" gid="2147483698" x="265" y="1801" width="750" height="450"/>
-  <object id="455" gid="2147483694" x="1011.88" y="1801.97" width="600" height="450"/>
-  <object id="456" gid="46" x="1608" y="1800.33" width="600" height="450"/>
-  <object id="457" gid="2147483694" x="2208" y="1800.33" width="600" height="450"/>
-  <object id="458" gid="46" x="2806.67" y="1801.67" width="600" height="450"/>
-  <object id="459" gid="2147483694" x="3401.33" y="1803" width="600" height="450"/>
-  <object id="460" gid="46" x="3998.67" y="1803" width="600" height="450"/>
-  <object id="461" gid="50" x="4598.33" y="1803.67" width="750" height="450"/>
  </objectgroup>
 </map>

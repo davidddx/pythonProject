@@ -117,30 +117,6 @@
   <object id="2" gid="24" x="-1916" y="6528" width="14472" height="128"/>
   <object id="3" gid="25" x="676" y="916" width="256" height="256"/>
   <object id="1" gid="23" x="5124" y="5188" width="192" height="256"/>
-  <object id="34" gid="2147483690" x="3547" y="921" width="450" height="450"/>
-  <object id="35" gid="2147483690" x="4339" y="869" width="450" height="450"/>
-  <object id="36" gid="2147483690" x="555" y="1029" width="450" height="450"/>
-  <object id="37" gid="2147483690" x="1279" y="929" width="450" height="450"/>
-  <object id="38" gid="2147483690" x="879" y="2425" width="450" height="450"/>
-  <object id="39" gid="42" x="2167" y="2785" width="450" height="450"/>
-  <object id="40" gid="42" x="2307" y="621" width="450" height="450" rotation="90"/>
-  <object id="41" gid="2147483689" x="1479" y="1333" width="450" height="450" rotation="90"/>
-  <object id="44" gid="43" x="5943" y="729" width="450" height="450" rotation="90"/>
-  <object id="45" gid="2147483691" x="7127" y="629" width="450" height="450" rotation="90"/>
-  <object id="46" gid="2147483691" x="6211" y="1949" width="450" height="450" rotation="90"/>
-  <object id="47" gid="2147483691" x="5611" y="3337" width="450" height="450" rotation="90"/>
-  <object id="48" gid="2147483691" x="4519" y="3389" width="450" height="450" rotation="90"/>
-  <object id="50" gid="2147483691" x="7923" y="3645" width="450" height="450" rotation="-90"/>
-  <object id="51" gid="2147483691" x="5003" y="3321" width="450" height="450" rotation="-90"/>
-  <object id="52" gid="2147483691" x="2843" y="3889" width="450" height="450" rotation="-90"/>
-  <object id="53" gid="2147483689" x="3315" y="2689" width="450" height="450"/>
-  <object id="54" gid="2147483689" x="5139" y="2405" width="450" height="450"/>
-  <object id="56" gid="2147483689" x="8375" y="813" width="450" height="450" rotation="90"/>
-  <object id="58" gid="41" x="6399" y="4309" width="450" height="450" rotation="90"/>
-  <object id="59" gid="41" x="5727" y="4197" width="450" height="450" rotation="180"/>
-  <object id="60" gid="41" x="4387" y="5129" width="450" height="450" rotation="-90"/>
-  <object id="61" gid="41" x="3895" y="4345" width="450" height="450"/>
-  <object id="62" gid="41" x="2767" y="4941" width="450" height="450"/>
   <object id="63" gid="27" x="952" y="1664" width="128" height="128"/>
   <object id="64" gid="27" x="2908" y="1172" width="128" height="128"/>
   <object id="65" gid="30" x="1852" y="2524" width="128" height="128"/>
