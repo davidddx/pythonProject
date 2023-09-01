@@ -41,12 +41,11 @@ class Tile(pygame.sprite.Sprite):
         self.tile_id = tile_id;
         self.collidable = collidable;
         self.isinrange = false;
-class Door(pygame.sprite.Sprite):
+class object(pygame.sprite.Sprite): #basically sprites that are not tiles
     def __init__(self, surface, pos):
         pygame.sprite.Sprite.__init__(self);
         self.image = surface
-        self.rect = self.image.get_rect(topleft = pos)
-
+        self.rect = self.image.get_rect(topleft=pos)
     def delete(self):
         self.kill()
 class physics():
@@ -628,6 +627,14 @@ class Enemy(pygame.sprite.Sprite):
             self.animate(self.canjump, self.canmove);
         if self.hasprojectile:
             self.updateprojectiles();
+class enemyimages():
+    def __init__(self):
+        self.black = pygame.image.load(cwd + '/tiles/EnemySprites/idleblackenemy.png')
+        self.gray = pygame.image.load(cwd + '/tiles/EnemySprites/idlegrayenemy.png')
+        self.blue = pygame.image.load(cwd + '/tiles/EnemySprites/idleblueenemy.png')
+        self.red = pygame.image.load(cwd + '/tiles/EnemySprites/idleredenemy.png')
+        self.green = pygame.image.load(cwd + '/tiles/EnemySprites/idlegreenenemy.png')
+        self.purple = pygame.image.load(cwd + '/tiles/EnemySprites/idlepurpleenemy.png')
 class Level:
     def __init__(self, currentmap, plr):
         self.levelcurrentlychanging = false
@@ -635,30 +642,70 @@ class Level:
         self.playeronground = false;
         self.player = plr;
         self.current_x = 0
+        self.imgenemy = enemyimages()
+        self.enemies = pygame.sprite.Group()
+        self.door = 0
         self.oobpos = pygame.math.Vector2(0,0)
-        self.enemies = self.findenemies(currentmap)
-        self.markers = self.findmarkers(currentmap)
+        self.background = pygame.sprite.Group()
+        self.setobjects(currentmap)
         self.timeplrlastcollidedwithenemy = 0
-        self.door = self.finddoor(currentmap)
         self.nontiledobjects = self.groupnontiledobjects() #enemy is not included in this spritegroup
         self.doorcollisionoccured = false
         self.checkedenemieswitheyes = false;
         self.hasenemieswitheyes = false;
 
-#finddoor, findenemies, findmarkers, etc functions find and return important info like spritelocs/positions/etc
-    def finddoor(self, mapinst):
+#setobject sets stuff on objectlayer in tiled
+    def setobjects(self, mapinst):
         door = 0
-        doorlayer = mapinst.tmxdata.get_layer_by_name("Door")
-        for door in doorlayer:
-            props = door.properties
-            doorname = props["name"]
-            # print(dir(door))
-            # print(door.parent)
-            if doorname == "door":
-                # print("door.properties: ", door.properties)
-                # print("door created")
-                door = Door(surface = door.image, pos = (door.x, door.y))
-        return door
+        objlayer = mapinst.tmxdata.get_layer_by_name("Object Layer 1");
+        imgenemy = self.imgenemy
+
+        for obj in objlayer:
+            props = obj.properties
+            name = props["name"]
+
+            if name == "door":
+                self.door = object(surface = obj.image, pos = (obj.x, obj.y));
+            elif name == "BlueEnemySpawner":
+                enemyimage = imgenemy.blue
+                enemyshirtcolor = "blue"
+                thisenemy = Enemy(surface=enemyimage, pos=(obj.x, obj.y), shirtcolor=enemyshirtcolor);
+                self.enemies.add(thisenemy)
+            elif name == "RedEnemySpawner":
+                enemyimage = imgenemy.red
+                enemyshirtcolor = "red"
+                thisenemy = Enemy(surface=enemyimage, pos=(obj.x, obj.y), shirtcolor=enemyshirtcolor);
+                self.enemies.add(thisenemy)
+            elif name == "GreenEnemySpawner":
+                enemyimage = imgenemy.green
+                enemyshirtcolor = "green"
+                thisenemy = Enemy(surface=enemyimage, pos=(obj.x, obj.y), shirtcolor=enemyshirtcolor);
+                self.enemies.add(thisenemy)
+            elif name == "PurpleEnemySpawner":
+                enemyimage = imgenemy.purple
+                enemyshirtcolor = "purple"
+                thisenemy = Enemy(surface=enemyimage, pos=(obj.x, obj.y), shirtcolor=enemyshirtcolor);
+                self.enemies.add(thisenemy)
+            elif name == "BlackEnemySpawner":
+                enemyimage = imgenemy.black
+                enemyshirtcolor = "black"
+                thisenemy = Enemy(surface=enemyimage, pos=(obj.x, obj.y), shirtcolor=enemyshirtcolor);
+                self.enemies.add(thisenemy)
+            elif name == "GrayEnemySpawner":
+                enemyimage = imgenemy.gray
+                enemyshirtcolor = "gray"
+                thisenemy = Enemy(surface=enemyimage, pos=(obj.x, obj.y), shirtcolor=enemyshirtcolor);
+                self.enemies.add(thisenemy)
+            elif name == "plrspawn":
+                self.player.rect.x = obj.x
+                self.player.rect.y = obj.y
+            elif name == "OutOfBounds":
+                self.oobpos.x = obj.x
+                self.oobpos.y = obj.y
+            elif name == "background":
+                self.background.add(object(surface = obj.image, pos = (obj.x, obj.y)))
+            else:
+                print("error occured while looping through object layer")
     def groupnontiledobjects(self):
         #this function makes sure everything was in a spritegroup so that all sprites in a level could be deleted and changed properly
         nontiledobjectsgroup = pygame.sprite.Group()
@@ -667,65 +714,6 @@ class Level:
 
 
         return nontiledobjectsgroup
-    def findenemies(self, mapinst):
-        #think of this function as an enemy factory
-        enemygroup = pygame.sprite.Group()
-        enemyimage = pygame.image.load(enemyspriteloc)
-        enemyshirtcolor = "blue"
-        enemyspawnpointlayer = mapinst.tmxdata.get_layer_by_name("EnemySpawnPoints")
-
-        for aobject in enemyspawnpointlayer:
-            # print("aobject.properties: ", aobject.properties);
-            props = aobject.properties;
-            name = props["name"];
-            if name == "BlueEnemySpawner":
-                enemyimage = pygame.image.load(cwd + '/tiles/EnemySprites/idleblueenemy.png')
-                enemyshirtcolor = "blue"
-            elif name == "RedEnemySpawner":
-                enemyimage = pygame.image.load(cwd + '/tiles/EnemySprites/idleredenemy.png')
-                enemyshirtcolor = "red"
-            elif name == "GreenEnemySpawner":
-                enemyimage = pygame.image.load(cwd + '/tiles/EnemySprites/idlegreenenemy.png')
-                enemyshirtcolor = "green"
-
-            elif name == "PurpleEnemySpawner":
-                enemyimage = pygame.image.load(cwd + '/tiles/EnemySprites/idlepurpleenemy.png')
-                enemyshirtcolor = "purple"
-
-            elif name == "BlackEnemySpawner":
-                enemyimage = pygame.image.load(cwd + '/tiles/EnemySprites/idleblackenemy.png')
-                enemyshirtcolor = "black"
-            elif name == "GrayEnemySpawner":
-                enemyimage = pygame.image.load(cwd + "/tiles/EnemySprites/idlegrayenemy.png");
-                enemyshirtcolor = "gray"
-            else:
-                enemyimage = pygame.image.load(cwd + '/tiles/EnemySprites/idleredenemy.png')
-                enemyshirtcolor = "red"
-
-
-            thisenemy = Enemy(surface = enemyimage, pos = (aobject.x, aobject.y), shirtcolor = enemyshirtcolor);
-            enemygroup.add(thisenemy)
-
-        return enemygroup
-
-#markers used for spawning plrs/enemys and setting oob
-    def findmarkers(self, mapinst):
-        markerlist = []
-        markerlayer = mapinst.tmxdata.get_layer_by_name("Markers")
-        for aobject in markerlayer:
-            properties = aobject.properties
-            objname = properties["name"]
-            if objname == "plrspawn":
-                self.setplrspawnpos(spawnpointx = aobject.x, spawnpointy = aobject.y)
-            elif objname == "OutOfBounds":
-                self.oobpos.x = aobject.x
-                self.oobpos.y = aobject.y
-            markerlist.append(aobject)
-
-        return markerlist
-    def setplrspawnpos(self, spawnpointx, spawnpointy):
-        self.player.rect.x = spawnpointx
-        self.player.rect.y = spawnpointy
 
 #func below inits tiles and enemies
     def inittiles(self, mapinst):
@@ -922,8 +910,6 @@ class Level:
             # print("player is out of bounds, has lost one life. player.lives is now ", self.player.lives)
             self.player.isOob = true
 
-# level scroller and tile position updates
-
 #run function is what the level should check/do every frame while running
     def run(self):
         #PLAYER
@@ -948,8 +934,7 @@ class Level:
         for enemy in self.enemies.sprites():
             enemy.delete()
         self.enemies.empty()
-        self.markers.clear()
-        self.markers = []
+
 class levelhandler:
     def __init__(self):
         self.islevel = true
@@ -960,6 +945,8 @@ class levelhandler:
         self.tmxdata = 0
         self.nextmap = 0
         self.tmxdatalocs = [
+            cwd + '/Maps/testmap/testmappygame4.tmx',
+            cwd + '/Maps/testmap/testmappygame1.tmx',
             cwd + '/Maps/testmap/level2.tmx',
             cwd + "/Maps/testmap/level1.tmx",
             cwd + '/Maps/testmap/testmappygame1.tmx',
@@ -976,19 +963,6 @@ class levelhandler:
         plr = Plr(plrpos=(0,0), plrsurf=pygame.image.load(plrspriteloc))
         level = Level(currentmap = map, plr = plr)
         return level
-
-#will add stuff to getmaxlevelnum function when i have world and level organization situated
-    def getmaxlevelnum(self):
-        thismaxlevelnum = 0
-        #whatever logic here
-        #
-        #
-        #
-        #
-        #
-        print("returned max level num for this world")
-        return thismaxlevelnum;
-
 #returns the next level
     def changeleveltonext(self):
         self.plrlives = self.currentlevel.player.lives
@@ -1029,14 +1003,13 @@ class levelhandler:
         print("game over, you have lost all your lives. Exiting the application...")
         pygame.quit()
         sys.exit()
-
 #levelhandler update function and render function just puts everything on the screen
-
     def render(self, thislevel, screen, adjustcamerayfactor, adjcamx):
         collgroup = thislevel.currentmap.collidablegroup;
         noncollgroup = thislevel.currentmap.noncollidablegroup;
         enemygroup = thislevel.enemies;
         otherobjgroup = thislevel.nontiledobjects;
+        backgroundgroup = thislevel.background
         plr = thislevel.player;
         plrx = plr.rect.x;
         plry = plr.rect.y;
@@ -1046,7 +1019,16 @@ class levelhandler:
         viewright = plrx + screenwidth / 2 + extrarendering;
         viewup = plry - screenheight / 2 - extrarendering;
         viewdown = plry + screenheight / 2 + extrarendering;
-
+        for sprite in noncollgroup:
+            spritex = sprite.rect.x;
+            spritey = sprite.rect.y;
+            if viewleft <= spritex <= viewright and viewup <= spritey <= viewdown:
+                screen.blit(sprite.image, (spritex + adjcamx, spritey + adjustcamerayfactor));
+        for sprite in backgroundgroup:
+            x = sprite.rect.x;
+            y = sprite.rect.y;
+            if viewleft <= x <= viewright and viewup <= y <= viewdown:
+                screen.blit(sprite.image, (x + adjcamx, y + adjustcamerayfactor));
         for sprite in collgroup:
             spritex = sprite.rect.x;
             spritey = sprite.rect.y;
@@ -1055,11 +1037,7 @@ class levelhandler:
                 screen.blit(sprite.image, (sprite.rect.x + adjcamx, sprite.rect.y + adjustcamerayfactor));
             else:
                 sprite.isinrange = false;
-        for sprite in noncollgroup:
-            spritex = sprite.rect.x;
-            spritey = sprite.rect.y;
-            if viewleft <= spritex <= viewright and viewup <= spritey <= viewdown:
-                screen.blit(sprite.image, (sprite.rect.x + adjcamx, sprite.rect.y + adjustcamerayfactor));
+
 
 
         for enemy in enemygroup:
@@ -1070,7 +1048,8 @@ class levelhandler:
                 screen.blit(enemy.image, (enemy.rect.x + adjcamx, enemy.rect.y + adjustcamerayfactor));
             else:
                 enemy.isinrange = false
-            if enemy.hasprojectile and len(enemy.projectilegroup) != 0:
+            if not enemy.hasprojectile: continue;
+            if len(enemy.projectilegroup) != 0:
                 for thisprojectile in enemy.projectilegroup:
                     # thisprojectile.printvalues();
                     projectilex = thisprojectile.rect.x;

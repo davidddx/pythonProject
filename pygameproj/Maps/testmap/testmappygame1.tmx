@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="45" height="30" tilewidth="64" tileheight="64" infinite="0" nextlayerid="9" nextobjectid="29">
+<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="45" height="30" tilewidth="64" tileheight="64" infinite="0" nextlayerid="10" nextobjectid="35">
  <tileset firstgid="1" source="../../Tilesets/TestTileSet.tsx"/>
  <tileset firstgid="21" source="../../Tilesets/objectTileSet.tsx"/>
+ <tileset firstgid="32" source="../../Tilesets/backgroundimages.tsx"/>
  <layer id="2" name="World" width="45" height="30">
   <data encoding="csv">
 5,5,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
@@ -36,17 +37,15 @@
 5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5
 </data>
  </layer>
- <objectgroup id="5" name="Markers">
+ <objectgroup id="9" name="Object Layer 1">
   <object id="20" gid="24" x="-690" y="1916" width="4414" height="202"/>
   <object id="21" gid="25" x="344" y="508" width="256" height="256"/>
- </objectgroup>
- <objectgroup id="7" name="Door">
   <object id="19" name="door" gid="23" x="2688" y="1152" width="192" height="256"/>
- </objectgroup>
- <objectgroup id="6" name="EnemySpawnPoints">
   <object id="24" gid="27" x="1478" y="402" width="128" height="128"/>
   <object id="26" gid="30" x="1588" y="690" width="128" height="128"/>
   <object id="27" gid="29" x="1966" y="650" width="128" height="128"/>
   <object id="28" gid="31" x="982" y="384" width="128" height="128"/>
+  <object id="33" gid="38" x="1190" y="1158" width="480" height="480"/>
+  <object id="34" gid="39" x="639" y="1347" width="450" height="450"/>
  </objectgroup>
 </map>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="45" height="30" tilewidth="64" tileheight="64" infinite="0" nextlayerid="5" nextobjectid="8">
+<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="45" height="30" tilewidth="64" tileheight="64" infinite="0" nextlayerid="6" nextobjectid="8">
  <tileset firstgid="1" source="../../Tilesets/TestTileSet.tsx"/>
  <tileset firstgid="21" source="../../Tilesets/objectTileSet.tsx"/>
  <layer id="1" name="Tile Layer 1" width="45" height="30">
@@ -36,17 +36,13 @@
 5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5
 </data>
  </layer>
- <objectgroup id="2" name="Markers">
+ <objectgroup id="5" name="Object Layer 1">
   <object id="5" name="PlrSpawnPoint" gid="25" x="207.462" y="381.46" width="256" height="256"/>
   <object id="6" name="OutOfBounds" gid="24" x="-1908.46" y="2168.71" width="7206.32" height="242.305"/>
- </objectgroup>
- <objectgroup id="3" name="EnemySpawnPoints">
   <object id="1" name="BlueEnemy" gid="26" x="1471.67" y="190.73" width="128" height="128"/>
   <object id="2" name="BlueEnemy" gid="26" x="1931.38" y="235.458" width="128" height="128"/>
   <object id="3" name="BlueEnemy" gid="26" x="1178.45" y="523.707" width="128" height="128"/>
   <object id="4" name="BlueEnemy" gid="26" x="2381.14" y="337.339" width="128" height="128"/>
- </objectgroup>
- <objectgroup id="4" name="Door">
   <object id="7" name="door" gid="23" x="2488.3" y="955.472" width="192" height="256"/>
  </objectgroup>
 </map>
