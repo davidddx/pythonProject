@@ -3,8 +3,6 @@ import globals
 from settings import *
 from pytmx.util_pygame import load_pygame;
 
-
-#next idea is to use objects in tiled to add background to levels
 class Map():
     def __init__(self, tmxdata):
         self.collidablegroup = pygame.sprite.Group();
@@ -46,8 +44,11 @@ class object(pygame.sprite.Sprite): #basically sprites that are not tiles
         pygame.sprite.Sprite.__init__(self);
         self.image = surface
         self.rect = self.image.get_rect(topleft=pos)
+        self.inrange = false;
     def delete(self):
         self.kill()
+    def update(self, plrdirectionmoving, scrollspeed):
+        self.rect.x +=  scrollspeed * plrdirectionmoving
 class physics():
     def __init__(self, gravity, onground, plrxvel, jumppow):
         self.gravity = gravity;
@@ -637,6 +638,7 @@ class enemyimages():
         self.purple = pygame.image.load(cwd + '/tiles/EnemySprites/idlepurpleenemy.png')
 class Level:
     def __init__(self, currentmap, plr):
+        self.lastframeplrxpos = 0
         self.levelcurrentlychanging = false
         self.currentmap = self.inittiles(currentmap);
         self.playeronground = false;
@@ -844,14 +846,6 @@ class Level:
                     elif -diry > 0:
                         enemy.rect.top = sprite.rect.bottom
                         enemy.direction.y = 0
-                if not enemy.hasprojectile:
-                    continue;
-
-                # need to change code below, it causes lag
-                for projectile in enemy.projectilegroup:
-                    if not projectile.isinrange: continue;
-                    if projectile.rect.colliderect(sprite.rect):
-                        projectile.deletenextframe = true;
     def enemywallcoll(self):
         for enemy in self.enemies.sprites():
             if not enemy.canmove:
@@ -924,6 +918,17 @@ class Level:
         self.enemygroundcoll()
         self.enemywallcoll()
         self.enemyhaseyes();
+        plrxpos = self.player.rect.x;
+        #background
+        if self.player.moving:
+            if plrxpos == self.lastframexpos:
+                return;
+            for images in self.background:
+                if not images.inrange:
+                    continue;
+                images.update(plrdirectionmoving = self.player.physics.direction.x, scrollspeed = self.player.physics.plrxvelocity / 3);
+        self.lastframexpos = plrxpos
+
     def deletelevel(self):
         self.levelcurrentlychanging = true
         self.currentmap.clearmap()
@@ -945,13 +950,13 @@ class levelhandler:
         self.tmxdata = 0
         self.nextmap = 0
         self.tmxdatalocs = [
-            cwd + '/Maps/testmap/testmappygame4.tmx',
-            cwd + '/Maps/testmap/testmappygame1.tmx',
-            cwd + '/Maps/testmap/level2.tmx',
-            cwd + "/Maps/testmap/level1.tmx",
-            cwd + '/Maps/testmap/testmappygame1.tmx',
-            cwd + '/Maps/testmap/testmappygame2.tmx',
-            cwd + '/Maps/testmap/testmappygame3.tmx',
+            # cwd + '/Maps/testmap/testmappygame4.tmx',
+            # cwd + '/Maps/testmap/testmappygame1.tmx',
+            # cwd + '/Maps/testmap/level1.tmx',
+            cwd + "/Maps/testmap/level2.tmx",
+            # cwd + '/Maps/testmap/testmappygame1.tmx',
+            # cwd + '/Maps/testmap/testmappygame2.tmx',
+            # cwd + '/Maps/testmap/testmappygame3.tmx',
         ] #contains locations of all map data
         self.maxlevelnum = len(self.tmxdatalocs)
         self.currentlevel = self.initlevel(levelnum = self.levelnum)
@@ -1029,6 +1034,9 @@ class levelhandler:
             y = sprite.rect.y;
             if viewleft <= x <= viewright and viewup <= y <= viewdown:
                 screen.blit(sprite.image, (x + adjcamx, y + adjustcamerayfactor));
+                sprite.inrange = true
+            else:
+                sprite.inrange = false
         for sprite in collgroup:
             spritex = sprite.rect.x;
             spritey = sprite.rect.y;

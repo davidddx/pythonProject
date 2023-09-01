@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.10.1" name="backgroundimages" tilewidth="640" tileheight="640" tilecount="7" columns="0">
+<tileset version="1.10" tiledversion="1.10.1" name="backgroundimages" tilewidth="1000" tileheight="1000" tilecount="8" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="5">
   <properties>
@@ -42,5 +42,11 @@
    <property name="name" value="background"/>
   </properties>
   <image width="450" height="450" source="../tiles/background/cloud1.png"/>
+ </tile>
+ <tile id="12">
+  <properties>
+   <property name="name" value="background"/>
+  </properties>
+  <image width="1000" height="1000" source="../tiles/background/bigmountains.png"/>
  </tile>
 </tileset>
