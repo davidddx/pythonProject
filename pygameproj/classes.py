@@ -631,13 +631,12 @@ class Enemy(pygame.sprite.Sprite):
         if self.hasprojectile:
             self.updateprojectiles();
 class enemyimages():
-    def __init__(self):
-        self.black = pygame.image.load(cwd + '/tiles/EnemySprites/idleblackenemy.png')
-        self.gray = pygame.image.load(cwd + '/tiles/EnemySprites/idlegrayenemy.png')
-        self.blue = pygame.image.load(cwd + '/tiles/EnemySprites/idleblueenemy.png')
-        self.red = pygame.image.load(cwd + '/tiles/EnemySprites/idleredenemy.png')
-        self.green = pygame.image.load(cwd + '/tiles/EnemySprites/idlegreenenemy.png')
-        self.purple = pygame.image.load(cwd + '/tiles/EnemySprites/idlepurpleenemy.png')
+    black = pygame.image.load(cwd + '/tiles/EnemySprites/idleblackenemy.png')
+    gray = pygame.image.load(cwd + '/tiles/EnemySprites/idlegrayenemy.png')
+    blue = pygame.image.load(cwd + '/tiles/EnemySprites/idleblueenemy.png')
+    red = pygame.image.load(cwd + '/tiles/EnemySprites/idleredenemy.png')
+    green = pygame.image.load(cwd + '/tiles/EnemySprites/idlegreenenemy.png')
+    purple = pygame.image.load(cwd + '/tiles/EnemySprites/idlepurpleenemy.png')
 class Level:
     def __init__(self, currentmap, plr):
         self.lastframeplrxpos = 0
@@ -747,8 +746,9 @@ class Level:
                 pos = (64*x, 64*y);
                 props = mapinst.tmxdata.get_tile_properties(x, y, layerindex)
                 tile_id = props["id"]
+                print(tile_id)
                 spritegroup = 0
-                if ((tile_id >= 2 and tile_id <= 7) or tile_id == 19 or tile_id == 18 or tile_id == 13 or tile_id == 12):
+                if ((tile_id >= 2 and tile_id <= 7) or tile_id == 20 or tile_id == 19 or tile_id == 18 or tile_id == 13 or tile_id == 12):
                     collidable = "yes"
                     spritegroup = collidablegroup
                 else:
@@ -761,7 +761,7 @@ class Level:
                 # print("collidable?: ", collidable)
                 tile_info = {
                     "pos": pos,
-                    "surf": surf,
+                    "surf": mapinst.tmxdata.get_tile_image(x, y, layerindex),
                     "groups": spritegroup,
                     "tile_id": tile_id,
                     "collidable": collidable

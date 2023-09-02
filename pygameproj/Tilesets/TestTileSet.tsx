@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.10.1" name="TestTileSet" tilewidth="64" tileheight="64" tilecount="20" columns="0">
+<tileset version="1.10" tiledversion="1.10.2" name="TestTileSet" tilewidth="64" tileheight="64" tilecount="23" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0">
   <image width="64" height="64" source="../tiles/BasicBlueSkyTile.png"/>
@@ -60,5 +60,14 @@
  </tile>
  <tile id="19">
   <image width="64" height="64" source="../tiles/GrassSpriteNight.png"/>
+ </tile>
+ <tile id="20">
+  <image width="64" height="64" source="../tiles/cornergrasssprite.png"/>
+ </tile>
+ <tile id="21">
+  <image width="64" height="64" source="../tiles/corneroppositegrasssprite.png"/>
+ </tile>
+ <tile id="22">
+  <image width="64" height="64" source="../tiles/grassspritehorizontal.png"/>
  </tile>
 </tileset>
