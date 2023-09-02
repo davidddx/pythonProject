@@ -3,8 +3,8 @@ import os
 #pre Runtime
 true = True
 false = False
-screenwidth = 1500;
-screenheight = 1000;
+screenwidth = 1000;
+screenheight = 700;
 cwd = str(os.getcwd());
 lightmaploc = cwd + '/Maps/testmap/testmappygame1.tmx';
 darkmaploc = cwd + '/Maps/testmap/testmappygame2.tmx';

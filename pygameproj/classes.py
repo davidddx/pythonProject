@@ -667,9 +667,9 @@ class Level:
         for obj in objlayer:
             props = obj.properties
             name = props["name"]
-            print(dir(obj))
+            # print(dir(obj))
             obj.apply_transformations()
-            print(props)
+            # print(props)
             if name == "door":
                 self.door = object(surface = obj.image, pos = (obj.x, obj.y));
             elif name == "BlueEnemySpawner":

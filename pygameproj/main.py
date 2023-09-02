@@ -1,4 +1,4 @@
-import pygame, sys, os, pymunk;
+import pygame, sys, os;
 import globals
 from settings import *
 from classes import *
