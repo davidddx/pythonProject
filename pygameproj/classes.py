@@ -953,12 +953,12 @@ class levelhandler:
         self.tmxdata = 0
         self.nextmap = 0
         self.tmxdatalocs = [
-            cwd + '/Maps/testmap/testmap.tmx',
+            cwd + '/Maps/testmap/level1.tmx',
             cwd + "/Maps/testmap/level2.tmx",
             # cwd + '/Maps/testmap/testmappygame1.tmx',
             # cwd + '/Maps/testmap/testmappygame2.tmx',
             # cwd + '/Maps/testmap/testmappygame3.tmx',
-        ] #contains locations of all map data
+        ] #contains locations of .tmx maps
         self.maxlevelnum = len(self.tmxdatalocs)
         self.currentlevel = self.initlevel(levelnum = self.levelnum)
         self.plrlives = self.currentlevel.player.lives #need to add gui element to plr lives

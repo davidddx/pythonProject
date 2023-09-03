@@ -194,16 +194,16 @@
    <wangtile tileid="4" wangid="0,2,0,2,0,2,0,2"/>
    <wangtile tileid="6" wangid="0,1,0,2,0,2,0,1"/>
    <wangtile tileid="20" wangid="0,1,0,1,0,2,0,1"/>
-   <wangtile tileid="21" wangid="0,1,0,2,0,2,0,2"/>
+   <wangtile tileid="21" wangid="0,2,0,2,0,1,0,2"/>
    <wangtile tileid="22" wangid="0,2,0,2,0,1,0,1"/>
    <wangtile tileid="23" wangid="0,1,0,2,0,1,0,1"/>
    <wangtile tileid="24" wangid="0,1,0,1,0,2,0,2"/>
-   <wangtile tileid="25" wangid="0,2,0,2,0,2,0,1"/>
+   <wangtile tileid="25" wangid="0,1,0,2,0,2,0,2"/>
    <wangtile tileid="26" wangid="0,2,0,1,0,1,0,2"/>
    <wangtile tileid="27" wangid="0,2,0,1,0,1,0,1"/>
    <wangtile tileid="28" wangid="0,1,0,1,0,1,0,2"/>
    <wangtile tileid="29" wangid="0,2,0,1,0,2,0,2"/>
-   <wangtile tileid="30" wangid="0,2,0,2,0,1,0,2"/>
+   <wangtile tileid="30" wangid="0,2,0,2,0,2,0,1"/>
   </wangset>
  </wangsets>
 </tileset>
