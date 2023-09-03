@@ -747,7 +747,6 @@ class Level:
                 props = mapinst.tmxdata.get_tile_properties(x, y, layerindex)
                 tile_id = props["id"]
                 tilecollidable = props["collidable"]
-                print(tile_id)
                 spritegroup = 0
                 if tilecollidable:
                     spritegroup = collidablegroup
@@ -1072,11 +1071,18 @@ class levelhandler:
             if viewleft <= objx <= viewright and viewup <= objy <= viewdown:  # pygame has upward as negative so the inequality is up <= y <= down instead of down <= y <= up
                 screen.blit(obj.image, (objx + adjcamx, obj.rect.y + adjustcamerayfactor))
         if not self.changinglevel:
+            fontstring = "Helvetica"
+            fontsize = 64
             #displays lives
-            livesfont = pygame.font.SysFont("Times New Roman", 64)
-            livesimg = livesfont.render(str(plr.lives), 1, (255,255,255))
+            livesfont = pygame.font.SysFont(fontstring, fontsize)
+            newlivesfont = pygame.font.SysFont(fontstring, fontsize + 3)
+            print(pygame.font.get_fonts())
+            livesimg = livesfont.render(str(plr.lives), 1, (0,0,0))
+            livesbckgrnd = newlivesfont.render(str(plr.lives), 1, (230,230,230))
             screen.blit(self.heartsymbol, (0, 0))
-            screen.blit(livesimg, (64, 0))
+            screen.blit(livesbckgrnd, (64, 3))
+            screen.blit(livesimg, (64, 3))
+
     def update(self):
         screen = globals.screen
         adjustcamerayfactor = -(self.currentlevel.player.rect.y - self.currentlevel.player.adjustcamerayfactor)
