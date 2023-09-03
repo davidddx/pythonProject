@@ -746,13 +746,12 @@ class Level:
                 pos = (64*x, 64*y);
                 props = mapinst.tmxdata.get_tile_properties(x, y, layerindex)
                 tile_id = props["id"]
+                tilecollidable = props["collidable"]
                 print(tile_id)
                 spritegroup = 0
-                if ((tile_id >= 2 and tile_id <= 7) or tile_id == 20 or tile_id == 19 or tile_id == 18 or tile_id == 13 or tile_id == 12):
-                    collidable = "yes"
+                if tilecollidable:
                     spritegroup = collidablegroup
                 else:
-                    collidable = "no"
                     spritegroup = noncollidablegroup
 
 
@@ -761,13 +760,13 @@ class Level:
                 # print("collidable?: ", collidable)
                 tile_info = {
                     "pos": pos,
-                    "surf": mapinst.tmxdata.get_tile_image(x, y, layerindex),
+                    "surf": surf,
                     "groups": spritegroup,
                     "tile_id": tile_id,
-                    "collidable": collidable
+                    "collidable": tilecollidable
                 }
                 tileinstance = Tile(**tile_info)
-                if collidable == "yes":
+                if tilecollidable:
                     groupc.append(tileinstance)
                 else:
                     groupn.append(tileinstance)
@@ -954,7 +953,7 @@ class levelhandler:
         self.tmxdata = 0
         self.nextmap = 0
         self.tmxdatalocs = [
-            cwd + '/Maps/testmap/level1.tmx',
+            cwd + '/Maps/testmap/testmap.tmx',
             cwd + "/Maps/testmap/level2.tmx",
             # cwd + '/Maps/testmap/testmappygame1.tmx',
             # cwd + '/Maps/testmap/testmappygame2.tmx',
