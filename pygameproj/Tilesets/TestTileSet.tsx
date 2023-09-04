@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.10.2" name="TestTileSet" tilewidth="64" tileheight="64" tilecount="31" columns="0">
+<tileset version="1.10" tiledversion="1.10.2" name="TestTileSet" tilewidth="64" tileheight="64" tilecount="34" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0">
   <properties>
@@ -186,6 +186,24 @@
    <property name="collidable" type="bool" value="true"/>
   </properties>
   <image width="64" height="64" source="../tiles/flippedcorneroppositegrassspriteverticalf.png"/>
+ </tile>
+ <tile id="31">
+  <properties>
+   <property name="collidable" type="bool" value="false"/>
+  </properties>
+  <image width="64" height="64" source="../tiles/background/flowertileother.png"/>
+ </tile>
+ <tile id="33">
+  <properties>
+   <property name="collidable" type="bool" value="false"/>
+  </properties>
+  <image width="64" height="64" source="../tiles/background/flowertile.png"/>
+ </tile>
+ <tile id="34">
+  <properties>
+   <property name="collidable" type="bool" value="false"/>
+  </properties>
+  <image width="64" height="64" source="../tiles/background/grassnoncollidable.png"/>
  </tile>
  <wangsets>
   <wangset name="Unnamed Set" type="corner" tile="-1">
