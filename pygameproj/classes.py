@@ -46,6 +46,8 @@ class object(pygame.sprite.Sprite): #basically sprites that are not tiles
         self.image = surface
         self.rect = self.image.get_rect(topleft=pos)
         self.inrange = false;
+        self.length = 0;
+        self.tall = 0;
     def delete(self):
         self.kill()
     def scroll(self, speed, direction):
@@ -164,7 +166,7 @@ class Plr(pygame.sprite.Sprite):
         self.image = plrsurf;
         self.rect = self.image.get_rect(topleft = plrpos);
         self.onground = false;
-        self.physics = physics(gravity = 2, onground = false, plrxvel = 30, jumppow = -35);
+        self.physics = physics(gravity = 1.5, onground = false, plrxvel = 20, jumppow = -20);
         self.facingright = true;
 
         #jumping vars
@@ -708,7 +710,11 @@ class Level:
                 self.oobpos.x = obj.x
                 self.oobpos.y = obj.y
             elif name == "background":
-                self.background.add(object(surface = obj.image, pos = (obj.x, obj.y)))
+                objref = object(surface = obj.image, pos = (obj.x, obj.y));
+                objref.length = obj.width;
+                objref.tall = obj.height;
+                # print(dir(obj))
+                self.background.add(objref)
             else:
                 print("error occured while looping through object layer")
     def groupnontiledobjects(self):
@@ -923,7 +929,7 @@ class Level:
         plrxpos = self.player.rect.x;
         #background
         if self.player.moving:
-            if plrxpos == self.lastframexpos:
+            if plrxpos == self.lastframeplrxpos:
                 return;
             for images in self.background:
                 if not images.inrange:
@@ -953,7 +959,7 @@ class levelhandler:
         self.nextmap = 0
         self.tmxdatalocs = [
             cwd + '/Maps/testmap/level1.tmx',
-            cwd + "/Maps/testmap/level2.tmx",
+            # cwd + "/Maps/testmap/level2.tmx",
             # cwd + '/Maps/testmap/testmappygame1.tmx',
             # cwd + '/Maps/testmap/testmappygame2.tmx',
             # cwd + '/Maps/testmap/testmappygame3.tmx',
@@ -1032,7 +1038,9 @@ class levelhandler:
         for sprite in backgroundgroup:
             x = sprite.rect.x;
             y = sprite.rect.y;
-            if viewleft - 64*6 <= x <= viewright + 64*6 and viewup - 64 * 6 <= y <= viewdown + 64*6:
+            w = sprite.length;
+            h = sprite.tall;
+            if viewleft - w <= x <= viewright + w and viewup - h <= y <= viewdown + h :
                 screen.blit(sprite.image, (x + adjcamx, y + adjustcamerayfactor));
         for sprite in collgroup:
             spritex = sprite.rect.x;
@@ -1076,7 +1084,7 @@ class levelhandler:
             #displays lives
             livesfont = pygame.font.SysFont(fontstring, fontsize)
             newlivesfont = pygame.font.SysFont(fontstring, fontsize + 3)
-            print(pygame.font.get_fonts())
+            # print(pygame.font.get_fonts())
             livesimg = livesfont.render(str(plr.lives), 1, (0,0,0))
             livesbckgrnd = newlivesfont.render(str(plr.lives), 1, (230,230,230))
             screen.blit(self.heartsymbol, (0, 0))
