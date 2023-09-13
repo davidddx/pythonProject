@@ -1,6 +1,6 @@
 import os
 
-#pre Runtime
+
 true = True
 false = False
 screenwidth = 1000;

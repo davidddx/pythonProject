@@ -1080,7 +1080,7 @@ class levelhandler:
                 screen.blit(obj.image, (objx + adjcamx, obj.rect.y + adjustcamerayfactor))
         if not self.changinglevel:
             # fontstring = "Helvetica"
-            fonstring = "Times New Roman"
+            fontstring = "Times New Roman"
             fontsize = 64
             #displays lives
             livesfont = pygame.font.SysFont(fontstring, fontsize)
