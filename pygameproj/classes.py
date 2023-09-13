@@ -1079,7 +1079,8 @@ class levelhandler:
             if viewleft <= objx <= viewright and viewup <= objy <= viewdown:  # pygame has upward as negative so the inequality is up <= y <= down instead of down <= y <= up
                 screen.blit(obj.image, (objx + adjcamx, obj.rect.y + adjustcamerayfactor))
         if not self.changinglevel:
-            fontstring = "Helvetica"
+            # fontstring = "Helvetica"
+            fonstring = "Times New Roman"
             fontsize = 64
             #displays lives
             livesfont = pygame.font.SysFont(fontstring, fontsize)
