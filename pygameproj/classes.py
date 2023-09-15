@@ -50,7 +50,7 @@ class object(pygame.sprite.Sprite): #basically sprites that are not tiles
         self.image = surface
         self.rect = self.image.get_rect(topleft=pos);
         self.inrange = false;
-        self.objtype = type;
+        self.type = type;
         self.length = len;
         self.tall = height;
         self.speed = self.getspeed(type = type);
@@ -58,8 +58,8 @@ class object(pygame.sprite.Sprite): #basically sprites that are not tiles
     def getspeed(self, type):
         if type == "zero": #immovable background objects
             return 0;
-        elif type == "one": #part of full background layer
-            return 0.5;
+        elif type == "one": #looping background
+            return 0.25;
         else:
             return 0;
     def delete(self):
@@ -68,10 +68,8 @@ class object(pygame.sprite.Sprite): #basically sprites that are not tiles
         x += speed * direction * typefactor; #direction refers to x axis
         return x;
     def update(self, direction, scrollspeed):
-        if not self.inrange:
-            return None;
-        print("object.update")
-        self.rect.x = self.scroll(speed = scrollspeed, direction = direction, typefactor = self.speed, x = self.rect.x);
+        if self.inrange or self.type == "one":
+            self.rect.x = self.scroll(speed = scrollspeed, direction = direction, typefactor = self.speed, x = self.rect.x);
 
 class physics():
     def __init__(self, gravity, onground, plrxvel, jumppow):
@@ -961,9 +959,10 @@ class Level:
             if plrxpos == self.lastframexpos:
                 return;
             for images in self.background:
-                if not images.objtype == "one":
-                    if not images.inrange:
+                if not images.inrange:
+                    if not images.type == "one":
                         continue;
+
                 images.update(direction = self.player.physics.direction.x, scrollspeed = self.player.physics.plrxvelocity);
         self.lastframexpos = plrxpos
 
@@ -985,6 +984,7 @@ class levelhandler:
         self.nextlevel = globals.savedlevelnum + 1
         self.worldnum = globals.savedworldnum
         self.changinglevel = false
+        self.timelastrestarted = 0;
         self.tmxdata = 0
         self.nextmap = 0
         self.tmxdatalocs = [
@@ -1022,9 +1022,26 @@ class levelhandler:
         map = Map(tmxdata = tmxdata)
         self.currentlevel = Level(currentmap=map, plr=plr)
         # print("level has been changed!")
-    def checkrestartlevel(self):
-        if self.currentlevel.player.isOob == false:
-            return None
+    def checkrestartlevel(self, plrisoob):
+        key = pygame.key.get_pressed()
+        if plrisoob or (key[pygame.K_r]):
+            cd = 1000;
+            if pygame.time.get_ticks() - self.timelastrestarted >= cd:
+                self.restartlevel();
+                self.timelastrestarted = pygame.time.get_ticks();
+        # self.plrlives = self.currentlevel.player.lives
+        # self.currentlevel.deletelevel()
+        # del self.currentlevel
+        # levelnum = self.levelnum
+        # plrx = 18;
+        # plry = 3;
+        # plr = Plr(plrpos=(plrx * 64, plry * 64), plrsurf=pygame.image.load(plrspriteloc))
+        # plr.lives = self.plrlives
+        # self.tmxdata = load_pygame(self.tmxdatalocs[levelnum])
+        # tmxdata = self.tmxdata
+        # map = Map(tmxdata=tmxdata)
+        # self.currentlevel = Level(currentmap=map, plr=plr)
+    def restartlevel(self):
         self.plrlives = self.currentlevel.player.lives
         self.currentlevel.deletelevel()
         del self.currentlevel
@@ -1129,7 +1146,6 @@ class levelhandler:
             screen.blit(self.heartsymbol, (0, 0))
             screen.blit(livesbckgrnd, (64, 3))
             screen.blit(livesimg, (64, 3))
-
     def update(self):
         screen = globals.screen
         adjustcamerayfactor = -(self.currentlevel.player.rect.y - self.currentlevel.player.adjustcamerayfactor)
@@ -1138,5 +1154,5 @@ class levelhandler:
         screen.fill((0, 0, 0));
         thislevel = self.currentlevel
         self.render(thislevel = thislevel, screen = screen, adjustcamerayfactor = adjustcamerayfactor, adjcamx = adjustcameraxfactor)
-        self.checkrestartlevel()
+        self.checkrestartlevel(self.currentlevel.player.isOob);
         self.checkifgameover(self.currentlevel.player.lives)

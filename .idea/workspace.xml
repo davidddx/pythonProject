@@ -4,10 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e2939fcd-4fa2-4fa5-aa65-2d278de70d72" name="Changes" comment="decoration spritegroup added">
+    <list default="true" id="e2939fcd-4fa2-4fa5-aa65-2d278de70d72" name="Changes" comment="sprite/image editing">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pygameproj/classes.py" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/classes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pygameproj/tiles/background/detailedtallgrass.png" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/tiles/background/detailedtallgrass.png" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -190,7 +189,15 @@
       <option name="project" value="LOCAL" />
       <updated>1694816516527</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="sprite/image editing">
+      <option name="closed" value="true" />
+      <created>1694817089017</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1694817089017</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -217,6 +224,7 @@
     <MESSAGE value="font change" />
     <MESSAGE value="background &amp; img editing" />
     <MESSAGE value="decoration spritegroup added" />
-    <option name="LAST_COMMIT_MESSAGE" value="decoration spritegroup added" />
+    <MESSAGE value="sprite/image editing" />
+    <option name="LAST_COMMIT_MESSAGE" value="sprite/image editing" />
   </component>
 </project>
