@@ -23,10 +23,13 @@ class Map():
             tiles.kill()
         for tiles in self.noncollidablegroup:
             tiles.kill()
+        for tiles in self.decorationgroup:
+            tiles.kill();
         # for tiles in self.fullspritegroup:
         #     tiles.kill()
         self.collidablegroup.empty()
         self.noncollidablegroup.empty()
+        self.decorationgroup.empty();
         # self.fullspritegroup.empty()
         del self.tmxdata
         self.tmxdata = None
@@ -743,19 +746,19 @@ class Level:
 
 #func below inits tiles and enemies
     def inittiles(self, mapinst):
-        # mapinst.fullspritegroup.empty()
-        mapinst.collidablegroup.empty()
-        mapinst.noncollidablegroup.empty()
-        instmap = mapinst
+        # mapinst.fullspritegroup.empty();
+        mapinst.collidablegroup.empty();
+        mapinst.noncollidablegroup.empty();
+        instmap = mapinst;
         layerindex = -1;
-        groupc = []
-        groupn = []
-        groupd = []
-        enemylist = []
-        collidablegroup = mapinst.collidablegroup
-        noncollidablegroup = mapinst.noncollidablegroup
-        decgroup = mapinst.decorationgroup
-        visiblelayers = mapinst.tmxdata.visible_layers
+        groupc = [];
+        groupn = [];
+        groupd = [];
+        enemylist = [];
+        collidablegroup = mapinst.collidablegroup;
+        noncollidablegroup = mapinst.noncollidablegroup;
+        decorationgroup = mapinst.decorationgroup;
+        visiblelayers = mapinst.tmxdata.visible_layers;
         for layer in visiblelayers:
             # print("hasattr(layer, 'data'", hasattr(layer, "data"))
             if not hasattr(layer, "data"):
@@ -767,16 +770,18 @@ class Level:
 
             for x,y,surf in layer.tiles():
                 pos = (64*x, 64*y);
-                props = mapinst.tmxdata.get_tile_properties(x, y, layerindex)
-                tile_id = props["id"]
-                tilecollidable = props["collidable"]
-                spritegroup = 0
+                props = mapinst.tmxdata.get_tile_properties(x, y, layerindex);
+                tile_id = props["id"];
+                tilecollidable = props["collidable"];
+                tilename = props["name"];
+                spritegroup = 0;
                 if tilecollidable:
-                    spritegroup = collidablegroup
+                    spritegroup = collidablegroup;
                 else:
-                    spritegroup = noncollidablegroup
-                if tilename == "dec":
-                    spritegroup = decgroup;
+                    if tilename == "dec":
+                        spritegroup = decorationgroup;
+                    else:
+                        spritegroup = noncollidablegroup;
 
 
                 # print("props: ", props);
@@ -789,17 +794,21 @@ class Level:
                     "tile_id": tile_id,
                     "collidable": tilecollidable
                 }
-                tileinstance = Tile(**tile_info)
+                tileinstance = Tile(**tile_info);
                 if tilecollidable:
-                    groupc.append(tileinstance)
+                    groupc.append(tileinstance);
                 else:
-                    groupn.append(tileinstance)
+                    if tilename == "dec":
+                        groupd.append(tileinstance);
+                    else:
+                        groupn.append(tileinstance);
 
                 instmap.tilelist.append(tileinstance);
 
 
         instmap.noncollidablegroup.add(groupn);
         instmap.collidablegroup.add(groupc);
+        instmap.decorationgroup.add(groupd)
         # instmap.fullspritegroup.add(groupn);
         # instmap.fullspritegroup.add(groupc);
         return instmap;
@@ -1039,7 +1048,8 @@ class levelhandler:
         noncollgroup = thislevel.currentmap.noncollidablegroup;
         enemygroup = thislevel.enemies;
         otherobjgroup = thislevel.nontiledobjects;
-        backgroundgroup = thislevel.background
+        backgroundgroup = thislevel.background;
+        decgroup = thislevel.currentmap.decorationgroup;
         plr = thislevel.player;
         plrx = plr.rect.x;
         plry = plr.rect.y;
@@ -1063,7 +1073,13 @@ class levelhandler:
                 sprite.inrange = true;
                 screen.blit(sprite.image, (x + adjcamx, y + adjustcamerayfactor));
             else:
-                self.inrange = false;
+                sprite.inrange = false;
+        for sprite in decgroup:
+            spritex = sprite.rect.x;
+            spritey = sprite.rect.y;
+            if viewleft <= spritex <= viewright and viewup <= spritey <= viewdown:
+                screen.blit(sprite.image, (spritex + adjcamx, spritey + adjustcamerayfactor))
+
         for sprite in collgroup:
             spritex = sprite.rect.x;
             spritey = sprite.rect.y;
@@ -1072,8 +1088,6 @@ class levelhandler:
                 screen.blit(sprite.image, (sprite.rect.x + adjcamx, sprite.rect.y + adjustcamerayfactor));
             else:
                 sprite.isinrange = false;
-
-
 
         for enemy in enemygroup:
             enemyx = enemy.rect.x;
