@@ -50,6 +50,7 @@ class object(pygame.sprite.Sprite): #basically sprites that are not tiles
         self.image = surface
         self.rect = self.image.get_rect(topleft=pos);
         self.inrange = false;
+        self.inxrange = false;
         self.type = type;
         self.length = len;
         self.tall = height;
@@ -67,9 +68,20 @@ class object(pygame.sprite.Sprite): #basically sprites that are not tiles
     def scroll(self, speed, direction, typefactor, x):
         x += speed * direction * typefactor; #direction refers to x axis
         return x;
-    def update(self, direction, scrollspeed):
-        if self.inrange or self.type == "one":
+    def update(self, direction, scrollspeed, plrx):
+        if self.inrange:
             self.rect.x = self.scroll(speed = scrollspeed, direction = direction, typefactor = self.speed, x = self.rect.x);
+        elif self.inxrange:
+            if self.type == "one":
+                self.rect.x = self.scroll(speed = scrollspeed, direction = direction, typefactor = self.speed, x = self.rect.x);
+        elif self.type == "one":
+            if direction == -1:
+                self.rect.x = plrx + (screenwidth * direction / 2) - self.length;
+
+            elif direction == 1:
+                self.rect.x = plrx + (screenwidth * direction / 2);
+            self.inxrange = true;
+            self.rect.x = self.scroll(speed=scrollspeed, direction=direction, typefactor=self.speed, x=self.rect.x);
 
 class physics():
     def __init__(self, gravity, onground, plrxvel, jumppow):
@@ -959,11 +971,7 @@ class Level:
             if plrxpos == self.lastframexpos:
                 return;
             for images in self.background:
-                if not images.inrange:
-                    if not images.type == "one":
-                        continue;
-
-                images.update(direction = self.player.physics.direction.x, scrollspeed = self.player.physics.plrxvelocity);
+                images.update(direction = self.player.physics.direction.x, scrollspeed = self.player.physics.plrxvelocity, plrx = plrxpos);
         self.lastframexpos = plrxpos
 
     def deletelevel(self):
@@ -1088,11 +1096,16 @@ class levelhandler:
             y = sprite.rect.y;
             w = sprite.length;
             h = sprite.tall;
-            if viewleft - w <= x <= viewright + w and viewup - h <= y <= viewdown + h :
-                sprite.inrange = true;
-                screen.blit(sprite.image, (x + adjcamx, y + adjustcamerayfactor));
+            if viewleft - w <= x <= viewright:
+                sprite.inxrange = true;
+                if viewup - h <= y <= viewdown + h :
+                    sprite.inrange = true;
+                    screen.blit(sprite.image, (x + adjcamx, y + adjustcamerayfactor));
+                else:
+                    sprite.inrange = false;
             else:
                 sprite.inrange = false;
+                sprite.inxrange = false;
         for sprite in decgroup:
             spritex = sprite.rect.x;
             spritey = sprite.rect.y;
