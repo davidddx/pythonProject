@@ -4,9 +4,34 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e2939fcd-4fa2-4fa5-aa65-2d278de70d72" name="Changes" comment="fontchange">
+    <list default="true" id="e2939fcd-4fa2-4fa5-aa65-2d278de70d72" name="Changes" comment="font change">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pygameproj/Maps/testmap/level1.tmx" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/Maps/testmap/level1.tmx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pygameproj/Maps/testmap/level2.tmx" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/Maps/testmap/level2.tmx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pygameproj/Tilesets/TestTileSet.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/Tilesets/TestTileSet.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pygameproj/Tilesets/backgroundimages.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/Tilesets/backgroundimages.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pygameproj/Tilesets/objectTileSet.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/Tilesets/objectTileSet.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pygameproj/Tilesets/savannahgrasslands.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/Tilesets/savannahgrasslands.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pygameproj/classes.py" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/classes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pygameproj/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pygameproj/tiles/DirtSprite.png" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/tiles/DirtSprite.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pygameproj/tiles/GrassSprite.png" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/tiles/GrassSprite.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pygameproj/tiles/background/leaflesstree.png" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/tiles/background/leaflesstree.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pygameproj/tiles/background/leaflesstree2.png" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/tiles/background/leaflesstree2.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pygameproj/tiles/background/leaflesstreesmaller.png" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/tiles/background/leaflesstreesmaller.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pygameproj/tiles/background/tallgrass.png" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/tiles/background/tallgrass.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pygameproj/tiles/background/tallgrassleftedge.png" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/tiles/background/tallgrassleftedge.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pygameproj/tiles/background/tallgrassrightedge.png" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/tiles/background/tallgrassrightedge.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pygameproj/tiles/cornergrasssprite.png" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/tiles/cornergrasssprite.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pygameproj/tiles/corneroppositegrasssprite.png" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/tiles/corneroppositegrasssprite.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pygameproj/tiles/flippedcornerggrassspritevertical.png" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/tiles/flippedcornerggrassspritevertical.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pygameproj/tiles/flippedcornergrasssprite.png" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/tiles/flippedcornergrasssprite.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pygameproj/tiles/flippedcornergrassspritevertical.png" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/tiles/flippedcornergrassspritevertical.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pygameproj/tiles/flippedcorneroppositegrasspritevertical.png" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/tiles/flippedcorneroppositegrasspritevertical.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pygameproj/tiles/flippedcorneroppositegrasssprite.png" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/tiles/flippedcorneroppositegrasssprite.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pygameproj/tiles/flippedcorneroppositegrassspriteverticalf.png" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/tiles/flippedcorneroppositegrassspriteverticalf.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pygameproj/tiles/flippedverticalgrasssprite.png" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/tiles/flippedverticalgrasssprite.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pygameproj/tiles/grassspritehorizontal.png" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/tiles/grassspritehorizontal.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pygameproj/tiles/grassspritehorizontalright.png" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/tiles/grassspritehorizontalright.png" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,17 +66,17 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/david/Documents/GitHub/pythonProject/pygameproj/main.py",
-    "settings.editor.selected.configurable": "editor.preferences.folding"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/david/Documents/GitHub/pythonProject/pygameproj/main.py&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.folding&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="pythonProject" />
@@ -73,20 +98,6 @@
       <option name="MODULE_MODE" value="false" />
       <option name="REDIRECT_INPUT" value="false" />
       <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration default="true" type="tests" factoryName="Autodetect">
-      <module name="pythonProject" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;&quot;" />
-      <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
   </component>
@@ -171,7 +182,15 @@
       <option name="project" value="LOCAL" />
       <updated>1694625634448</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="font change">
+      <option name="closed" value="true" />
+      <created>1694625989253</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1694625989253</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -195,6 +214,7 @@
     <MESSAGE value="sprite &amp; level editing, background objects now visible until fully offscreen" />
     <MESSAGE value="level editing" />
     <MESSAGE value="fontchange" />
-    <option name="LAST_COMMIT_MESSAGE" value="fontchange" />
+    <MESSAGE value="font change" />
+    <option name="LAST_COMMIT_MESSAGE" value="font change" />
   </component>
 </project>

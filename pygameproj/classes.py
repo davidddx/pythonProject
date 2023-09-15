@@ -7,6 +7,7 @@ class Map():
     def __init__(self, tmxdata):
         self.collidablegroup = pygame.sprite.Group();
         self.noncollidablegroup = pygame.sprite.Group();
+        self.decorationgroup = pygame.sprite.Group();
         self.tmxdata = tmxdata;
         # self.fullspritegroup = pygame.sprite.Group();
         self.tilelist = []
@@ -41,17 +42,33 @@ class Tile(pygame.sprite.Sprite):
         self.isinrange = false;
 
 class object(pygame.sprite.Sprite): #basically sprites that are not tiles
-    def __init__(self, surface, pos):
+    def __init__(self, surface, pos, type, len, height):
         pygame.sprite.Sprite.__init__(self);
         self.image = surface
-        self.rect = self.image.get_rect(topleft=pos)
+        self.rect = self.image.get_rect(topleft=pos);
         self.inrange = false;
-        self.length = 0;
-        self.tall = 0;
+        self.objtype = type;
+        self.length = len;
+        self.tall = height;
+        self.speed = self.getspeed(type = type);
+        self.direction = 0;
+    def getspeed(self, type):
+        if type == "zero":
+            return 0;
+        elif type == "one":
+            return 0.5;
+        else:
+            return 0;
     def delete(self):
         self.kill()
-    def scroll(self, speed, direction):
-        self.rect.x += speed * direction
+    def scroll(self, speed, direction, typefactor, x):
+        x += speed * direction * typefactor; #direction refers to x axis
+        return x;
+    def update(self, direction, scrollspeed):
+        if not self.inrange:
+            return None;
+        print("object.update")
+        self.rect.x = self.scroll(speed = scrollspeed, direction = direction, typefactor = self.speed, x = self.rect.x);
 
 class physics():
     def __init__(self, gravity, onground, plrxvel, jumppow):
@@ -670,9 +687,9 @@ class Level:
             name = props["name"]
             # print(dir(obj))
             obj.apply_transformations()
-            # print(props)
+            print(props)
             if name == "door":
-                self.door = object(surface = obj.image, pos = (obj.x, obj.y));
+                self.door = object(surface = obj.image, pos = (obj.x, obj.y), type = props["backgroundtype"], len = obj.width, height = obj.height);
             elif name == "BlueEnemySpawner":
                 enemyimage = imgenemy.blue
                 enemyshirtcolor = "blue"
@@ -710,9 +727,7 @@ class Level:
                 self.oobpos.x = obj.x
                 self.oobpos.y = obj.y
             elif name == "background":
-                objref = object(surface = obj.image, pos = (obj.x, obj.y));
-                objref.length = obj.width;
-                objref.tall = obj.height;
+                objref = object(surface = obj.image, pos = (obj.x, obj.y),  type = props["backgroundtype"], len = obj.width, height = obj.height);
                 # print(dir(obj))
                 self.background.add(objref)
             else:
@@ -735,9 +750,11 @@ class Level:
         layerindex = -1;
         groupc = []
         groupn = []
+        groupd = []
         enemylist = []
         collidablegroup = mapinst.collidablegroup
         noncollidablegroup = mapinst.noncollidablegroup
+        decgroup = mapinst.decorationgroup
         visiblelayers = mapinst.tmxdata.visible_layers
         for layer in visiblelayers:
             # print("hasattr(layer, 'data'", hasattr(layer, "data"))
@@ -758,6 +775,8 @@ class Level:
                     spritegroup = collidablegroup
                 else:
                     spritegroup = noncollidablegroup
+                if tilename == "dec":
+                    spritegroup = decgroup;
 
 
                 # print("props: ", props);
@@ -934,7 +953,7 @@ class Level:
             for images in self.background:
                 if not images.inrange:
                     continue;
-                images.update(plrdirectionmoving = self.player.physics.direction.x, scrollspeed = self.player.physics.plrxvelocity / 3);
+                images.update(direction = self.player.physics.direction.x, scrollspeed = self.player.physics.plrxvelocity);
         self.lastframexpos = plrxpos
 
     def deletelevel(self):
@@ -1041,7 +1060,10 @@ class levelhandler:
             w = sprite.length;
             h = sprite.tall;
             if viewleft - w <= x <= viewright + w and viewup - h <= y <= viewdown + h :
+                sprite.inrange = true;
                 screen.blit(sprite.image, (x + adjcamx, y + adjustcamerayfactor));
+            else:
+                self.inrange = false;
         for sprite in collgroup:
             spritex = sprite.rect.x;
             spritey = sprite.rect.y;

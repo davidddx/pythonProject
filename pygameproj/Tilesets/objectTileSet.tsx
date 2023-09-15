@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.10.1" name="objectTileSet" tilewidth="512" tileheight="256" tilecount="9" columns="0">
+<tileset version="1.10" tiledversion="1.10.2" name="objectTileSet" tilewidth="512" tileheight="256" tilecount="9" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="2" type="Door">
   <properties>
+   <property name="backgroundtype" value="zero"/>
    <property name="name" value="door"/>
   </properties>
   <image width="192" height="256" source="../tiles/door.png"/>
