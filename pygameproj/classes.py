@@ -56,9 +56,9 @@ class object(pygame.sprite.Sprite): #basically sprites that are not tiles
         self.speed = self.getspeed(type = type);
         self.direction = 0;
     def getspeed(self, type):
-        if type == "zero":
+        if type == "zero": #immovable background objects
             return 0;
-        elif type == "one":
+        elif type == "one": #part of full background layer
             return 0.5;
         else:
             return 0;
@@ -659,6 +659,7 @@ class enemyimages():
     red = pygame.image.load(cwd + '/tiles/EnemySprites/idleredenemy.png')
     green = pygame.image.load(cwd + '/tiles/EnemySprites/idlegreenenemy.png')
     purple = pygame.image.load(cwd + '/tiles/EnemySprites/idlepurpleenemy.png')
+#class enemyimages accessed only when enemyimages needed for instancing
 class Level:
     def __init__(self, currentmap, plr):
         self.lastframeplrxpos = 0
@@ -957,11 +958,12 @@ class Level:
         plrxpos = self.player.rect.x;
         #background
         if self.player.moving:
-            if plrxpos == self.lastframeplrxpos:
+            if plrxpos == self.lastframexpos:
                 return;
             for images in self.background:
-                if not images.inrange:
-                    continue;
+                if not images.objtype == "one":
+                    if not images.inrange:
+                        continue;
                 images.update(direction = self.player.physics.direction.x, scrollspeed = self.player.physics.plrxvelocity);
         self.lastframexpos = plrxpos
 
