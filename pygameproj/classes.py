@@ -71,15 +71,12 @@ class object(pygame.sprite.Sprite): #basically sprites that are not tiles
     def update(self, direction, scrollspeed, plrx):
         if self.inrange:
             self.rect.x = self.scroll(speed = scrollspeed, direction = direction, typefactor = self.speed, x = self.rect.x);
-        elif self.inxrange:
-            if self.type == "one":
-                self.rect.x = self.scroll(speed = scrollspeed, direction = direction, typefactor = self.speed, x = self.rect.x);
         elif self.type == "one":
-            if direction == -1:
-                self.rect.x = plrx + (screenwidth * direction / 2) - self.length;
-
-            elif direction == 1:
-                self.rect.x = plrx + (screenwidth * direction / 2);
+            # if direction == -1:
+            #     self.rect.x = plrx + (screenwidth * direction)/2 - self.length/2;
+            #
+            # elif direction == 1:
+            #     self.rect.x = plrx + (screenwidth * direction / 2);
             self.inxrange = true;
             self.rect.x = self.scroll(speed=scrollspeed, direction=direction, typefactor=self.speed, x=self.rect.x);
 
