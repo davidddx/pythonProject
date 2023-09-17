@@ -224,10 +224,10 @@
   <object id="781" gid="69" x="6429.33" y="5125.33" width="576" height="576"/>
   <object id="816" gid="61" x="906" y="4936" width="450" height="450"/>
   <object id="842" gid="68" x="-279.879" y="5118.94" width="1384" height="450"/>
-  <object id="843" gid="68" x="1102" y="5118.33" width="1384" height="450"/>
+  <object id="843" gid="68" x="1103.5" y="5118.33" width="1384" height="450"/>
   <object id="844" gid="68" x="2486.67" y="5118.33" width="1384" height="450"/>
   <object id="845" gid="68" x="3870" y="5118.33" width="1384" height="450"/>
-  <object id="846" gid="68" x="5250.67" y="5118.33" width="1384" height="450"/>
+  <object id="846" gid="68" x="5251.67" y="5117.83" width="1384" height="450"/>
   <object id="847" gid="68" x="6635.33" y="5117" width="1384" height="450"/>
  </objectgroup>
 </map>
