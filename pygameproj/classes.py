@@ -60,7 +60,13 @@ class object(pygame.sprite.Sprite): #basically sprites that are not tiles
         if type == "zero": #immovable background objects
             return 0;
         elif type == "one": #looping background
-            return 0.25;
+            return 0.3;
+        elif type == "two":
+            return 0.27;
+        elif type == "three":
+            return 0.24;
+        elif type == "four":
+            return 0.21;
         else:
             return 0;
     def delete(self):
@@ -1093,7 +1099,7 @@ class levelhandler:
             y = sprite.rect.y;
             w = sprite.length;
             h = sprite.tall;
-            if viewleft - w <= x <= viewright:
+            if viewleft - w <= x <= viewright + w:
                 sprite.inxrange = true;
                 if viewup - h <= y <= viewdown + h :
                     sprite.inrange = true;
