@@ -57,16 +57,16 @@ class object(pygame.sprite.Sprite): #basically sprites that are not tiles
         self.speed = self.getspeed(type = type);
         self.direction = 0;
     def getspeed(self, type):
-        if type == "zero": #immovable background objects
+        if type == 0: #immovable background objects
             return 0;
-        elif type == "one": #looping background
-            return 0.3;
-        elif type == "two":
-            return 0.27;
-        elif type == "three":
-            return 0.24;
-        elif type == "four":
-            return 0.21;
+        elif type == 1: #closer background is faster. higher backgroudn type = further
+            return 0.35;
+        elif type == 2:
+            return 0.30;
+        elif type == 3:
+            return 0.25;
+        elif type == 4:
+            return 0.20;
         else:
             return 0;
     def delete(self):
@@ -77,7 +77,7 @@ class object(pygame.sprite.Sprite): #basically sprites that are not tiles
     def update(self, direction, scrollspeed, plrx):
         if self.inrange:
             self.rect.x = self.scroll(speed = scrollspeed, direction = direction, typefactor = self.speed, x = self.rect.x);
-        elif self.type == "one":
+        elif self.type != 0:
             # if direction == -1:
             #     self.rect.x = plrx + (screenwidth * direction)/2 - self.length/2;
             #
@@ -685,7 +685,7 @@ class Level:
         self.enemies = pygame.sprite.Group()
         self.door = 0
         self.oobpos = pygame.math.Vector2(0,0)
-        self.background = pygame.sprite.Group()
+        self.background = [pygame.sprite.Group(), pygame.sprite.Group(), pygame.sprite.Group(), pygame.sprite.Group(), pygame.sprite.Group()]
         self.setobjects(currentmap)
         self.timeplrlastcollidedwithenemy = 0
         self.nontiledobjects = self.groupnontiledobjects() #enemy is not included in this spritegroup
@@ -704,7 +704,7 @@ class Level:
             name = props["name"]
             # print(dir(obj))
             obj.apply_transformations()
-            print(props)
+            # print(props)
             if name == "door":
                 self.door = object(surface = obj.image, pos = (obj.x, obj.y), type = props["backgroundtype"], len = obj.width, height = obj.height);
             elif name == "BlueEnemySpawner":
@@ -744,9 +744,10 @@ class Level:
                 self.oobpos.x = obj.x
                 self.oobpos.y = obj.y
             elif name == "background":
-                objref = object(surface = obj.image, pos = (obj.x, obj.y),  type = props["backgroundtype"], len = obj.width, height = obj.height);
+                typebackground = props["backgroundtype"] #needed for multi layer parallax view
+                objref = object(surface = obj.image, pos = (obj.x, obj.y),  type = typebackground, len = obj.width, height = obj.height);
                 # print(dir(obj))
-                self.background.add(objref)
+                self.background[4 - typebackground].add(objref); #reason i created a background list was to allow for priority rendering
             else:
                 print("error occured while looping through object layer")
     def groupnontiledobjects(self):
@@ -973,8 +974,9 @@ class Level:
         if self.player.moving:
             if plrxpos == self.lastframexpos:
                 return;
-            for images in self.background:
-                images.update(direction = self.player.physics.direction.x, scrollspeed = self.player.physics.plrxvelocity, plrx = plrxpos);
+            for layers in self.background:
+                for images in layers:
+                    images.update(direction = self.player.physics.direction.x, scrollspeed = self.player.physics.plrxvelocity, plrx = plrxpos);
         self.lastframexpos = plrxpos
 
     def deletelevel(self):
@@ -1078,7 +1080,7 @@ class levelhandler:
         noncollgroup = thislevel.currentmap.noncollidablegroup;
         enemygroup = thislevel.enemies;
         otherobjgroup = thislevel.nontiledobjects;
-        backgroundgroup = thislevel.background;
+        backgroundlist = thislevel.background;
         decgroup = thislevel.currentmap.decorationgroup;
         plr = thislevel.player;
         plrx = plr.rect.x;
@@ -1094,21 +1096,22 @@ class levelhandler:
             spritey = sprite.rect.y;
             if viewleft <= spritex <= viewright and viewup <= spritey <= viewdown:
                 screen.blit(sprite.image, (spritex + adjcamx, spritey + adjustcamerayfactor));
-        for sprite in backgroundgroup:
-            x = sprite.rect.x;
-            y = sprite.rect.y;
-            w = sprite.length;
-            h = sprite.tall;
-            if viewleft - w <= x <= viewright + w:
-                sprite.inxrange = true;
-                if viewup - h <= y <= viewdown + h :
-                    sprite.inrange = true;
-                    screen.blit(sprite.image, (x + adjcamx, y + adjustcamerayfactor));
+        for layer in backgroundlist:
+            for sprite in layer:
+                x = sprite.rect.x;
+                y = sprite.rect.y;
+                w = sprite.length;
+                h = sprite.tall;
+                if viewleft - w <= x <= viewright + w:
+                    sprite.inxrange = true;
+                    if viewup - h <= y <= viewdown + h :
+                        sprite.inrange = true;
+                        screen.blit(sprite.image, (x + adjcamx, y + adjustcamerayfactor));
+                    else:
+                        sprite.inrange = false;
                 else:
                     sprite.inrange = false;
-            else:
-                sprite.inrange = false;
-                sprite.inxrange = false;
+                    sprite.inxrange = false;
         for sprite in decgroup:
             spritex = sprite.rect.x;
             spritey = sprite.rect.y;
