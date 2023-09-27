@@ -3,21 +3,21 @@
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0">
   <properties>
-   <property name="backgroundtype" type="int" value="3"/>
+   <property name="backgroundtype" type="int" value="2"/>
    <property name="name" value="background"/>
   </properties>
   <image width="576" height="576" source="../tiles/background/leaflesstree.png"/>
  </tile>
  <tile id="1">
   <properties>
-   <property name="backgroundtype" type="int" value="3"/>
+   <property name="backgroundtype" type="int" value="2"/>
    <property name="name" value="background"/>
   </properties>
   <image width="576" height="576" source="../tiles/background/leaflesstree2.png"/>
  </tile>
  <tile id="2">
   <properties>
-   <property name="backgroundtype" type="int" value="2"/>
+   <property name="backgroundtype" type="int" value="1"/>
    <property name="name" value="background"/>
   </properties>
   <image width="300" height="300" source="../tiles/background/leaflesstreesmaller.png"/>
@@ -80,7 +80,7 @@
  </tile>
  <tile id="11">
   <properties>
-   <property name="backgroundtype" type="int" value="2"/>
+   <property name="backgroundtype" type="int" value="1"/>
    <property name="name" value="background"/>
   </properties>
   <image width="300" height="300" source="../tiles/background/darkleaflesstree.png"/>
