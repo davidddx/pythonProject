@@ -57,20 +57,24 @@ class object(pygame.sprite.Sprite): #basically sprites that are not tiles
         self.speed = self.getspeed(type = type);
         self.direction = 0;
     def getspeed(self, type):
+        #4-7 is deep level background
+        #0-3 is simple background objects(trees, bushes, etc)
         if type == 0: #immovable background objects
             return 0;
-        elif type == 1: #closer background is faster. higher backgroudn type = further
-            return 0.31;
-        elif type == 2:
-            return 0.24;
-        elif type == 3:
-            return 0.17;
-        elif type == 4:
-            return 0.10;
-        elif type == 5:
+        elif type == 1:
             return 0.05;
-        elif type == 6:
+        elif type == 2:
             return 0.075;
+        elif type == 3:
+            return 0.0875;
+        elif type == 4: #closer background is faster. higher backgroudn type = further
+            return 0.31;
+        elif type == 5:
+            return 0.24;
+        elif type == 6:
+            return 0.17;
+        elif type == 7:
+            return 0.10;
         else:
             return 0;
     def delete(self):
