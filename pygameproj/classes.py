@@ -959,7 +959,7 @@ class Level:
         if plr.rect.colliderect(door) and not alreadycollided:
             self.doorcollisionoccured = true
             # print("plr has collided with door")
-            globals.levelhandler.changeleveltonext()
+            # globals.levelhandler.changeleveltonext()
 
 #oob logic
     def checkifplroob(self):
@@ -1004,26 +1004,25 @@ class Level:
         self.enemies.empty()
 class levelhandler:
     def __init__(self):
-        self.islevel = true
         self.levelnum = globals.savedlevelnum
         self.worldnum = globals.savedworldnum
         self.changinglevel = false
         self.timelastrestarted = 0;
         self.tmxdata = 0
         self.nextmap = 0
-        self.tmxdatalocs = [
+        self.levels = [
             cwd + '/Maps/testmap/level1.tmx',
             cwd + "/Maps/testmap/level2.tmx",
             # cwd + '/Maps/testmap/testmappygame1.tmx',
             # cwd + '/Maps/testmap/testmappygame2.tmx',
             # cwd + '/Maps/testmap/testmappygame3.tmx',
-        ] #contains locations of .tmx maps
-        self.maxlevelnum = len(self.tmxdatalocs)
+        ]
+        self.maxlevelnum = len(self.levels)
         self.currentlevel = self.initlevel(levelnum = self.levelnum)
         self.plrlives = self.currentlevel.player.lives #need to add gui element to plr lives
         self.heartsymbol = pygame.image.load(cwd + '/tiles/heartsymbol.png')
     def initlevel(self, levelnum):
-        tmxdata = load_pygame(self.tmxdatalocs[self.levelnum]);
+        tmxdata = load_pygame(self.levels[self.levelnum]);
         map = Map(tmxdata = tmxdata);
         plr = Plr(plrpos=(0,0), plrsurf=pygame.image.load(plrspriteloc));
         level = Level(currentmap = map, plr = plr);
@@ -1041,7 +1040,7 @@ class levelhandler:
         # plry = 3;
         # plr = Plr(plrpos=(plrx * 64, plry * 64), plrsurf=pygame.image.load(plrspriteloc))
         # plr.lives = self.plrlives
-        # self.tmxdata = load_pygame(self.tmxdatalocs[self.levelnum])
+        # self.tmxdata = load_pygame(self.levels[self.levelnum])
         # tmxdata = self.tmxdata
         # map = Map(tmxdata = tmxdata)
         # self.currentlevel = Level(currentmap=map, plr=plr)
@@ -1062,10 +1061,13 @@ class levelhandler:
         # plry = 3;
         # plr = Plr(plrpos=(plrx * 64, plry * 64), plrsurf=pygame.image.load(plrspriteloc))
         # plr.lives = self.plrlives
-        # self.tmxdata = load_pygame(self.tmxdatalocs[levelnum])
+        # self.tmxdata = load_pygame(self.levels[levelnum])
         # tmxdata = self.tmxdata
         # map = Map(tmxdata=tmxdata)
         # self.currentlevel = Level(currentmap=map, plr=plr)
+    def checkchangelevel(self, doorcoll):
+        if doorcoll:
+            self.changeleveltonext();
     def restartlevel(self):
         self.plrlives = self.currentlevel.player.lives
         self.currentlevel.deletelevel()
@@ -1075,7 +1077,7 @@ class levelhandler:
         # plry = 3;
         # plr = Plr(plrpos=(plrx * 64, plry * 64), plrsurf=pygame.image.load(plrspriteloc))
         # plr.lives = self.plrlives
-        # self.tmxdata = load_pygame(self.tmxdatalocs[levelnum])
+        # self.tmxdata = load_pygame(self.levels[levelnum])
         # tmxdata = self.tmxdata
         # map = Map(tmxdata=tmxdata)
         # self.currentlevel = Level(currentmap=map, plr=plr)
@@ -1178,7 +1180,7 @@ class levelhandler:
             screen.blit(self.heartsymbol, (0, 0))
             screen.blit(livesbckgrnd, (64, 3))
             screen.blit(livesimg, (64, 3))
-    def updatelevel(self):
+    def update(self):
         screen = globals.screen
         adjustcamerayfactor = -(self.currentlevel.player.rect.y - self.currentlevel.player.adjustcamerayfactor);
         adjustcameraxfactor = -(self.currentlevel.player.rect.x - self.currentlevel.player.adjustcameraxfactor);
@@ -1188,15 +1190,22 @@ class levelhandler:
         self.render(thislevel = thislevel, screen = screen, adjustcamerayfactor = adjustcamerayfactor, adjcamx = adjustcameraxfactor);
         self.checkrestartlevel(self.currentlevel.player.isOob);
         self.checkifgameover(self.currentlevel.player.lives);
-    def updatedialogue(self):
-        print("dialogue updating");
-    def update(self):
-        if (self.islevel):
-            self.updatelevel();
-        else:
-            self.updatedialogue();
-
-class dialogue:
+        self.checkchangelevel(self.currentlevel.doorcollisionoccured)
+class dialoguehandler:
     def __init__(self):
-        dialoguedir = cwd + "/dialogue/dialoguestorage.py";
+        self.dialoguedir = cwd + "/dialogue/dialoguestorage.py";
+        self.dialoguescenenum = 0;
+        self.worldnum = 0;
+class game:
+    def __init__(self):
+        self.gamescenenum = 0;
+        self.gamescenetypes = [
+            "dialogue",
+            "level"
+        ]
+        self.levelhandler = levelhandler();
+        self.dialoguehandler = dialoguehandler();
+    def run(self):
+        self.levelhandler.update();
+
 
