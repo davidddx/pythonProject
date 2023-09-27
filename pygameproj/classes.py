@@ -60,13 +60,13 @@ class object(pygame.sprite.Sprite): #basically sprites that are not tiles
         if type == 0: #immovable background objects
             return 0;
         elif type == 1: #closer background is faster. higher backgroudn type = further
-            return 0.35;
+            return 0.31;
         elif type == 2:
-            return 0.30;
+            return 0.24;
         elif type == 3:
-            return 0.25;
+            return 0.17;
         elif type == 4:
-            return 0.20;
+            return 0.10;
         else:
             return 0;
     def delete(self):
