@@ -24,21 +24,21 @@
  </tile>
  <tile id="3">
   <properties>
-   <property name="backgroundtype" type="int" value="0"/>
+   <property name="backgroundtype" type="int" value="1"/>
    <property name="name" value="background"/>
   </properties>
   <image width="256" height="256" source="../tiles/background/tallgrass.png"/>
  </tile>
  <tile id="4">
   <properties>
-   <property name="backgroundtype" type="int" value="0"/>
+   <property name="backgroundtype" type="int" value="1"/>
    <property name="name" value="background"/>
   </properties>
   <image width="256" height="256" source="../tiles/background/tallgrassleftedge.png"/>
  </tile>
  <tile id="5">
   <properties>
-   <property name="backgroundtype" type="int" value="0"/>
+   <property name="backgroundtype" type="int" value="1"/>
    <property name="name" value="background"/>
   </properties>
   <image width="256" height="256" source="../tiles/background/tallgrassrightedge.png"/>
