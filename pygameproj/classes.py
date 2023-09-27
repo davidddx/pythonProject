@@ -62,11 +62,11 @@ class object(pygame.sprite.Sprite): #basically sprites that are not tiles
         if type == 0: #immovable
             return 0;
         elif type == 1:
-            return 0.13;
-        elif type == 2:
-            return 0.07;
-        elif type == 3:
             return 0.03;
+        elif type == 2:
+            return 0.10;
+        elif type == 3:
+            return 0.13;
 
         elif type == 4: #closer background is faster. higher backgroudn type = further
             return 0.28;
