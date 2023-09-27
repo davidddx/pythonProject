@@ -4,12 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e2939fcd-4fa2-4fa5-aa65-2d278de70d72" name="Changes" comment="background color editing">
+    <list default="true" id="e2939fcd-4fa2-4fa5-aa65-2d278de70d72" name="Changes" comment="backgroundspeed editing">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pygameproj/Maps/testmap/level1.tmx" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/Maps/testmap/level1.tmx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pygameproj/Tilesets/savannahgrasslands.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/Tilesets/savannahgrasslands.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pygameproj/classes.py" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/classes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pygameproj/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pygameproj/tiles/background/grassland/grass4background.png" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/tiles/background/grassland/grass4background.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pygameproj/globals.py" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/globals.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -299,7 +299,15 @@
       <option name="project" value="LOCAL" />
       <updated>1695434112505</updated>
     </task>
-    <option name="localTasksCounter" value="27" />
+    <task id="LOCAL-00027" summary="backgroundspeed editing">
+      <option name="closed" value="true" />
+      <created>1695779277861</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1695779277861</updated>
+    </task>
+    <option name="localTasksCounter" value="28" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -338,6 +346,7 @@
     <MESSAGE value="fixed background glitch, added more background types" />
     <MESSAGE value="added multi parallax background" />
     <MESSAGE value="background color editing" />
-    <option name="LAST_COMMIT_MESSAGE" value="background color editing" />
+    <MESSAGE value="backgroundspeed editing" />
+    <option name="LAST_COMMIT_MESSAGE" value="backgroundspeed editing" />
   </component>
 </project>

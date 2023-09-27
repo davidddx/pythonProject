@@ -67,6 +67,10 @@ class object(pygame.sprite.Sprite): #basically sprites that are not tiles
             return 0.17;
         elif type == 4:
             return 0.10;
+        elif type == 5:
+            return 0.05;
+        elif type == 6:
+            return 0.075;
         else:
             return 0;
     def delete(self):
@@ -685,7 +689,9 @@ class Level:
         self.enemies = pygame.sprite.Group()
         self.door = 0
         self.oobpos = pygame.math.Vector2(0,0)
-        self.background = [pygame.sprite.Group(), pygame.sprite.Group(), pygame.sprite.Group(), pygame.sprite.Group(), pygame.sprite.Group()]
+        self.background = [];
+        for x in range(globals.numbackgrounds + 1):
+            self.background.append(pygame.sprite.Group());
         self.setobjects(currentmap)
         self.timeplrlastcollidedwithenemy = 0
         self.nontiledobjects = self.groupnontiledobjects() #enemy is not included in this spritegroup
@@ -747,9 +753,11 @@ class Level:
                 typebackground = props["backgroundtype"] #needed for multi layer parallax view
                 objref = object(surface = obj.image, pos = (obj.x, obj.y),  type = typebackground, len = obj.width, height = obj.height);
                 # print(dir(obj))
-                self.background[4 - typebackground].add(objref); #reason i created a background list was to allow for priority rendering
+                self.background[globals.numbackgrounds - typebackground].add(objref); #reason i created a background list was to allow for priority rendering
             else:
                 print("error occured while looping through object layer")
+
+#besides backgrounds...:
     def groupnontiledobjects(self):
         #this function makes sure everything was in a spritegroup so that all sprites in a level could be deleted and changed properly
         nontiledobjectsgroup = pygame.sprite.Group()
@@ -757,7 +765,7 @@ class Level:
         nontiledobjectsgroup.add(self.door)
 
 
-        return nontiledobjectsgroup
+        return nontiledobjectsgroup;
 
 #func below inits tiles and enemies
     def inittiles(self, mapinst):
