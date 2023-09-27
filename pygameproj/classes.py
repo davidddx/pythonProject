@@ -1195,3 +1195,8 @@ class levelhandler:
             self.updatelevel();
         else:
             self.updatedialogue();
+
+class dialogue:
+    def __init__(self):
+        dialoguedir = cwd + "/dialogue/dialoguestorage.py";
+
