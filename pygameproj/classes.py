@@ -112,7 +112,6 @@ class projectile(pygame.sprite.Sprite):
         self.hasphysics = self.checkifhasphysics(type);
         self.positionstate = "justthrown"
         if self.hasphysics:
-            self.targetx = globals.levelhandler.currentlevel.player.rect.x
             self.physics = physics(gravity = 1, onground = false, plrxvel = 30, jumppow = -20);
             self.yvelocity = 0
 
@@ -1006,7 +1005,7 @@ class levelhandler:
     def __init__(self):
         self.levelnum = globals.savedlevelnum
         self.worldnum = globals.savedworldnum
-        self.changinglevel = false
+        self.levelcomplete = false;
         self.timelastrestarted = 0;
         self.tmxdata = 0
         self.nextmap = 0
@@ -1030,20 +1029,11 @@ class levelhandler:
 #returns the next level
     def changeleveltonext(self):
         self.plrlives = self.currentlevel.player.lives
-        # print("lives left: ", self.plrlives)
+
         self.currentlevel.deletelevel()
         del self.currentlevel
         self.currentlevel = 0
         self.levelnum+=1
-        # maparr = self.maparray
-        # plrx = 18;
-        # plry = 3;
-        # plr = Plr(plrpos=(plrx * 64, plry * 64), plrsurf=pygame.image.load(plrspriteloc))
-        # plr.lives = self.plrlives
-        # self.tmxdata = load_pygame(self.levels[self.levelnum])
-        # tmxdata = self.tmxdata
-        # map = Map(tmxdata = tmxdata)
-        # self.currentlevel = Level(currentmap=map, plr=plr)
         self.currentlevel = self.initlevel(levelnum = self.levelnum);
         # print("level has been changed!")
     def checkrestartlevel(self, plrisoob):
@@ -1065,22 +1055,10 @@ class levelhandler:
         # tmxdata = self.tmxdata
         # map = Map(tmxdata=tmxdata)
         # self.currentlevel = Level(currentmap=map, plr=plr)
-    def checkchangelevel(self, doorcoll):
-        if doorcoll:
-            self.changeleveltonext();
     def restartlevel(self):
         self.plrlives = self.currentlevel.player.lives
         self.currentlevel.deletelevel()
         del self.currentlevel
-        # levelnum = self.levelnum
-        # plrx = 18;
-        # plry = 3;
-        # plr = Plr(plrpos=(plrx * 64, plry * 64), plrsurf=pygame.image.load(plrspriteloc))
-        # plr.lives = self.plrlives
-        # self.tmxdata = load_pygame(self.levels[levelnum])
-        # tmxdata = self.tmxdata
-        # map = Map(tmxdata=tmxdata)
-        # self.currentlevel = Level(currentmap=map, plr=plr)
         self.currentlevel = self.initlevel(self.levelnum);
     def checkifgameover(self, plrlives):
         if not plrlives <= 0:
@@ -1167,7 +1145,7 @@ class levelhandler:
             objy = obj.rect.y;
             if viewleft <= objx <= viewright and viewup <= objy <= viewdown:  # pygame has upward as negative so the inequality is up <= y <= down instead of down <= y <= up
                 screen.blit(obj.image, (objx + adjcamx, obj.rect.y + adjustcamerayfactor))
-        if not self.changinglevel:
+        if not self.levelcomplete:
             # fontstring = "Helvetica"
             fontstring = "Times New Roman"
             fontsize = 64
@@ -1196,16 +1174,50 @@ class dialoguehandler:
         self.dialoguedir = cwd + "/dialogue/dialoguestorage.py";
         self.dialoguescenenum = 0;
         self.worldnum = 0;
+        self.dialoguedone = true;
 class game:
     def __init__(self):
-        self.gamescenenum = 0;
+        self.gamescenenum = 0; #index for gamescenetypes
         self.gamescenetypes = [
-            "dialogue",
+            "level",
             "level"
         ]
+        self.state = "ondialogue";
         self.levelhandler = levelhandler();
         self.dialoguehandler = dialoguehandler();
+    def checklevelstate(self, levelhandler):
+        print("hello world level");
+        if levelhandler.levelcomplete:
+            self.gamescenenum+=1;
+            if self.gamescenetypes[self.gamescenenum] == "level":
+                self.levelhandler.changeleveltonext();
+                self.state = "ondialogue";
+            elif self.gamescenetypes[self.gamescenenum] == "dialogue":
+                self.dialoguehandler.changescenetonext();
+                self.state = "onlevel";
+            else:
+                pygame.quit();
+    def checkdialoguescenstate(self, dialoguehandler):
+        if dialoguehandler.dialoguedone:
+            print("hello world dialogue");
+            self.gamescenenum+=1;
+            if self.gamescenetypes[self.gamescenenum] == "dialogue":
+                self.dialoguehandler.changescenetonext();
+                self.state = "ondialogue"
+            elif self.gamescenetypes[self.gamescenenum] == "level":
+                self.levelhandler.changeleveltonext();
+                self.state = "onlevel"
+
+
     def run(self):
-        self.levelhandler.update();
+        if self.state == "onlevel":
+            self.levelhandler.update();
+            self.checklevelstate(levelhandler = self.levelhandler);
+            return None;
+        elif self.state == "ondialogue":
+            self.dialoguehandler.update();
+            self.checkdialoguescenestate(dialoguehandler = self.dialoguehandler);
+
+
 
 
