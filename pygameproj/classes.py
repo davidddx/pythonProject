@@ -985,12 +985,12 @@ class Level:
         plrxpos = self.player.rect.x;
         #background
         if self.player.moving:
-            if plrxpos == self.lastframexpos:
+            if plrxpos == self.lastframeplrxpos:
                 return;
             for layers in self.background:
                 for images in layers:
                     images.update(direction = self.player.physics.direction.x, scrollspeed = self.player.physics.plrxvelocity, plrx = plrxpos);
-        self.lastframexpos = plrxpos
+        self.lastframeplrxpos = plrxpos
 
     def deletelevel(self):
         self.levelcurrentlychanging = true
@@ -1002,12 +1002,10 @@ class Level:
         for enemy in self.enemies.sprites():
             enemy.delete()
         self.enemies.empty()
-
 class levelhandler:
     def __init__(self):
         self.islevel = true
         self.levelnum = globals.savedlevelnum
-        self.nextlevel = globals.savedlevelnum + 1
         self.worldnum = globals.savedworldnum
         self.changinglevel = false
         self.timelastrestarted = 0;
@@ -1015,7 +1013,7 @@ class levelhandler:
         self.nextmap = 0
         self.tmxdatalocs = [
             cwd + '/Maps/testmap/level1.tmx',
-            # cwd + "/Maps/testmap/level2.tmx",
+            cwd + "/Maps/testmap/level2.tmx",
             # cwd + '/Maps/testmap/testmappygame1.tmx',
             # cwd + '/Maps/testmap/testmappygame2.tmx',
             # cwd + '/Maps/testmap/testmappygame3.tmx',
@@ -1025,11 +1023,11 @@ class levelhandler:
         self.plrlives = self.currentlevel.player.lives #need to add gui element to plr lives
         self.heartsymbol = pygame.image.load(cwd + '/tiles/heartsymbol.png')
     def initlevel(self, levelnum):
-        tmxdata = load_pygame(self.tmxdatalocs[self.levelnum])
-        map = Map(tmxdata = tmxdata)
-        plr = Plr(plrpos=(0,0), plrsurf=pygame.image.load(plrspriteloc))
-        level = Level(currentmap = map, plr = plr)
-        return level
+        tmxdata = load_pygame(self.tmxdatalocs[self.levelnum]);
+        map = Map(tmxdata = tmxdata);
+        plr = Plr(plrpos=(0,0), plrsurf=pygame.image.load(plrspriteloc));
+        level = Level(currentmap = map, plr = plr);
+        return level;
 #returns the next level
     def changeleveltonext(self):
         self.plrlives = self.currentlevel.player.lives
@@ -1039,14 +1037,15 @@ class levelhandler:
         self.currentlevel = 0
         self.levelnum+=1
         # maparr = self.maparray
-        plrx = 18;
-        plry = 3;
-        plr = Plr(plrpos=(plrx * 64, plry * 64), plrsurf=pygame.image.load(plrspriteloc))
-        plr.lives = self.plrlives
-        self.tmxdata = load_pygame(self.tmxdatalocs[self.levelnum])
-        tmxdata = self.tmxdata
-        map = Map(tmxdata = tmxdata)
-        self.currentlevel = Level(currentmap=map, plr=plr)
+        # plrx = 18;
+        # plry = 3;
+        # plr = Plr(plrpos=(plrx * 64, plry * 64), plrsurf=pygame.image.load(plrspriteloc))
+        # plr.lives = self.plrlives
+        # self.tmxdata = load_pygame(self.tmxdatalocs[self.levelnum])
+        # tmxdata = self.tmxdata
+        # map = Map(tmxdata = tmxdata)
+        # self.currentlevel = Level(currentmap=map, plr=plr)
+        self.currentlevel = self.initlevel(levelnum = self.levelnum);
         # print("level has been changed!")
     def checkrestartlevel(self, plrisoob):
         key = pygame.key.get_pressed()
@@ -1071,15 +1070,16 @@ class levelhandler:
         self.plrlives = self.currentlevel.player.lives
         self.currentlevel.deletelevel()
         del self.currentlevel
-        levelnum = self.levelnum
-        plrx = 18;
-        plry = 3;
-        plr = Plr(plrpos=(plrx * 64, plry * 64), plrsurf=pygame.image.load(plrspriteloc))
-        plr.lives = self.plrlives
-        self.tmxdata = load_pygame(self.tmxdatalocs[levelnum])
-        tmxdata = self.tmxdata
-        map = Map(tmxdata=tmxdata)
-        self.currentlevel = Level(currentmap=map, plr=plr)
+        # levelnum = self.levelnum
+        # plrx = 18;
+        # plry = 3;
+        # plr = Plr(plrpos=(plrx * 64, plry * 64), plrsurf=pygame.image.load(plrspriteloc))
+        # plr.lives = self.plrlives
+        # self.tmxdata = load_pygame(self.tmxdatalocs[levelnum])
+        # tmxdata = self.tmxdata
+        # map = Map(tmxdata=tmxdata)
+        # self.currentlevel = Level(currentmap=map, plr=plr)
+        self.currentlevel = self.initlevel(self.levelnum);
     def checkifgameover(self, plrlives):
         if not plrlives <= 0:
             return None
@@ -1178,13 +1178,20 @@ class levelhandler:
             screen.blit(self.heartsymbol, (0, 0))
             screen.blit(livesbckgrnd, (64, 3))
             screen.blit(livesimg, (64, 3))
-    def update(self):
+    def updatelevel(self):
         screen = globals.screen
-        adjustcamerayfactor = -(self.currentlevel.player.rect.y - self.currentlevel.player.adjustcamerayfactor)
-        adjustcameraxfactor = -(self.currentlevel.player.rect.x - self.currentlevel.player.adjustcameraxfactor)
+        adjustcamerayfactor = -(self.currentlevel.player.rect.y - self.currentlevel.player.adjustcamerayfactor);
+        adjustcameraxfactor = -(self.currentlevel.player.rect.x - self.currentlevel.player.adjustcameraxfactor);
         self.currentlevel.run();
         screen.fill((0, 0, 0));
-        thislevel = self.currentlevel
-        self.render(thislevel = thislevel, screen = screen, adjustcamerayfactor = adjustcamerayfactor, adjcamx = adjustcameraxfactor)
+        thislevel = self.currentlevel;
+        self.render(thislevel = thislevel, screen = screen, adjustcamerayfactor = adjustcamerayfactor, adjcamx = adjustcameraxfactor);
         self.checkrestartlevel(self.currentlevel.player.isOob);
-        self.checkifgameover(self.currentlevel.player.lives)
+        self.checkifgameover(self.currentlevel.player.lives);
+    def updatedialogue(self):
+        print("dialogue updating");
+    def update(self):
+        if (self.islevel):
+            self.updatelevel();
+        else:
+            self.updatedialogue();
