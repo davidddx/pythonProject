@@ -4,9 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e2939fcd-4fa2-4fa5-aa65-2d278de70d72" name="Changes" comment="game class, &#10;&#10;trying dialogue creation">
+    <list default="true" id="e2939fcd-4fa2-4fa5-aa65-2d278de70d72" name="Changes" comment="trying dialogue creation">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pygameproj/classes.py" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/classes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pygameproj/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,6 +40,7 @@
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/pygameproj/classes.py" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/pygameproj/main.py" root0="SKIP_INSPECTION" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -396,7 +398,15 @@
       <option name="project" value="LOCAL" />
       <updated>1695847426316</updated>
     </task>
-    <option name="localTasksCounter" value="38" />
+    <task id="LOCAL-00038" summary="trying dialogue creation">
+      <option name="closed" value="true" />
+      <created>1695850234969</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1695850234969</updated>
+    </task>
+    <option name="localTasksCounter" value="39" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -411,7 +421,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="fontchange" />
     <MESSAGE value="font change" />
     <MESSAGE value="background &amp; img editing" />
     <MESSAGE value="decoration spritegroup added" />
@@ -436,6 +445,7 @@
     <MESSAGE value="better levelchanging" />
     <MESSAGE value="adding dialogue" />
     <MESSAGE value="game class, &#10;&#10;trying dialogue creation" />
-    <option name="LAST_COMMIT_MESSAGE" value="game class, &#10;&#10;trying dialogue creation" />
+    <MESSAGE value="trying dialogue creation" />
+    <option name="LAST_COMMIT_MESSAGE" value="trying dialogue creation" />
   </component>
 </project>

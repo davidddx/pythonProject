@@ -10,9 +10,10 @@ from pytmx.util_pygame import load_pygame;
 
 pygame.init();
 
-clock = pygame.time.Clock()
+clock = pygame.time.Clock();
 globals.screen = pygame.display.set_mode((screenwidth, screenheight));
-globals.levelhandler = levelhandler()
+game = game();
+globals.levelhandler = game.levelhandler
 
 running = true;
 while running:
@@ -23,7 +24,7 @@ while running:
             pygame.quit();
             sys.exit();
 
-    globals.levelhandler.update();
+    game.run();
 
     pygame.display.update();
 
