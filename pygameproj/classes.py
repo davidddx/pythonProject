@@ -1180,12 +1180,32 @@ class levelhandler:
         self.checkrestartlevel(self.currentlevel.player.isOob);
         self.checkifgameover(self.currentlevel.player.lives);
         self.checklevelcomplete(self.currentlevel);
+
+class dialoguebox:
+    def __init__(self, type):
+        self.type = type;
+        self.width = 400;
+        self.height = 200;
+        self.x = (screenwidth - self.width) // 2;
+        self.y = (screenheight - self.height) // 2;
+        if type == "outside":
+            self.width = 420;
+            self.height = 220;
+
+class dialoguescene:
+    def __init__(self, backgroundlocation, dialoguelocation):
+        print("")
+        # plan
+        # file.readline() to read dialogue line by line. One line == one characters dialogue
+
 class dialoguehandler:
     def __init__(self):
         self.dialoguedir = cwd + "/dialogue/dialoguestorage.py";
         self.dialoguescenenum = 0;
         self.worldnum = 0;
         self.dialoguedone = false;
+        self.innerbox = dialoguebox(type == "inside");
+        self.outerbox = dialoguebox(type == "outside");
     def changescenetonext(self):
         self.dialoguescenenum+=1;
         self.dialoguedone = false;
@@ -1200,18 +1220,28 @@ class dialoguehandler:
         dialoguefont = pygame.font.SysFont(fontstring, fontsize)
         dialogueimg = dialoguefont.render("Dialogue Scene", 1, (50,50,50));
         # print(pygame.font.get_fonts())
-        screen.fill((0, 0, 0));
+        screen.fill((200, 200, 200));
         screen.blit(dialogueimg, (64, 3))
+
+        pygame.draw.rect(screen, (200,200,200), (self.outerbox.x,
+                                            self.outerbox.y,
+                                            self.outerbox.width,
+                                            self.outerbox.height))
+
+        pygame.draw.rect(screen, (100,100,100), (self.innerbox.x,
+                                            self.innerbox.y,
+                                            self.innerbox.width,
+                                            self.innerbox.height))
 
 class game:
     def __init__(self):
         self.gamescenenum = 0; #index for gamescenetypes
         self.gamescenetypes = [
-            "level",
+            # "level",
             "dialogue",
             "level"
         ]
-        self.state = "onlevel";
+        self.state = "ondialogue";
         self.levelhandler = levelhandler();
         self.dialoguehandler = dialoguehandler();
     def checklevelstate(self, levelhandler):
@@ -1229,6 +1259,7 @@ class game:
             else:
                 pygame.quit();
             levelhandler.levelcomplete = false;
+
     def checkdialoguescenestate(self, dialoguehandler):
         if dialoguehandler.dialoguedone:
             # print("hello world dialogue");
@@ -1239,6 +1270,7 @@ class game:
             elif self.gamescenetypes[self.gamescenenum] == "level":
                 self.levelhandler.changeleveltonext();
                 self.state = "onlevel";
+
     def run(self):
         if self.state == "onlevel":
             self.levelhandler.update();
@@ -1247,7 +1279,3 @@ class game:
         elif self.state == "ondialogue":
             self.dialoguehandler.update();
             self.checkdialoguescenestate(dialoguehandler = self.dialoguehandler);
-
-
-
-
