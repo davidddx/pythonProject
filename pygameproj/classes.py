@@ -1184,10 +1184,11 @@ class levelhandler:
 class dialoguebox:
     def __init__(self, type):
         self.type = type;
-        self.width = 400;
+        self.width = 900;
         self.height = 200;
+        yfactor = -200
         self.x = (screenwidth - self.width) // 2;
-        self.y = (screenheight - self.height) // 2;
+        self.y = (screenheight - self.height) // 2 - yfactor;
         if type == "outside":
             self.width = 420;
             self.height = 220;

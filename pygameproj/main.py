@@ -19,6 +19,10 @@ running = true;
 while running:
     clock.tick(30) # makes max fps 30
     #print("fps: ", clock.get_fps()) #  debug code used to test fps/performance
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_ESCAPE]:
+        pygame.quit();
+        sys.exit();
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit();
