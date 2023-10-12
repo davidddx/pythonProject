@@ -1035,7 +1035,6 @@ class levelhandler:
         if not self.deletedlevel:
             self.currentlevel.deletelevel()
         self.deletedlevel = false;
-        self.levelnum+=1
         self.currentlevel = self.initlevel(levelnum = self.levelnum);
         # print("level has been changed!")
     def deletelevel(self):
@@ -1076,8 +1075,10 @@ class levelhandler:
         pygame.quit()
         sys.exit()
     def checklevelcomplete(self, level):
-        if level.doorcollisionoccured:
+        if self.currentlevel.doorcollisionoccured:
             self.levelcomplete = true;
+            self.levelnum += 1;
+
 #levelhandler update function and render function just puts everything on the screen
     def render(self, thislevel, screen, adjustcamerayfactor, adjcamx):
         collgroup = thislevel.currentmap.collidablegroup;
@@ -1196,8 +1197,11 @@ class dialoguebox:
 class dialoguescene:
     def __init__(self, backgroundlocation, dialoguelocation):
         print("")
+        self.background = 0;
         # plan
         # file.readline() to read dialogue line by line. One line == one characters dialogue
+    def update(self):
+        print('updating dialogue scene');
 
 class dialoguehandler:
     def __init__(self):
@@ -1207,6 +1211,7 @@ class dialoguehandler:
         self.dialoguedone = false;
         self.innerbox = dialoguebox(type == "inside");
         self.outerbox = dialoguebox(type == "outside");
+        self.currentscene = 0;
     def changescenetonext(self):
         self.dialoguescenenum+=1;
         self.dialoguedone = false;
@@ -1240,37 +1245,44 @@ class game:
         self.gamescenetypes = [
             # "level",
             "dialogue",
-            "level"
+            "level",
+            "level",
         ]
-        self.state = "ondialogue";
+        self.state = "on" + self.gamescenetypes[0];
         self.levelhandler = levelhandler();
         self.dialoguehandler = dialoguehandler();
     def checklevelstate(self, levelhandler):
         # print("hello world level");
-        if levelhandler.levelcomplete:
-            self.gamescenenum+=1;
+        if not levelhandler.levelcomplete:
+            return None;
+        self.gamescenenum+=1;
             # print("reached")
-            self.levelhandler.deletelevel()
-            if self.gamescenetypes[self.gamescenenum] == "level":
-                self.levelhandler.changeleveltonext();
-                self.state = "onlevel";
-            elif self.gamescenetypes[self.gamescenenum] == "dialogue":
-                self.dialoguehandler.changescenetonext();
-                self.state = "ondialogue";
-            else:
-                pygame.quit();
-            levelhandler.levelcomplete = false;
+        self.levelhandler.deletelevel()
+        if self.gamescenetypes[self.gamescenenum] == "level":
+            self.levelhandler.changeleveltonext();
+            self.state = "onlevel";
+        elif self.gamescenetypes[self.gamescenenum] == "dialogue":
+            self.dialoguehandler.changescenetonext();
+            self.state = "ondialogue";
+        else:
+            pygame.quit();
+        levelhandler.levelcomplete = false;
 
     def checkdialoguescenestate(self, dialoguehandler):
-        if dialoguehandler.dialoguedone:
+        if not dialoguehandler.dialoguedone:
+            return None;
             # print("hello world dialogue");
-            self.gamescenenum+=1;
-            if self.gamescenetypes[self.gamescenenum] == "dialogue":
-                self.dialoguehandler.changescenetonext();
-                self.state = "ondialogue";
-            elif self.gamescenetypes[self.gamescenenum] == "level":
-                self.levelhandler.changeleveltonext();
-                self.state = "onlevel";
+        self.gamescenenum+=1;
+        if self.gamescenetypes[self.gamescenenum] == "dialogue":
+            self.dialoguehandler.changescenetonext();
+            self.state = "ondialogue";
+
+        #have not put "else" because I might add another scene type
+        elif self.gamescenetypes[self.gamescenenum] == "level":
+            self.levelhandler.changeleveltonext();
+            self.state = "onlevel";
+
+
 
     def run(self):
         if self.state == "onlevel":
