@@ -1195,40 +1195,39 @@ class dialoguebox:
             self.height = 220;
 
 class dialoguescene:
-    def __init__(self, backgroundlocation, dialoguelocation):
+    def __init__(self): #backgroundlocation, dialoguelocation):
         print("")
         self.background = 0;
-        # plan
-        # file.readline() to read dialogue line by line. One line == one characters dialogue
-    def update(self):
-        print('updating dialogue scene');
-
-class dialoguehandler:
-    def __init__(self):
-        self.dialoguedir = cwd + "/dialogue/dialoguestorage.py";
-        self.dialoguescenenum = 0;
-        self.worldnum = 0;
-        self.dialoguedone = false;
+        self.currenttext = "";
+        self.fulltext = self.getfulltext();
+        # self.fulltext = "hello dude whats up"
+        textfontstring = "Times New Roman"
+        textfontsize = 32
+        self.textfont = pygame.font.SysFont(textfontstring, textfontsize)
         self.innerbox = dialoguebox(type == "inside");
         self.outerbox = dialoguebox(type == "outside");
-        self.currentscene = 0;
-    def changescenetonext(self):
-        self.dialoguescenenum+=1;
-        self.dialoguedone = false;
+        self.scrollingidx = 0;
+        # plan
+        # file.readline() to read dialogue line by line. One line == one characters dialogue
+    def getfulltext(self):
+        dialoguedir = cwd + '\dialogue\world1\dialoguetest.txt';
+        file = open(dialoguedir)
+        fulltext = file.read()
+        print(fulltext)
+        return fulltext;
     def update(self):
-        key = pygame.key.get_pressed();
-        if(key[pygame.K_r]):
-            self.dialoguedone = true;
+        textfont = self.textfont;
+        self.currenttext = self.scroll(self.fulltext)
+        # screen.blit(textrimg, )
         screen = globals.screen
-        fontstring = "Times New Roman"
-        fontsize = 64
-        # displays lives
-        dialoguefont = pygame.font.SysFont(fontstring, fontsize)
+        dialoguefontstring = "Times New Roman"
+        dialoguefontsize = 64
+        dialoguefont = pygame.font.SysFont(dialoguefontstring, dialoguefontsize)
         dialogueimg = dialoguefont.render("Dialogue Scene", 1, (50,50,50));
         # print(pygame.font.get_fonts())
         screen.fill((200, 200, 200));
         screen.blit(dialogueimg, (64, 3))
-
+        textimg = textfont.render(self.currenttext, 1, (50,50,50));
         pygame.draw.rect(screen, (200,200,200), (self.outerbox.x,
                                             self.outerbox.y,
                                             self.outerbox.width,
@@ -1238,7 +1237,36 @@ class dialoguehandler:
                                             self.innerbox.y,
                                             self.innerbox.width,
                                             self.innerbox.height))
+        screen.blit(textimg, (self.innerbox.x, self.innerbox.y))
+        # self.text = self.scroll(self.text);
+    def scroll(self, fulltext):
 
+        currlen = len(fulltext);
+        if self.scrollingidx >= currlen:
+            self.textdone = true;
+            return fulltext;
+        idxstep = 0.5;
+        self.scrollingidx+=idxstep;
+        newtext = fulltext[0:int(self.scrollingidx)]
+        return newtext;
+class dialoguehandler:
+    def __init__(self):
+        self.dialoguedir = cwd + "/dialogue/dialoguestorage.py";
+        self.worldnum = 0;
+        self.dialoguedone = false;
+        self.currentscene = dialoguescene();
+        self.innerbox = dialoguebox(type == "inside");
+        self.outerbox = dialoguebox(type == "outside");
+
+    def changescenetonext(self):
+        self.dialoguescenenum+=1;
+        self.dialoguedone = false;
+    def update(self):
+        # self.currentscene.update();
+        key = pygame.key.get_pressed();
+        if(key[pygame.K_r]):
+            self.dialoguedone = true;
+        self.currentscene.update()
 class game:
     def __init__(self):
         self.gamescenenum = 0; #index for gamescenetypes
