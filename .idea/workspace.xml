@@ -4,10 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e2939fcd-4fa2-4fa5-aa65-2d278de70d72" name="Changes" comment="scene level/dialogue switching edit">
+    <list default="true" id="e2939fcd-4fa2-4fa5-aa65-2d278de70d72" name="Changes" comment="added scrolling text">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pygameproj/classes.py" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/classes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pygameproj/dialogue/dialoguetest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/dialogue/world1/dialoguetest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pygameproj/dialogue/world1/dialoguetest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/dialogue/world1/dialoguetest.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -439,7 +439,15 @@
       <option name="project" value="LOCAL" />
       <updated>1697124376745</updated>
     </task>
-    <option name="localTasksCounter" value="43" />
+    <task id="LOCAL-00043" summary="added scrolling text">
+      <option name="closed" value="true" />
+      <created>1697164302280</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1697164302280</updated>
+    </task>
+    <option name="localTasksCounter" value="44" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -454,7 +462,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="restart level with R button" />
     <MESSAGE value="background rendering edited&#10;looping background added" />
     <MESSAGE value="." />
     <MESSAGE value="trying to fix scrolling background" />
@@ -479,17 +486,7 @@
     <MESSAGE value="making dialogue system" />
     <MESSAGE value="dialoguebox position edit" />
     <MESSAGE value="scene level/dialogue switching edit" />
-    <option name="LAST_COMMIT_MESSAGE" value="scene level/dialogue switching edit" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/pygameproj/classes.py</url>
-          <line>1271</line>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <MESSAGE value="added scrolling text" />
+    <option name="LAST_COMMIT_MESSAGE" value="added scrolling text" />
   </component>
 </project>

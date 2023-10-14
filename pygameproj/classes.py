@@ -1195,29 +1195,53 @@ class dialoguebox:
             self.height = 220;
 
 class dialoguescene:
-    def __init__(self): #backgroundlocation, dialoguelocation):
-        print("")
-        self.background = 0;
+    def __init__(self, background, dialogueloc): #backgroundlocation, dialoguelocation):
+        self.state = "typing"
+        print("Dialogue scene being initialized....")
+        self.background = background;
         self.currenttext = "";
-        self.fulltext = self.getfulltext();
-        # self.fulltext = "hello dude whats up"
+
         textfontstring = "Times New Roman"
         textfontsize = 32
         self.textfont = pygame.font.SysFont(textfontstring, textfontsize)
         self.innerbox = dialoguebox(type == "inside");
         self.outerbox = dialoguebox(type == "outside");
-        self.scrollingidx = 0;
+        self.fulltext = self.getfulltext(dialogueloc);
+        self.fulltextidx = 0;
+        self.currentline = self.fulltext[self.fulltextidx];
+        self.maxfulltextidx = len(self.fulltext) - 1;
+        self.charscrollingidx = 0;
+        self.signalcontinue = false;
         # plan
         # file.readline() to read dialogue line by line. One line == one characters dialogue
-    def getfulltext(self):
+    def getfulltext(self, dialogueloc):
         dialoguedir = cwd + '\dialogue\world1\dialoguetest.txt';
         file = open(dialoguedir)
-        fulltext = file.read()
-        print(fulltext)
+        fulltext = [];
+        for line in file:
+            fulltext.append(line)
+            print(line)
+        # print(fulltext)
         return fulltext;
     def update(self):
+        key = pygame.key.get_pressed();
+        if key[pygame.K_r]:
+            print("self.state: ", self.state)
+            print("self.maxfulltextidx: ", self.maxfulltextidx)
+            print("self.fulltextidx: ", self.fulltextidx)
+            if self.state == "typing":
+                self.currenttext = self.currentline;
+                self.charscrollingidx = len(self.currentline) - 1;
+                self.signalcontinue = true;
+                return None;
+            else:
+                return None;
+        if self.state == "done":
+            return None;
         textfont = self.textfont;
-        self.currenttext = self.scroll(self.fulltext)
+        self.currenttext = self.scroll(self.currentline)
+        # print("self.currenttext: ", self.currenttext);
+        # print("self.currentline: ",self.currentline)
         # screen.blit(textrimg, )
         screen = globals.screen
         dialoguefontstring = "Times New Roman"
@@ -1226,6 +1250,7 @@ class dialoguescene:
         dialogueimg = dialoguefont.render("Dialogue Scene", 1, (50,50,50));
         # print(pygame.font.get_fonts())
         screen.fill((200, 200, 200));
+        screen.blit(self.background, (0,0))
         screen.blit(dialogueimg, (64, 3))
         textimg = textfont.render(self.currenttext, 1, (50,50,50));
         pygame.draw.rect(screen, (200,200,200), (self.outerbox.x,
@@ -1238,34 +1263,65 @@ class dialoguescene:
                                             self.innerbox.width,
                                             self.innerbox.height))
         screen.blit(textimg, (self.innerbox.x, self.innerbox.y))
-        # self.text = self.scroll(self.text);
-    def scroll(self, fulltext):
+        continueimg = textfont.render("press r to continue", 1, (50,50,50))
+        screen.blit(continueimg, (self.innerbox.x, self.innerbox.y - 30))
+        self.currentline = self.checklinestatus(currenttext=self.currenttext, currentline = self.currentline, idxcurrentline=self.fulltextidx, maxidx=self.maxfulltextidx, signalcontinue=self.signalcontinue);
+    def checklinestatus(self, currenttext, currentline, idxcurrentline, maxidx, signalcontinue):
+        # print('Current line idx: ', idxcurrentline)
+        if idxcurrentline == maxidx:
+            self.state == "done";
+            return currentline;
+        if currenttext != currentline:
+            return currentline;
+        else:
+            print("equality!")
+            if not signalcontinue:
+                return currentline;
+            self.signalcontinue = false;
+            self.fulltextidx+= 1;
+            currentline = self.fulltext[self.fulltextidx];
+            self.charscrollingidx = 0;
+            return currentline;
 
+    def scroll(self, fulltext):
         currlen = len(fulltext);
-        if self.scrollingidx >= currlen:
+        if self.charscrollingidx >= currlen:
             self.textdone = true;
             return fulltext;
         idxstep = 0.5;
-        self.scrollingidx+=idxstep;
-        newtext = fulltext[0:int(self.scrollingidx)]
+        self.charscrollingidx+=idxstep;
+        newtext = fulltext[0:int(self.charscrollingidx)]
         return newtext;
+
 class dialoguehandler:
     def __init__(self):
-        self.dialoguedir = cwd + "/dialogue/dialoguestorage.py";
+
+        self.dialoguedir = cwd + "/dialogue";
         self.worldnum = 0;
         self.dialoguedone = false;
-        self.currentscene = dialoguescene();
+        self.scenedone = false;
+        background = pygame.image.load(self.dialoguedir + '/world1/backgrounds/background0.png')
+        self.dialoguescenenum = 0;
         self.innerbox = dialoguebox(type == "inside");
         self.outerbox = dialoguebox(type == "outside");
+        self.dialoguelocations = [
+            cwd + '\dialogue\world1\dialoguetest.txt',
+        ]
+        self.currentscene = dialoguescene(background = background, dialogueloc = self.dialoguelocations[self.dialoguescenenum]);
 
     def changescenetonext(self):
         self.dialoguescenenum+=1;
         self.dialoguedone = false;
+    def deletecurrentscene(self):
+        del self.currentscene;
+        self.currentscene = 0;
     def update(self):
-        # self.currentscene.update();
-        key = pygame.key.get_pressed();
-        if(key[pygame.K_r]):
-            self.dialoguedone = true;
+        if self.scenedone:
+            return None;
+        if self.currentscene.state == "done":
+            self.dialoguescenenum += 1;
+            self.deletecurrentscene();
+            self.scenedone = true;
         self.currentscene.update()
 class game:
     def __init__(self):

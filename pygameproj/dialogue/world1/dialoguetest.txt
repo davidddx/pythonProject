@@ -1,1 +1,7 @@
 Hi. This is a dialogue test.
+I am still testing dialogue (line 3)
+STILL TESTING (LINE 5)
+TEST TEST TEST (LINE 7)
+TEEEEEEEEEEEST (LINE 9)
+t-e-s-t (LINE 11)
+spells TEST (LINE 13)
