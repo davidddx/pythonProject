@@ -1181,7 +1181,6 @@ class levelhandler:
         self.checkrestartlevel(self.currentlevel.player.isOob);
         self.checkifgameover(self.currentlevel.player.lives);
         self.checklevelcomplete(self.currentlevel);
-
 class dialoguebox:
     def __init__(self, type):
         self.type = type;
@@ -1193,7 +1192,6 @@ class dialoguebox:
         if type == "outside":
             self.width = 420;
             self.height = 220;
-
 class dialoguescene:
     def __init__(self, background, dialogueloc): #backgroundlocation, dialoguelocation):
         self.state = "typing"
@@ -1212,8 +1210,6 @@ class dialoguescene:
         self.maxfulltextidx = len(self.fulltext) - 1;
         self.charscrollingidx = 0;
         self.signalcontinue = false;
-        # plan
-        # file.readline() to read dialogue line by line. One line == one characters dialogue
     def getfulltext(self, dialogueloc):
         dialoguedir = cwd + '\dialogue\world1\dialoguetest.txt';
         file = open(dialoguedir)
@@ -1224,6 +1220,10 @@ class dialoguescene:
         # print(fulltext)
         return fulltext;
     def update(self):
+        if self.state == "done":
+            if self.signalcontinue:
+                print("done!")
+                return None;
         key = pygame.key.get_pressed();
         if key[pygame.K_r]:
             print("self.state: ", self.state)
@@ -1235,9 +1235,8 @@ class dialoguescene:
                 self.signalcontinue = true;
                 return None;
             else:
+                self.signalcontinue = true;
                 return None;
-        if self.state == "done":
-            return None;
         textfont = self.textfont;
         self.currenttext = self.scroll(self.currentline)
         # print("self.currenttext: ", self.currenttext);
@@ -1268,10 +1267,10 @@ class dialoguescene:
         self.currentline = self.checklinestatus(currenttext=self.currenttext, currentline = self.currentline, idxcurrentline=self.fulltextidx, maxidx=self.maxfulltextidx, signalcontinue=self.signalcontinue);
     def checklinestatus(self, currenttext, currentline, idxcurrentline, maxidx, signalcontinue):
         # print('Current line idx: ', idxcurrentline)
-        if idxcurrentline == maxidx:
-            self.state == "done";
-            return currentline;
         if currenttext != currentline:
+            return currentline;
+        elif idxcurrentline == maxidx:
+            self.state = "done";
             return currentline;
         else:
             print("equality!")
@@ -1282,7 +1281,6 @@ class dialoguescene:
             currentline = self.fulltext[self.fulltextidx];
             self.charscrollingidx = 0;
             return currentline;
-
     def scroll(self, fulltext):
         currlen = len(fulltext);
         if self.charscrollingidx >= currlen:
@@ -1292,6 +1290,13 @@ class dialoguescene:
         self.charscrollingidx+=idxstep;
         newtext = fulltext[0:int(self.charscrollingidx)]
         return newtext;
+    def delete(self):
+        del self.background
+        self.background = 0;
+        del self.innerbox
+        self.innerbox = 0;
+        del self.outerbox
+        self.outerbox = 0;
 
 class dialoguehandler:
     def __init__(self):
@@ -1307,6 +1312,7 @@ class dialoguehandler:
         self.dialoguelocations = [
             cwd + '\dialogue\world1\dialoguetest.txt',
         ]
+        self.scenestarted = true;
         self.currentscene = dialoguescene(background = background, dialogueloc = self.dialoguelocations[self.dialoguescenenum]);
 
     def changescenetonext(self):
@@ -1316,12 +1322,14 @@ class dialoguehandler:
         del self.currentscene;
         self.currentscene = 0;
     def update(self):
-        if self.scenedone:
+        if not self.scenestarted:
             return None;
-        if self.currentscene.state == "done":
+        if self.currentscene.state == "done" and self.currentscene.signalcontinue:
             self.dialoguescenenum += 1;
-            self.deletecurrentscene();
-            self.scenedone = true;
+            self.deletecurrentscene()
+            self.dialoguedone = true;
+            self.scenestarted = false;
+            return None;
         self.currentscene.update()
 class game:
     def __init__(self):
