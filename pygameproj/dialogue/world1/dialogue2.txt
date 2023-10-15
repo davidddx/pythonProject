@@ -1,0 +1,4 @@
+this is dialogue 2.
+hello. welcome.
+this is dialogue 2.
+welcome to dialogue2.txt.

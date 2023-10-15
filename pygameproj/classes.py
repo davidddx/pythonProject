@@ -1196,7 +1196,7 @@ class dialoguescene:
     def __init__(self, background, dialogueloc): #backgroundlocation, dialoguelocation):
         self.state = "typing"
         print("Dialogue scene being initialized....")
-        self.background = background;
+        self.background = pygame.image.load(background); #background represents a path to the image
         self.currenttext = "";
 
         textfontstring = "Times New Roman"
@@ -1211,18 +1211,18 @@ class dialoguescene:
         self.charscrollingidx = 0;
         self.signalcontinue = false;
     def getfulltext(self, dialogueloc):
-        dialoguedir = cwd + '\dialogue\world1\dialoguetest.txt';
-        file = open(dialoguedir)
+        # dialoguedir = cwd + '\dialogue\world1\dialoguetest.txt';
         fulltext = [];
+        file = open(dialogueloc);
         for line in file:
             fulltext.append(line)
-            print(line)
+            # print(line)
         # print(fulltext)
         return fulltext;
     def update(self):
         if self.state == "done":
             if self.signalcontinue:
-                print("done!")
+                # print("done!")
                 return None;
         key = pygame.key.get_pressed();
         if key[pygame.K_r]:
@@ -1273,7 +1273,7 @@ class dialoguescene:
             self.state = "done";
             return currentline;
         else:
-            print("equality!")
+            # print("equality!")
             if not signalcontinue:
                 return currentline;
             self.signalcontinue = false;
@@ -1304,20 +1304,28 @@ class dialoguehandler:
         self.dialoguedir = cwd + "/dialogue";
         self.worldnum = 0;
         self.dialoguedone = false;
-        self.scenedone = false;
-        background = pygame.image.load(self.dialoguedir + '/world1/backgrounds/background0.png')
+        # background = pygame.image.load(self.dialoguedir + '/world1/backgrounds/background0.png')
         self.dialoguescenenum = 0;
         self.innerbox = dialoguebox(type == "inside");
         self.outerbox = dialoguebox(type == "outside");
+        self.backgrounds = [
+            self.dialoguedir + '/world1/backgrounds/background0.png',
+            self.dialoguedir + '/world1/backgrounds/background0.png',
+            self.dialoguedir + '/world1/backgrounds/background0.png',
+        ]
         self.dialoguelocations = [
-            cwd + '\dialogue\world1\dialoguetest.txt',
+            cwd + '\dialogue\world1\dialogue1.txt',
+            cwd + '\dialogue\world1\dialogue2.txt',
+            cwd + '\dialogue\world1\dialogue3.txt',
         ]
         self.scenestarted = true;
-        self.currentscene = dialoguescene(background = background, dialogueloc = self.dialoguelocations[self.dialoguescenenum]);
+        self.currentscene = dialoguescene(background = self.backgrounds[self.dialoguescenenum], dialogueloc = self.dialoguelocations[self.dialoguescenenum]);
 
     def changescenetonext(self):
-        self.dialoguescenenum+=1;
         self.dialoguedone = false;
+        self.scenestarted = true;
+        self.currentscene = dialoguescene(self.backgrounds[self.dialoguescenenum], self.dialoguelocations[self.dialoguescenenum])
+
     def deletecurrentscene(self):
         del self.currentscene;
         self.currentscene = 0;
@@ -1335,9 +1343,9 @@ class game:
     def __init__(self):
         self.gamescenenum = 0; #index for gamescenetypes
         self.gamescenetypes = [
-            # "level",
             "dialogue",
             "level",
+            "dialogue",
             "level",
         ]
         self.state = "on" + self.gamescenetypes[0];
