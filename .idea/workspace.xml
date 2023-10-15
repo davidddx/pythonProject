@@ -4,12 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e2939fcd-4fa2-4fa5-aa65-2d278de70d72" name="Changes" comment="dialogue system enhancements">
-      <change afterPath="$PROJECT_DIR$/pygameproj/dialogue/world1/dialogue2.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pygameproj/dialogue/world1/dialogue3.txt" afterDir="false" />
+    <list default="true" id="e2939fcd-4fa2-4fa5-aa65-2d278de70d72" name="Changes" comment="dialogue works">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pygameproj/classes.py" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/classes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pygameproj/dialogue/world1/dialoguetest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/dialogue/world1/dialogue1.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pygameproj/dialogue/world1/dialogue2.txt" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/dialogue/world1/dialogue2.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -465,7 +463,15 @@
       <option name="project" value="LOCAL" />
       <updated>1697312590788</updated>
     </task>
-    <option name="localTasksCounter" value="46" />
+    <task id="LOCAL-00046" summary="dialogue works">
+      <option name="closed" value="true" />
+      <created>1697338754820</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1697338754820</updated>
+    </task>
+    <option name="localTasksCounter" value="47" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -480,7 +486,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="." />
     <MESSAGE value="trying to fix scrolling background" />
     <MESSAGE value="fixing background" />
     <MESSAGE value="background issue workaround" />
@@ -505,6 +510,7 @@
     <MESSAGE value="scene level/dialogue switching edit" />
     <MESSAGE value="added scrolling text" />
     <MESSAGE value="dialogue system enhancements" />
-    <option name="LAST_COMMIT_MESSAGE" value="dialogue system enhancements" />
+    <MESSAGE value="dialogue works" />
+    <option name="LAST_COMMIT_MESSAGE" value="dialogue works" />
   </component>
 </project>

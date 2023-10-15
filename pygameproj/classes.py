@@ -1194,6 +1194,7 @@ class dialoguebox:
             self.height = 220;
 class dialoguescene:
     def __init__(self, background, dialogueloc): #backgroundlocation, dialoguelocation):
+        self.finishedline = false;
         self.state = "typing"
         print("Dialogue scene being initialized....")
         self.background = pygame.image.load(background); #background represents a path to the image
@@ -1210,6 +1211,8 @@ class dialoguescene:
         self.maxfulltextidx = len(self.fulltext) - 1;
         self.charscrollingidx = 0;
         self.signalcontinue = false;
+        self.rcooldown = 250  # milliseconds
+        self.timelastpressedr = 0;
     def getfulltext(self, dialogueloc):
         # dialoguedir = cwd + '\dialogue\world1\dialoguetest.txt';
         fulltext = [];
@@ -1224,15 +1227,18 @@ class dialoguescene:
             if self.signalcontinue:
                 # print("done!")
                 return None;
+        timenow = pygame.time.get_ticks()
         key = pygame.key.get_pressed();
-        if key[pygame.K_r]:
+        if key[pygame.K_r] and (self.rcooldown < timenow - self.timelastpressedr):
+            self.timelastpressedr = timenow
             print("self.state: ", self.state)
             print("self.maxfulltextidx: ", self.maxfulltextidx)
             print("self.fulltextidx: ", self.fulltextidx)
             if self.state == "typing":
+                if self.finishedline:
+                    self.signalcontinue = true;
                 self.currenttext = self.currentline;
                 self.charscrollingidx = len(self.currentline) - 1;
-                self.signalcontinue = true;
                 return None;
             else:
                 self.signalcontinue = true;
@@ -1268,11 +1274,14 @@ class dialoguescene:
     def checklinestatus(self, currenttext, currentline, idxcurrentline, maxidx, signalcontinue):
         # print('Current line idx: ', idxcurrentline)
         if currenttext != currentline:
+            self.finishedline = false
             return currentline;
         elif idxcurrentline == maxidx:
+            self.finishedline = true;
             self.state = "done";
             return currentline;
         else:
+            self.finishedline = true;
             # print("equality!")
             if not signalcontinue:
                 return currentline;
