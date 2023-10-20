@@ -1199,7 +1199,7 @@ class dialoguescene:
         print("Dialogue scene being initialized....")
         self.background = pygame.image.load(background); #background represents a path to the image
         self.currenttext = "";
-
+        self.currentlinelist = [];
         textfontstring = "Times New Roman"
         textfontsize = 32
         self.textfont = pygame.font.SysFont(textfontstring, textfontsize)
@@ -1231,9 +1231,9 @@ class dialoguescene:
         key = pygame.key.get_pressed();
         if key[pygame.K_r] and (self.rcooldown < timenow - self.timelastpressedr):
             self.timelastpressedr = timenow
-            print("self.state: ", self.state)
-            print("self.maxfulltextidx: ", self.maxfulltextidx)
-            print("self.fulltextidx: ", self.fulltextidx)
+            # print("self.state: ", self.state)
+            # print("self.maxfulltextidx: ", self.maxfulltextidx)
+            # print("self.fulltextidx: ", self.fulltextidx)
             if self.state == "typing":
                 if self.finishedline:
                     self.signalcontinue = true;
@@ -1271,6 +1271,22 @@ class dialoguescene:
         continueimg = textfont.render("press r to continue", 1, (50,50,50))
         screen.blit(continueimg, (self.innerbox.x, self.innerbox.y - 30))
         self.currentline = self.checklinestatus(currenttext=self.currenttext, currentline = self.currentline, idxcurrentline=self.fulltextidx, maxidx=self.maxfulltextidx, signalcontinue=self.signalcontinue);
+        self.currentlinelist = self.getcurrentlinelist(self.currentline);
+    def getcurrentlinelist(self, currentline):
+        maxlinelen = 2;
+        currentlinelist = [];
+        writingfactor = 0;
+        newstring = "";
+        for character in currentline:
+            newstring += character;
+            if len(newstring) - writingfactor >= maxlinelen:
+                currentlinelist.append(newstring)
+                newstring = ""
+                writingfactor *= 2;
+        if newstring != "":
+            currentlinelist.append(newstring);
+        print("currentlinelist: ", currentlinelist )
+        return currentlinelist
     def checklinestatus(self, currenttext, currentline, idxcurrentline, maxidx, signalcontinue):
         # print('Current line idx: ', idxcurrentline)
         if currenttext != currentline:
@@ -1295,7 +1311,7 @@ class dialoguescene:
         if self.charscrollingidx >= currlen:
             self.textdone = true;
             return fulltext;
-        idxstep = 0.5;
+        idxstep = 1.5; #character scrolling speed
         self.charscrollingidx+=idxstep;
         newtext = fulltext[0:int(self.charscrollingidx)]
         return newtext;
@@ -1348,6 +1364,7 @@ class dialoguehandler:
             self.scenestarted = false;
             return None;
         self.currentscene.update()
+
 class game:
     def __init__(self):
         self.gamescenenum = 0; #index for gamescenetypes
