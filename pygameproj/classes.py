@@ -1199,7 +1199,7 @@ class dialoguescene:
         print("Dialogue scene being initialized....")
         self.background = pygame.image.load(background); #background represents a path to the image
         self.currenttext = "";
-        self.currentlinelist = [];
+        self.currenttextlist = [];
         textfontstring = "Times New Roman"
         textfontsize = 32
         self.textfont = pygame.font.SysFont(textfontstring, textfontsize)
@@ -1223,6 +1223,7 @@ class dialoguescene:
         # print(fulltext)
         return fulltext;
     def update(self):
+        # print("self.currentextlist: ", self.currenttextlist)
         if self.state == "done":
             if self.signalcontinue:
                 # print("done!")
@@ -1237,14 +1238,15 @@ class dialoguescene:
             if self.state == "typing":
                 if self.finishedline:
                     self.signalcontinue = true;
-                self.currenttext = self.currentline;
                 self.charscrollingidx = len(self.currentline) - 1;
+                self.currenttextlist = self.scrolllist(self.currentline, self.currenttextlist);
                 return None;
             else:
                 self.signalcontinue = true;
                 return None;
         textfont = self.textfont;
         self.currenttext = self.scroll(self.currentline)
+        self.currenttextlist = self.scrolllist(self.currentline, self.currenttextlist)
         # print("self.currenttext: ", self.currenttext);
         # print("self.currentline: ",self.currentline)
         # screen.blit(textrimg, )
@@ -1257,7 +1259,7 @@ class dialoguescene:
         screen.fill((200, 200, 200));
         screen.blit(self.background, (0,0))
         screen.blit(dialogueimg, (64, 3))
-        textimg = textfont.render(self.currenttext, 1, (50,50,50));
+        # textimg = textfont.render(self.currenttext, 1, (50,50,50));
         pygame.draw.rect(screen, (200,200,200), (self.outerbox.x,
                                             self.outerbox.y,
                                             self.outerbox.width,
@@ -1267,26 +1269,15 @@ class dialoguescene:
                                             self.innerbox.y,
                                             self.innerbox.width,
                                             self.innerbox.height))
-        screen.blit(textimg, (self.innerbox.x, self.innerbox.y))
+        # screen.blit(textimg, (self.innerbox.x, self.innerbox.y))
+        yfactor = 0;
+        for element in self.currenttextlist:
+            textimg = textfont.render(element, 1, (50, 50, 50));
+            screen.blit(textimg, (self.innerbox.x, self.innerbox.y - yfactor))
+            yfactor -= 30
         continueimg = textfont.render("press r to continue", 1, (50,50,50))
         screen.blit(continueimg, (self.innerbox.x, self.innerbox.y - 30))
         self.currentline = self.checklinestatus(currenttext=self.currenttext, currentline = self.currentline, idxcurrentline=self.fulltextidx, maxidx=self.maxfulltextidx, signalcontinue=self.signalcontinue);
-        self.currentlinelist = self.getcurrentlinelist(self.currentline);
-    def getcurrentlinelist(self, currentline):
-        maxlinelen = 2;
-        currentlinelist = [];
-        writingfactor = 0;
-        newstring = "";
-        for character in currentline:
-            newstring += character;
-            if len(newstring) - writingfactor >= maxlinelen:
-                currentlinelist.append(newstring)
-                newstring = ""
-                writingfactor *= 2;
-        if newstring != "":
-            currentlinelist.append(newstring);
-        print("currentlinelist: ", currentlinelist )
-        return currentlinelist
     def checklinestatus(self, currenttext, currentline, idxcurrentline, maxidx, signalcontinue):
         # print('Current line idx: ', idxcurrentline)
         if currenttext != currentline:
@@ -1311,10 +1302,33 @@ class dialoguescene:
         if self.charscrollingidx >= currlen:
             self.textdone = true;
             return fulltext;
-        idxstep = 1.5; #character scrolling speed
+        idxstep = 2; #character scrolling speed
         self.charscrollingidx+=idxstep;
         newtext = fulltext[0:int(self.charscrollingidx)]
         return newtext;
+    def scrolllist(self, fulltext, currenttextlist):
+        currlen = len(fulltext);
+        if self.charscrollingidx >= currlen:
+            self.textdone = true;
+            return currenttextlist;
+        idxstep = 1.5; #character scrolling speed
+        self.charscrollingidx+=idxstep;
+        newtext = fulltext[0:int(self.charscrollingidx)]
+        maxlinelen = 75;
+        currentlinelist = [];
+        writingfactor = 0;
+        newstring = "";
+        for character in newtext:
+            newstring += character;
+            if len(newstring) - writingfactor >= maxlinelen:
+                currentlinelist.append(newstring)
+                newstring = ""
+                writingfactor *= 2;
+        if newstring != "":
+            currentlinelist.append(newstring);
+        # print("currentlinelist: ", currentlinelist)
+        # print("currentline: ", fulltext);
+        return currentlinelist
     def delete(self):
         del self.background
         self.background = 0;
@@ -1345,12 +1359,10 @@ class dialoguehandler:
         ]
         self.scenestarted = true;
         self.currentscene = dialoguescene(background = self.backgrounds[self.dialoguescenenum], dialogueloc = self.dialoguelocations[self.dialoguescenenum]);
-
     def changescenetonext(self):
         self.dialoguedone = false;
         self.scenestarted = true;
         self.currentscene = dialoguescene(self.backgrounds[self.dialoguescenenum], self.dialoguelocations[self.dialoguescenenum])
-
     def deletecurrentscene(self):
         del self.currentscene;
         self.currentscene = 0;
