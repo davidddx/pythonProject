@@ -1230,7 +1230,7 @@ class dialoguescene:
                 return None;
         timenow = pygame.time.get_ticks()
         key = pygame.key.get_pressed();
-        if key[pygame.K_r] and (self.rcooldown < timenow - self.timelastpressedr):
+        if key[pygame.K_x] and (self.rcooldown < timenow - self.timelastpressedr):
             self.timelastpressedr = timenow
             # print("self.state: ", self.state)
             # print("self.maxfulltextidx: ", self.maxfulltextidx)
@@ -1275,8 +1275,8 @@ class dialoguescene:
             textimg = textfont.render(element, 1, (50, 50, 50));
             screen.blit(textimg, (self.innerbox.x, self.innerbox.y - yfactor))
             yfactor -= 30
-        continueimg = textfont.render("press r to continue", 1, (50,50,50))
-        screen.blit(continueimg, (self.innerbox.x, self.innerbox.y - 30))
+        continueimg = textfont.render("X TO CONTINUE", 1, (50,50,50))
+        screen.blit(continueimg, (self.innerbox.x, self.innerbox.y - 50))
         self.currentline = self.checklinestatus(currenttext=self.currenttext, currentline = self.currentline, idxcurrentline=self.fulltextidx, maxidx=self.maxfulltextidx, signalcontinue=self.signalcontinue);
     def checklinestatus(self, currenttext, currentline, idxcurrentline, maxidx, signalcontinue):
         # print('Current line idx: ', idxcurrentline)
@@ -1376,6 +1376,22 @@ class dialoguehandler:
             self.scenestarted = false;
             return None;
         self.currentscene.update()
+class titlescreen:
+    def __init__(self):
+        print("hello world!");
+    def onbuttonpress(self, buttontype):
+        if buttontype == "1":
+            print("buttontype1")
+        elif buttontype == "2":
+            print("buttontype2")
+        elif buttontype == "3":
+            print("buttontype3")
+        elif buttontype == "4":
+            print("buttontype4")
+        elif buttontype == "5":
+            print("buttontype5")
+        else:
+            print("buttontype1")
 
 class game:
     def __init__(self):
@@ -1389,6 +1405,7 @@ class game:
         self.state = "on" + self.gamescenetypes[0];
         self.levelhandler = levelhandler();
         self.dialoguehandler = dialoguehandler();
+        self.titlescreen = titlescreen();
     def checklevelstate(self, levelhandler):
         # print("hello world level");
         if not levelhandler.levelcomplete:
@@ -1423,6 +1440,9 @@ class game:
 
 
     def run(self):
+        if self.titlescreen:
+            return None;
+
         if self.state == "onlevel":
             self.levelhandler.update();
             self.checklevelstate(levelhandler = self.levelhandler);
