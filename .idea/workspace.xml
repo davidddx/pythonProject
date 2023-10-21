@@ -4,8 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e2939fcd-4fa2-4fa5-aa65-2d278de70d72" name="Changes" comment="dialogue system bug fix">
+    <list default="true" id="e2939fcd-4fa2-4fa5-aa65-2d278de70d72" name="Changes" comment="created titlescreen class">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pygameproj/classes.py" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/classes.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pygameproj/dialogue/world1/dialogue1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/dialogue/world1/dialogue1.txt" afterDir="false" />
     </list>
@@ -102,14 +103,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1693604848291</updated>
-    </task>
-    <task id="LOCAL-00001" summary="edited sprites">
-      <option name="closed" value="true" />
-      <created>1693630983449</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1693630983449</updated>
     </task>
     <task id="LOCAL-00002" summary="edited sprites &amp; maps">
       <option name="closed" value="true" />
@@ -495,7 +488,15 @@
       <option name="project" value="LOCAL" />
       <updated>1697780432089</updated>
     </task>
-    <option name="localTasksCounter" value="50" />
+    <task id="LOCAL-00050" summary="created titlescreen class">
+      <option name="closed" value="true" />
+      <created>1697855986936</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1697855986937</updated>
+    </task>
+    <option name="localTasksCounter" value="51" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -510,7 +511,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="small fix" />
     <MESSAGE value="background" />
     <MESSAGE value="fixed background glitch, added more background types" />
     <MESSAGE value="added multi parallax background" />
@@ -535,6 +535,7 @@
     <MESSAGE value="dialogue bug fix" />
     <MESSAGE value="added linelist" />
     <MESSAGE value="dialogue system bug fix" />
-    <option name="LAST_COMMIT_MESSAGE" value="dialogue system bug fix" />
+    <MESSAGE value="created titlescreen class" />
+    <option name="LAST_COMMIT_MESSAGE" value="created titlescreen class" />
   </component>
 </project>

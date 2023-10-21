@@ -2,7 +2,6 @@ import pygame, sys, os
 import globals
 from settings import *
 from pytmx.util_pygame import load_pygame;
-
 class Map():
     def __init__(self, tmxdata):
         self.collidablegroup = pygame.sprite.Group();
@@ -43,7 +42,6 @@ class Tile(pygame.sprite.Sprite):
         self.tile_id = tile_id;
         self.collidable = collidable;
         self.isinrange = false;
-
 class object(pygame.sprite.Sprite): #basically sprites that are not tiles
     def __init__(self, surface, pos, type, len, height):
         pygame.sprite.Sprite.__init__(self);
@@ -94,7 +92,6 @@ class object(pygame.sprite.Sprite): #basically sprites that are not tiles
             #     self.rect.x = plrx + (screenwidth * direction / 2);
             self.inxrange = true;
             self.rect.x = self.scroll(speed=scrollspeed, direction=direction, typefactor=self.speed, x=self.rect.x);
-
 class physics():
     def __init__(self, gravity, onground, plrxvel, jumppow):
         self.gravity = gravity;
@@ -680,7 +677,6 @@ class enemyimages():
     red = pygame.image.load(cwd + '/tiles/EnemySprites/idleredenemy.png')
     green = pygame.image.load(cwd + '/tiles/EnemySprites/idlegreenenemy.png')
     purple = pygame.image.load(cwd + '/tiles/EnemySprites/idlepurpleenemy.png')
-#class enemyimages accessed only when enemyimages needed for instancing
 class Level:
     def __init__(self, currentmap, plr):
         self.lastframeplrxpos = 0
@@ -1308,7 +1304,7 @@ class dialoguescene:
         return newtext;
     def scrolllist(self, fulltext, currenttextlist):
         currlen = len(fulltext);
-        if self.charscrollingidx >= currlen:
+        if self.charscrollingidx > currlen:
             self.textdone = true;
             return currenttextlist;
         idxstep = 1.5; #character scrolling speed
@@ -1325,6 +1321,7 @@ class dialoguescene:
                 newstring = ""
                 writingfactor *= 2;
         if newstring != "":
+
             currentlinelist.append(newstring);
         # print("currentlinelist: ", currentlinelist)
         # print("currentline: ", fulltext);
@@ -1336,10 +1333,8 @@ class dialoguescene:
         self.innerbox = 0;
         del self.outerbox
         self.outerbox = 0;
-
 class dialoguehandler:
     def __init__(self):
-
         self.dialoguedir = cwd + "/dialogue";
         self.worldnum = 0;
         self.dialoguedone = false;
@@ -1376,10 +1371,79 @@ class dialoguehandler:
             self.scenestarted = false;
             return None;
         self.currentscene.update()
+class button:
+    def __init__(self, text, type, x, y):
+        width = 0
+        height = 0;
+        if type == "small":
+            width = 150
+            height = 2 * width
+        elif type == "medium":
+            width = 175
+            height = 2 * width
+            pass;
+        elif type == "big":
+            width = 190
+            height = 2 * width
+            pass;
+        else: #default to medium
+            width = 175
+            height = 175
+            pass;
+        self.width = width;
+        self.height = height;
+        self.text = text;
+        self.x = x;
+        self.y = y;
+        self.pressed = false;
+        fontstring = "Times New Roman"
+        fontsize = 25
+        # displays lives
+        self.font = pygame.font.SysFont(fontstring, fontsize)
+    def checkmouseinrange(self, mousepos, buttonx, buttony, buttonwidth, buttonh):
+        mouseposx = mousepos[0]
+        mouseposy = mousepos[1]
+        xlower = buttonx
+        xhigher = buttonx + buttonwidth
+        ylower = buttony
+        yhigher = buttony + buttonh
+        if xlower > mouseposx or xhigher < mouseposx:
+            return None;
+        if ylower > mouseposy or yhigher < mouseposy:
+            return None;
+        return true;
+    def checkclicked(self, mousepress):
+        if mousepress[0]: #element 0 is left click
+            return true;
+        return None
+
+    def update(self):
+        buttontext = self.font.render(self.text, 1, (0,0,0))
+        rect = buttontext.get_rect(center = (self.x, self.y))
+        globals.screen.blit(buttontext, (rect.x + self.width/2, rect.y + self.height/2));
+        if self.checkmouseinrange(mousepos = pygame.mouse.get_pos(),buttonx = self.x, buttony = self.y,
+                                  buttonwidth = self.width, buttonh = self.height):
+            # print("mouse is in range!")
+            if self.checkclicked(pygame.mouse.get_pressed()):
+                self.pressed = true;
 class titlescreen:
     def __init__(self):
+        #Buttons
+        backgrounddir = cwd + "/titlescreen/background.png"
+        self.background = pygame.image.load(backgrounddir)
+        buttonslist = []
+        buttonspacingfactor = 203;
+        numbuttons = 5;
+        print("screenwidth: ", screenwidth);
+        text = ["athlete", "samurai", "tank", "ninja", "glider"]
+        for i in range(numbuttons):
+            buttonslist.append(button(text = text[i], type = "big",
+                                      x = (i * buttonspacingfactor), y = screenheight/2)  );
+        self.buttonslist = buttonslist;
+        self.done = false;
+
         print("hello world!");
-    def onbuttonpress(self, buttontype):
+    def onbuttonsignal(self, buttontype):
         if buttontype == "1":
             print("buttontype1")
         elif buttontype == "2":
@@ -1391,8 +1455,21 @@ class titlescreen:
         elif buttontype == "5":
             print("buttontype5")
         else:
-            print("buttontype1")
-
+            return None;
+    def update(self):
+        globals.screen.blit(self.background, (0,0))
+        keys = pygame.key.get_pressed()
+        for button in self.buttonslist:
+            # print("button.x: ", button.x);
+            pygame.draw.rect(globals.screen, (255,255,255), (button.x, button.y, button.width, button.height));
+            button.update()
+            if button.pressed:
+                self.done = true;
+        # pygame.draw.rect(screen, (200,200,200), (self.outerbox.x,
+        #                                     self.outerbox.y,
+        #                                     self.outerbox.width,
+        #                                     self.outerbox.height))
+        # buttonpressed = getbutton
 class game:
     def __init__(self):
         self.gamescenenum = 0; #index for gamescenetypes
@@ -1441,6 +1518,10 @@ class game:
 
     def run(self):
         if self.titlescreen:
+            self.titlescreen.update();
+            if self.titlescreen.done:
+                self.titlescreen = false;
+                print("title screen is done")
             return None;
 
         if self.state == "onlevel":
