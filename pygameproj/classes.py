@@ -204,7 +204,9 @@ class Plr(pygame.sprite.Sprite):
         self.image = plrsurf;
         self.rect = self.image.get_rect(topleft = plrpos);
         self.onground = false;
-        self.physics = physics(gravity = 1.5, onground = false, plrxvel = 20, jumppow = -20);
+        archetypestats = archetypestatstorage(globals.archetype)
+        self.physics = physics(gravity = archetypestats.gravity, onground = false,
+                               plrxvel = archetypestats.plrxvel, jumppow = archetypestats.jumppow);
         self.facingright = true;
 
         #jumping vars
@@ -226,7 +228,7 @@ class Plr(pygame.sprite.Sprite):
         self.alreadypressedq = false
         self.alreadypressede = false
         self.isOob = false
-        self.lives = 50
+        self.lives = archetypestats.lives
     def initjumpanimlist(self):
         thislist = []
         thislist.append(self.idleanim)
@@ -1310,7 +1312,7 @@ class dialoguescene:
         idxstep = 1.5; #character scrolling speed
         self.charscrollingidx+=idxstep;
         newtext = fulltext[0:int(self.charscrollingidx)]
-        maxlinelen = 75;
+        maxlinelen = 72;
         currentlinelist = [];
         writingfactor = 0;
         newstring = "";
@@ -1372,7 +1374,7 @@ class dialoguehandler:
             return None;
         self.currentscene.update()
 class button:
-    def __init__(self, text, type, x, y):
+    def __init__(self, text, type, x, y, desc="_"):
         width = 0
         height = 0;
         if type == "small":
@@ -1393,13 +1395,20 @@ class button:
         self.width = width;
         self.height = height;
         self.text = text;
+        self.desctext = desc;
+        self.desctextlist = self.desctexttolist(desctext=desc);
         self.x = x;
         self.y = y;
         self.pressed = false;
         fontstring = "Times New Roman"
-        fontsize = 25
+        fontsize = 50
+        descfontsize = 25
         # displays lives
         self.font = pygame.font.SysFont(fontstring, fontsize)
+        self.buttontext = self.font.render(self.text, 1, (0,0,0))
+        self.descfont = pygame.font.SysFont(fontstring, descfontsize)
+        self.hover = false
+        self.desctextimg = self.converttexttoimage(textlist=self.desctextlist);
     def checkmouseinrange(self, mousepos, buttonx, buttony, buttonwidth, buttonh):
         mouseposx = mousepos[0]
         mouseposy = mousepos[1]
@@ -1416,16 +1425,43 @@ class button:
         if mousepress[0]: #element 0 is left click
             return true;
         return None
+    def desctexttolist(self, desctext):
+        checkcharactersize = len(desctext)
+        textlist = []
+        idx = 0
+        bordercharsize = 16
+        while checkcharactersize > -bordercharsize:
+            textlist.append(desctext[idx:idx + bordercharsize])
+            checkcharactersize -= bordercharsize
+            idx += bordercharsize
+        for string in textlist:
+            print(f"{string=}")
+        return textlist
+    def converttexttoimage(self, textlist):
+        imglist = []
+        for text in textlist:
+            imglist.append(self.descfont.render(text, 1, (0,0,0)))
 
+        return imglist
     def update(self):
-        buttontext = self.font.render(self.text, 1, (0,0,0))
-        rect = buttontext.get_rect(center = (self.x, self.y))
-        globals.screen.blit(buttontext, (rect.x + self.width/2, rect.y + self.height/2));
+        buttontext = self.buttontext
+        if self.hover:
+            yadjust = -(len(self.desctextimg) - 1) * self.desctextimg[0].get_height()
+            for desctext in self.desctextimg:
+                descrect = desctext.get_rect(center = (self.x, self.y))
+                globals.screen.blit(desctext, (descrect.x + self.width/2, descrect.y + self.height/2 + yadjust));
+                yadjust += desctext.get_height()
+        else:
+            textrect = buttontext.get_rect(center=(self.x, self.y))
+            globals.screen.blit(buttontext, (textrect.x + self.width/2, textrect.y + self.height/2));
         if self.checkmouseinrange(mousepos = pygame.mouse.get_pos(),buttonx = self.x, buttony = self.y,
                                   buttonwidth = self.width, buttonh = self.height):
+            self.hover = true
             # print("mouse is in range!")
             if self.checkclicked(pygame.mouse.get_pressed()):
                 self.pressed = true;
+        else:
+            self.hover = false
 class titlescreen:
     def __init__(self):
         #Buttons
@@ -1434,15 +1470,28 @@ class titlescreen:
         buttonslist = []
         buttonspacingfactor = 203;
         numbuttons = 5;
+        buttonyfactor = -50
         print("screenwidth: ", screenwidth);
         text = ["athlete", "samurai", "tank", "ninja", "glider"]
+        desctext = [
+            "slightly fast, slightly high jump, 10 health",
+            "fast, high jump, 5 health",
+            "slow, low jump, 50 health",
+            "very fast, very high jump, slightly floaty 5 health",
+            "slow, slightly high jump, floaty, faster in air, 5 health,"
+        ]
         for i in range(numbuttons):
             buttonslist.append(button(text = text[i], type = "big",
-                                      x = (i * buttonspacingfactor), y = screenheight/2)  );
+                                      x = (i * buttonspacingfactor), y = screenheight/2 + buttonyfactor, desc = desctext[i]  ));
         self.buttonslist = buttonslist;
         self.done = false;
-
-        print("hello world!");
+        fontsize = 100
+        fontstring = "Times New Roman"
+        titlefont = pygame.font.SysFont(name=fontstring, size= fontsize)
+        headingfont = pygame.font.SysFont(name = fontstring, size= 32)
+        self.chooseanarchetype = titlefont.render("choose an archetype", 1, (0,0,0))
+        self.hoveroverprompt = headingfont.render("Hover for more info on archetype", 1, (0,0,0))
+        self.clickprompt = headingfont.render("Click the archetype you want to choose", 1, (0,0,0))
     def onbuttonsignal(self, buttontype):
         if buttontype == "1":
             print("buttontype1")
@@ -1458,6 +1507,9 @@ class titlescreen:
             return None;
     def update(self):
         globals.screen.blit(self.background, (0,0))
+        globals.screen.blit(self.chooseanarchetype, (0,0))
+        globals.screen.blit(self.hoveroverprompt, (0, 150))
+        globals.screen.blit(self.clickprompt, (0, 210))
         keys = pygame.key.get_pressed()
         for button in self.buttonslist:
             # print("button.x: ", button.x);
@@ -1465,11 +1517,8 @@ class titlescreen:
             button.update()
             if button.pressed:
                 self.done = true;
-        # pygame.draw.rect(screen, (200,200,200), (self.outerbox.x,
-        #                                     self.outerbox.y,
-        #                                     self.outerbox.width,
-        #                                     self.outerbox.height))
-        # buttonpressed = getbutton
+                globals.archetype = button.text
+                print(f"{globals.archetype = }")
 class game:
     def __init__(self):
         self.gamescenenum = 0; #index for gamescenetypes
@@ -1531,3 +1580,44 @@ class game:
         elif self.state == "ondialogue":
             self.dialoguehandler.update();
             self.checkdialoguescenestate(dialoguehandler = self.dialoguehandler);
+class archetypestatstorage:
+    def __init__(self, name):
+        jumppow = 0
+        gravity = 0
+        plrxvel = 0
+        lives = 0
+        if name == "samurai":
+            plrxvel = 27
+            jumppow = 27
+            gravity = 1.5
+            lives = 5
+        elif name == "tank":
+            plrxvel = 18
+            jumppow = 20
+            gravity = 1.6
+            lives = 50
+        elif name == "glider":
+            plrxvel = 20
+            jumppow = 30
+            gravity = 1
+            lives = 5
+        elif name == "ninja":
+            plrxvel = 30
+            jumppow = 30
+            gravity = 1.25
+            lives = 1
+        elif name == "athlete":
+            plrxvel = 25
+            jumppow = 25
+            gravity = 1.5
+            lives = 10
+        else:
+            plrxvel = 20
+            jumppow = 20
+            gravity = 1.5
+            lives = 5
+        self.jumppow = -jumppow #because physics storage takes negative jumppower arg
+        self.gravity = gravity
+        self.plrxvel = plrxvel
+        self.lives = lives
+

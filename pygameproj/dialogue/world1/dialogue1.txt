@@ -1,1 +1,2 @@
-Hello. Welcome to this game. You have the following stats:
+Hello. This game is a demo, so bugs are expected.
+The controls are: X | go through dialouge, W | jump, AD | Left/right,   S | quickfall, R | restart level
