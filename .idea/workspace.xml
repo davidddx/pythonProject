@@ -4,12 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e2939fcd-4fa2-4fa5-aa65-2d278de70d72" name="Changes" comment="added buttons &amp; fixed dialogue scrolling bug">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pygameproj/classes.py" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/classes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pygameproj/dialogue/world1/dialogue1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/dialogue/world1/dialogue1.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pygameproj/globals.py" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/globals.py" afterDir="false" />
-    </list>
+    <list default="true" id="e2939fcd-4fa2-4fa5-aa65-2d278de70d72" name="Changes" comment="added titlescreen, buttonhovering, buttondescriptions, archetypes" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -103,14 +98,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1693604848291</updated>
-    </task>
-    <task id="LOCAL-00003" summary="edited sprites &amp; maps, edited tile collision group initialization">
-      <option name="closed" value="true" />
-      <created>1693750367162</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1693750367162</updated>
     </task>
     <task id="LOCAL-00004" summary="edited level and grasss sprites">
       <option name="closed" value="true" />
@@ -496,7 +483,15 @@
       <option name="project" value="LOCAL" />
       <updated>1697931473616</updated>
     </task>
-    <option name="localTasksCounter" value="52" />
+    <task id="LOCAL-00052" summary="added titlescreen, buttonhovering, archetypes">
+      <option name="closed" value="true" />
+      <created>1697946094062</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1697946094062</updated>
+    </task>
+    <option name="localTasksCounter" value="53" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -511,7 +506,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="fixed background glitch, added more background types" />
     <MESSAGE value="added multi parallax background" />
     <MESSAGE value="background color editing" />
     <MESSAGE value="backgroundspeed editing" />
@@ -536,6 +530,7 @@
     <MESSAGE value="dialogue system bug fix" />
     <MESSAGE value="created titlescreen class" />
     <MESSAGE value="added buttons &amp; fixed dialogue scrolling bug" />
-    <option name="LAST_COMMIT_MESSAGE" value="added buttons &amp; fixed dialogue scrolling bug" />
+    <MESSAGE value="added titlescreen, buttonhovering, archetypes" />
+    <option name="LAST_COMMIT_MESSAGE" value="added titlescreen, buttonhovering, archetypes" />
   </component>
 </project>

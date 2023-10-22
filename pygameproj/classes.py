@@ -1446,7 +1446,7 @@ class button:
     def update(self):
         buttontext = self.buttontext
         if self.hover:
-            yadjust = -(len(self.desctextimg) - 1) * self.desctextimg[0].get_height()
+            yadjust = -(len(self.desctextimg)-2)/2 * self.desctextimg[0].get_height()
             for desctext in self.desctextimg:
                 descrect = desctext.get_rect(center = (self.x, self.y))
                 globals.screen.blit(desctext, (descrect.x + self.width/2, descrect.y + self.height/2 + yadjust));
