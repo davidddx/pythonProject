@@ -207,6 +207,10 @@ class Plr(pygame.sprite.Sprite):
         archetypestats = archetypestatstorage(globals.archetype)
         self.physics = physics(gravity = archetypestats.gravity, onground = false,
                                plrxvel = archetypestats.plrxvel, jumppow = archetypestats.jumppow);
+        self.statstorage = archetypestatstorage(globals.archetype)
+        self.archetypespeed = self.statstorage.plrxvel;
+        del self.statstorage;
+
         self.facingright = true;
 
         #jumping vars
@@ -281,6 +285,10 @@ class Plr(pygame.sprite.Sprite):
     def update(self, currmap):
         if self.onground:
             self.numberjumpsinair = 0;
+            if globals.archetype == "glider":
+                self.physics.plrxvelocity = self.archetypespeed;
+        elif globals.archetype == "glider":
+            self.physics.plrxvelocity += 0.25;
         self.animate()
         self.inputmap()
         self.checkifdashdone(timelastdashed = self.timelastdashed, dashfactor = self.dashfactor) #dashfactor is how much player's x velocity increases on dash
@@ -1435,7 +1443,8 @@ class button:
             checkcharactersize -= bordercharsize
             idx += bordercharsize
         for string in textlist:
-            print(f"{string=}")
+            pass
+            # print(f"{string=}")
         return textlist
     def converttexttoimage(self, textlist):
         imglist = []
@@ -1461,7 +1470,7 @@ class button:
             if self.checkclicked(pygame.mouse.get_pressed()):
                 self.pressed = true;
         else:
-            self.hover = false
+            self.hover = false  
 class titlescreen:
     def __init__(self):
         #Buttons
@@ -1518,7 +1527,7 @@ class titlescreen:
             if button.pressed:
                 self.done = true;
                 globals.archetype = button.text
-                print(f"{globals.archetype = }")
+                # print(f"{globals.archetype = }")
 class game:
     def __init__(self):
         self.gamescenenum = 0; #index for gamescenetypes
