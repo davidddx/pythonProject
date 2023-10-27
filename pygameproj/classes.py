@@ -2,6 +2,8 @@ import pygame, sys, os
 import globals
 from settings import *
 from pytmx.util_pygame import load_pygame;
+
+
 class Map():
     def __init__(self, tmxdata):
         self.collidablegroup = pygame.sprite.Group();
@@ -1455,11 +1457,13 @@ class button:
     def update(self):
         buttontext = self.buttontext
         if self.hover:
-            yadjust = -(len(self.desctextimg)-2)/2 * self.desctextimg[0].get_height()
-            for desctext in self.desctextimg:
-                descrect = desctext.get_rect(center = (self.x, self.y))
-                globals.screen.blit(desctext, (descrect.x + self.width/2, descrect.y + self.height/2 + yadjust));
-                yadjust += desctext.get_height()
+            if not self.desctext == "_":
+
+                yadjust = -(len(self.desctextimg)-2)/2 * self.desctextimg[0].get_height()
+                for desctext in self.desctextimg:
+                    descrect = desctext.get_rect(center = (self.x, self.y))
+                    globals.screen.blit(desctext, (descrect.x + self.width/2, descrect.y + self.height/2 + yadjust));
+                    yadjust += desctext.get_height()
         else:
             textrect = buttontext.get_rect(center=(self.x, self.y))
             globals.screen.blit(buttontext, (textrect.x + self.width/2, textrect.y + self.height/2));
@@ -1470,11 +1474,96 @@ class button:
             if self.checkclicked(pygame.mouse.get_pressed()):
                 self.pressed = true;
         else:
-            self.hover = false  
-class titlescreen:
+            self.hover = false
+class imagedbutton:
+    def __init__(self, imagedir, x, y, toggle=false, startontrue=false):
+        self.pressed = startontrue;
+        self.toggle = toggle;
+        self.image = pygame.image.load(imagedir);
+        rect = self.image.get_rect()
+        self.width = rect.width;
+        self.height = rect.height
+        self.hover = false;
+        self.x = x - self.width/2;
+        self.y = y - self.height/2;
+    def checkmouseinrange(self, mousepos, buttonx, buttony, buttonwidth, buttonh):
+        mouseposx = mousepos[0]
+        mouseposy = mousepos[1]
+        xlower = buttonx
+        xhigher = buttonx + buttonwidth
+        ylower = buttony
+        yhigher = buttony + buttonh
+        if xlower > mouseposx or xhigher < mouseposx:
+            return None;
+        if ylower > mouseposy or yhigher < mouseposy:
+            return None;
+        return true;
+    def checkclicked(self, mousepress):
+        if mousepress[0]: #element 0 is left click
+            return true;
+        return None
+    def update(self):
+        globals.screen.blit(self.image, (self.x, self.y))
+        if self.checkmouseinrange(mousepos=pygame.mouse.get_pos(), buttonx=self.x, buttony=self.y,
+                                  buttonwidth=self.width, buttonh=self.height):
+            self.hover = true
+            # print("mouse is in range!")
+            if self.checkclicked(pygame.mouse.get_pressed()):
+                if not self.toggle:
+                    self.pressed = true;
+                    return None;
+                if self.pressed == true:
+                    self.pressed = false;
+                    return None;
+                else:
+                    self.pressed = true;
+        else:
+            self.hover = false;
+class archetypestatstorage:
+    def __init__(self, name):
+        jumppow = 0
+        gravity = 0
+        plrxvel = 0
+        lives = 0
+        if name == "samurai":
+            plrxvel = 27
+            jumppow = 27
+            gravity = 1.5
+            lives = 5
+        elif name == "tank":
+            plrxvel = 18
+            jumppow = 20
+            gravity = 1.6
+            lives = 50
+        elif name == "glider":
+            plrxvel = 20
+            jumppow = 30
+            gravity = 1
+            lives = 5
+        elif name == "ninja":
+            plrxvel = 30
+            jumppow = 30
+            gravity = 1.25
+            lives = 1
+        elif name == "athlete":
+            plrxvel = 25
+            jumppow = 25
+            gravity = 1.5
+            lives = 10
+        else:
+            plrxvel = 20
+            jumppow = 20
+            gravity = 1.5
+            lives = 5
+        self.jumppow = -jumppow #because physics storage takes negative jumppower arg
+        self.gravity = gravity
+        self.plrxvel = plrxvel
+        self.lives = lives
+class archetypeselect:
     def __init__(self):
         #Buttons
-        backgrounddir = cwd + "/titlescreen/background.png"
+        self.sceneinittime = pygame.time.get_ticks()
+        backgrounddir = cwd + "/archetypeselect/background.png"
         self.background = pygame.image.load(backgrounddir)
         buttonslist = []
         buttonspacingfactor = 203;
@@ -1525,9 +1614,33 @@ class titlescreen:
             pygame.draw.rect(globals.screen, (255,255,255), (button.x, button.y, button.width, button.height));
             button.update()
             if button.pressed:
+                timenow = pygame.time.get_ticks()
+                cooldown = 1000
+                if timenow - self.sceneinittime < cooldown:
+                    button.pressed = false
+                    continue;
                 self.done = true;
                 globals.archetype = button.text
                 # print(f"{globals.archetype = }")
+class titlescreen:
+    def __init__(self):
+        self.done = false
+        backgrounddir = cwd + "/titlescreen/background.png"
+        self.background = pygame.image.load(backgrounddir)
+        playbuttondir = cwd + "/titlescreen/playbutton.png"
+        playbuttonx = 0
+        playbuttony = 0
+        self.playbutton = imagedbutton(imagedir= playbuttondir, x = screenwidth/2, y = screenheight/2)
+
+    def onbuttonsignal(self):
+        self.done = true;
+    def update(self):
+        screen = globals.screen
+        screen.blit(self.background, (0,0))
+        self.playbutton.update()
+        if self.playbutton.pressed:
+            self.onbuttonsignal()
+            self.playbutton.pressed = false;
 class game:
     def __init__(self):
         self.gamescenenum = 0; #index for gamescenetypes
@@ -1540,6 +1653,7 @@ class game:
         self.state = "on" + self.gamescenetypes[0];
         self.levelhandler = levelhandler();
         self.dialoguehandler = dialoguehandler();
+        self.archetypeselect = archetypeselect();
         self.titlescreen = titlescreen();
     def checklevelstate(self, levelhandler):
         # print("hello world level");
@@ -1557,7 +1671,6 @@ class game:
         else:
             pygame.quit();
         levelhandler.levelcomplete = false;
-
     def checkdialoguescenestate(self, dialoguehandler):
         if not dialoguehandler.dialoguedone:
             return None;
@@ -1571,15 +1684,19 @@ class game:
         elif self.gamescenetypes[self.gamescenenum] == "level":
             self.levelhandler.changeleveltonext();
             self.state = "onlevel";
-
-
-
     def run(self):
         if self.titlescreen:
             self.titlescreen.update();
             if self.titlescreen.done:
-                self.titlescreen = false;
-                print("title screen is done")
+                del self.titlescreen
+                self.titlescreen = false
+            return None;
+        if self.archetypeselect:
+            self.archetypeselect.update();
+            if self.archetypeselect.done:
+                del self.archetypeselect
+                self.archetypeselect = false;
+                print("archetype select creen is done")
             return None;
 
         if self.state == "onlevel":
@@ -1589,44 +1706,5 @@ class game:
         elif self.state == "ondialogue":
             self.dialoguehandler.update();
             self.checkdialoguescenestate(dialoguehandler = self.dialoguehandler);
-class archetypestatstorage:
-    def __init__(self, name):
-        jumppow = 0
-        gravity = 0
-        plrxvel = 0
-        lives = 0
-        if name == "samurai":
-            plrxvel = 27
-            jumppow = 27
-            gravity = 1.5
-            lives = 5
-        elif name == "tank":
-            plrxvel = 18
-            jumppow = 20
-            gravity = 1.6
-            lives = 50
-        elif name == "glider":
-            plrxvel = 20
-            jumppow = 30
-            gravity = 1
-            lives = 5
-        elif name == "ninja":
-            plrxvel = 30
-            jumppow = 30
-            gravity = 1.25
-            lives = 1
-        elif name == "athlete":
-            plrxvel = 25
-            jumppow = 25
-            gravity = 1.5
-            lives = 10
-        else:
-            plrxvel = 20
-            jumppow = 20
-            gravity = 1.5
-            lives = 5
-        self.jumppow = -jumppow #because physics storage takes negative jumppower arg
-        self.gravity = gravity
-        self.plrxvel = plrxvel
-        self.lives = lives
+
 
