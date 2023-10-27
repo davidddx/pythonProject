@@ -206,6 +206,7 @@ class Plr(pygame.sprite.Sprite):
         self.image = plrsurf;
         self.rect = self.image.get_rect(topleft = plrpos);
         self.onground = false;
+        self.onciel = false;
         archetypestats = archetypestatstorage(globals.archetype)
         self.physics = physics(gravity = archetypestats.gravity, onground = false,
                                plrxvel = archetypestats.plrxvel, jumppow = archetypestats.jumppow);
@@ -290,7 +291,8 @@ class Plr(pygame.sprite.Sprite):
             if globals.archetype == "glider":
                 self.physics.plrxvelocity = self.archetypespeed;
         elif globals.archetype == "glider":
-            self.physics.plrxvelocity += 0.25;
+            if not self.belowplatform:
+                self.physics.plrxvelocity += 0.25;
         self.animate()
         self.inputmap()
         self.checkifdashdone(timelastdashed = self.timelastdashed, dashfactor = self.dashfactor) #dashfactor is how much player's x velocity increases on dash
@@ -865,9 +867,11 @@ class Level:
     def vertmovecoll(self):
         player = self.player;
         player.applygravity()
+        acollisionoccured = false;
         for sprite in self.currentmap.collidablegroup.sprites():
             if not sprite.isinrange: continue;
             if sprite.rect.colliderect(player.rect):
+                acollisionoccured = true;
                 if -player.physics.plryvelocity < 0:
                     self.player.onground = true
                     player.rect.bottom = sprite.rect.top
@@ -876,8 +880,6 @@ class Level:
                     self.player.belowplatform = true
                     player.rect.top = sprite.rect.bottom
                     player.physics.plryvelocity = 0;
-
-
         # THE REASON WHY I USE -player.physics.direction.y INSTEAD OF player.physics.direction.y
         #in pygame, the Y-axis is oriented from top to bottom,
         # so positive values in the Y-direction mean moving
@@ -1615,7 +1617,7 @@ class archetypeselect:
             button.update()
             if button.pressed:
                 timenow = pygame.time.get_ticks()
-                cooldown = 1000
+                cooldown = 1300
                 if timenow - self.sceneinittime < cooldown:
                     button.pressed = false
                     continue;
