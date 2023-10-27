@@ -1592,19 +1592,19 @@ class archetypeselect:
         self.chooseanarchetype = titlefont.render("choose an archetype", 1, (0,0,0))
         self.hoveroverprompt = headingfont.render("Hover for more info on archetype", 1, (0,0,0))
         self.clickprompt = headingfont.render("Click the archetype you want to choose", 1, (0,0,0))
-    def onbuttonsignal(self, buttontype):
-        if buttontype == "1":
-            print("buttontype1")
-        elif buttontype == "2":
-            print("buttontype2")
-        elif buttontype == "3":
-            print("buttontype3")
-        elif buttontype == "4":
-            print("buttontype4")
-        elif buttontype == "5":
-            print("buttontype5")
-        else:
-            return None;
+    # def onbuttonsignal(self, buttontype):
+    #     if buttontype == "1":
+    #         print("buttontype1")
+    #     elif buttontype == "2":
+    #         print("buttontype2")
+    #     elif buttontype == "3":
+    #         print("buttontype3")
+    #     elif buttontype == "4":
+    #         print("buttontype4")
+    #     elif buttontype == "5":
+    #         print("buttontype5")
+    #     else:
+    #         return None;
     def update(self):
         globals.screen.blit(self.background, (0,0))
         globals.screen.blit(self.chooseanarchetype, (0,0))
@@ -1698,7 +1698,7 @@ class game:
             if self.archetypeselect.done:
                 del self.archetypeselect
                 self.archetypeselect = false;
-                print("archetype select creen is done")
+                print("archetype select screen is done")
             return None;
 
         if self.state == "onlevel":
