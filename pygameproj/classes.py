@@ -1592,19 +1592,24 @@ class archetypeselect:
         self.chooseanarchetype = titlefont.render("choose an archetype", 1, (0,0,0))
         self.hoveroverprompt = headingfont.render("Hover for more info on archetype", 1, (0,0,0))
         self.clickprompt = headingfont.render("Click the archetype you want to choose", 1, (0,0,0))
-    # def onbuttonsignal(self, buttontype):
-    #     if buttontype == "1":
-    #         print("buttontype1")
-    #     elif buttontype == "2":
-    #         print("buttontype2")
-    #     elif buttontype == "3":
-    #         print("buttontype3")
-    #     elif buttontype == "4":
-    #         print("buttontype4")
-    #     elif buttontype == "5":
-    #         print("buttontype5")
-    #     else:
-    #         return None;
+    def onbuttonsignal(self, button):
+        timenow = pygame.time.get_ticks()
+        cooldown = 1300
+        if timenow - self.sceneinittime < cooldown:
+            button.pressed = false
+            return None;
+        self.done = true;
+        globals.archetype = button.text
+        self.deletescene()
+    def deletescene(self):
+        del self.chooseanarchetype;
+        del self.hoveroverprompt;
+        del self.clickprompt;
+        for button in self.buttonslist:
+            del button;
+        del self.buttonslist;
+        del self.background;
+        del self.sceneinittime;
     def update(self):
         globals.screen.blit(self.background, (0,0))
         globals.screen.blit(self.chooseanarchetype, (0,0))
@@ -1616,13 +1621,7 @@ class archetypeselect:
             pygame.draw.rect(globals.screen, (255,255,255), (button.x, button.y, button.width, button.height));
             button.update()
             if button.pressed:
-                timenow = pygame.time.get_ticks()
-                cooldown = 1300
-                if timenow - self.sceneinittime < cooldown:
-                    button.pressed = false
-                    continue;
-                self.done = true;
-                globals.archetype = button.text
+                self.onbuttonsignal(button = button);
                 # print(f"{globals.archetype = }")
 class titlescreen:
     def __init__(self):
@@ -1636,13 +1635,18 @@ class titlescreen:
 
     def onbuttonsignal(self):
         self.done = true;
+        self.deletescene();
+    def deletescene(self):
+        del self.background;
+        self.background = None;
+        del self.playbutton;
+        self.playbutton = None;
     def update(self):
         screen = globals.screen
         screen.blit(self.background, (0,0))
         self.playbutton.update()
         if self.playbutton.pressed:
             self.onbuttonsignal()
-            self.playbutton.pressed = false;
 class game:
     def __init__(self):
         self.gamescenenum = 0; #index for gamescenetypes
@@ -1690,14 +1694,14 @@ class game:
         if self.titlescreen:
             self.titlescreen.update();
             if self.titlescreen.done:
-                del self.titlescreen
-                self.titlescreen = false
+                del self.titlescreen;
+                self.titlescreen = None;
             return None;
         if self.archetypeselect:
             self.archetypeselect.update();
             if self.archetypeselect.done:
                 del self.archetypeselect
-                self.archetypeselect = false;
+                self.archetypeselect = None;
                 print("archetype select screen is done")
             return None;
 

@@ -4,9 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e2939fcd-4fa2-4fa5-aa65-2d278de70d72" name="Changes" comment="new titlescreen class, separated titlescreen scene and archetypeselect scene">
+    <list default="true" id="e2939fcd-4fa2-4fa5-aa65-2d278de70d72" name="Changes" comment="edited print statements">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pygameproj/classes.py" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/classes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pygameproj/dialogue/world1/dialogue1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/dialogue/world1/dialogue1.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -101,22 +102,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1693604848291</updated>
-    </task>
-    <task id="LOCAL-00007" summary="sprite &amp; level editing, background objects now visible until fully offscreen">
-      <option name="closed" value="true" />
-      <created>1694308880870</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1694308880870</updated>
-    </task>
-    <task id="LOCAL-00008" summary="level editing">
-      <option name="closed" value="true" />
-      <created>1694312892706</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1694312892706</updated>
     </task>
     <task id="LOCAL-00009" summary="fontchange">
       <option name="closed" value="true" />
@@ -494,7 +479,23 @@
       <option name="project" value="LOCAL" />
       <updated>1698379877799</updated>
     </task>
-    <option name="localTasksCounter" value="56" />
+    <task id="LOCAL-00056" summary="glider archetype does not speed up on climb below platforms or cielings">
+      <option name="closed" value="true" />
+      <created>1698380725849</created>
+      <option name="number" value="00056" />
+      <option name="presentableId" value="LOCAL-00056" />
+      <option name="project" value="LOCAL" />
+      <updated>1698380725849</updated>
+    </task>
+    <task id="LOCAL-00057" summary="edited print statements">
+      <option name="closed" value="true" />
+      <created>1698380892897</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1698380892897</updated>
+    </task>
+    <option name="localTasksCounter" value="58" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -509,8 +510,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="background art/logic edits" />
-    <MESSAGE value="more background depth/layers" />
     <MESSAGE value="background editing" />
     <MESSAGE value="more background editing" />
     <MESSAGE value="background art" />
@@ -534,6 +533,8 @@
     <MESSAGE value="fixed button description text centering" />
     <MESSAGE value="glider archetype faster on jump" />
     <MESSAGE value="new titlescreen class, separated titlescreen scene and archetypeselect scene" />
-    <option name="LAST_COMMIT_MESSAGE" value="new titlescreen class, separated titlescreen scene and archetypeselect scene" />
+    <MESSAGE value="glider archetype does not speed up on climb below platforms or cielings" />
+    <MESSAGE value="edited print statements" />
+    <option name="LAST_COMMIT_MESSAGE" value="edited print statements" />
   </component>
 </project>
