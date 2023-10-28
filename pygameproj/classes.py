@@ -1697,6 +1697,7 @@ class game:
                 del self.titlescreen;
                 self.titlescreen = None;
             return None;
+
         if self.archetypeselect:
             self.archetypeselect.update();
             if self.archetypeselect.done:
