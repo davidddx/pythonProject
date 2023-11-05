@@ -1577,11 +1577,11 @@ class archetypeselect:
         print("screenwidth: ", screenwidth);
         text = ["athlete", "samurai", "tank", "ninja", "glider"]
         desctext = [
-            "slightly fast, slightly high jump, 10 health",
-            "fast, high jump, 5 health",
-            "slow, low jump, 50 health",
-            "very fast, very high jump, slightly floaty 5 health",
-            "slow, slightly high jump, floaty, faster in air, 5 health,"
+            "slightly fast, slightly high jump, 10 health", #athlete
+            "fast, high jump, 5 health", #samurai
+            "slow, low jump, 50 health", #tank
+            "very fast, very high jump, slightly floaty 5 health", #ninja
+            "slow, slightly high jump, floaty, faster in air, 5 health," #glider
         ]
         for i in range(numbuttons):
             buttonslist.append(button(text = text[i], type = "big",
