@@ -286,13 +286,16 @@ class Plr(pygame.sprite.Sprite):
         thislist.append(pygame.image.load(cwd + '/tiles/plrdashframe5.png'));
         return thislist;
     def update(self, currmap):
+        print(f"{self.physics.plrxvelocity=}")
         if self.onground:
             self.numberjumpsinair = 0;
             if globals.archetype == "glider":
                 self.physics.plrxvelocity = self.archetypespeed;
         elif globals.archetype == "glider":
             if not self.belowplatform:
-                self.physics.plrxvelocity += 0.25;
+                if not self.physics.plrxvelocity >= 40:  # maxgliderspeed
+
+                    self.physics.plrxvelocity += 1;
         self.animate()
         self.inputmap()
         self.checkifdashdone(timelastdashed = self.timelastdashed, dashfactor = self.dashfactor) #dashfactor is how much player's x velocity increases on dash
