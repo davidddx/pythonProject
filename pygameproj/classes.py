@@ -1698,10 +1698,15 @@ class game:
             self.titlescreen.update();
             if self.titlescreen.done:
                 del self.titlescreen;
+                self.timeswitched = pygame.time.get_ticks();
                 self.titlescreen = None;
             return None;
 
         if self.archetypeselect:
+            #loading cooldown
+            timenow = pygame.time.get_ticks();
+            if timenow - self.timeswitched < 250:
+                return None
             self.archetypeselect.update();
             if self.archetypeselect.done:
                 del self.archetypeselect
