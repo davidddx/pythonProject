@@ -4,9 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e2939fcd-4fa2-4fa5-aa65-2d278de70d72" name="Changes" comment="set glider archetype speed cap">
+    <list default="true" id="e2939fcd-4fa2-4fa5-aa65-2d278de70d72" name="Changes" comment="title screen &amp; archetypeselect switch cooldown">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pygameproj/classes.py" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/classes.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -101,22 +100,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1693604848291</updated>
-    </task>
-    <task id="LOCAL-00012" summary="background &amp; img editing">
-      <option name="closed" value="true" />
-      <created>1694813545698</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1694813545698</updated>
-    </task>
-    <task id="LOCAL-00013" summary="decoration spritegroup added">
-      <option name="closed" value="true" />
-      <created>1694816516527</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL-00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1694816516527</updated>
     </task>
     <task id="LOCAL-00014" summary="sprite/image editing">
       <option name="closed" value="true" />
@@ -494,7 +477,23 @@
       <option name="project" value="LOCAL" />
       <updated>1699201418555</updated>
     </task>
-    <option name="localTasksCounter" value="61" />
+    <task id="LOCAL-00061" summary="comments">
+      <option name="closed" value="true" />
+      <created>1699201628574</created>
+      <option name="number" value="00061" />
+      <option name="presentableId" value="LOCAL-00061" />
+      <option name="project" value="LOCAL" />
+      <updated>1699201628574</updated>
+    </task>
+    <task id="LOCAL-00062" summary="title screen &amp; archetypeselect switch cooldown">
+      <option name="closed" value="true" />
+      <created>1699201816295</created>
+      <option name="number" value="00062" />
+      <option name="presentableId" value="LOCAL-00062" />
+      <option name="project" value="LOCAL" />
+      <updated>1699201816295</updated>
+    </task>
+    <option name="localTasksCounter" value="63" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -509,8 +508,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="better levelchanging" />
-    <MESSAGE value="adding dialogue" />
     <MESSAGE value="game class, &#10;&#10;trying dialogue creation" />
     <MESSAGE value="trying dialogue creation" />
     <MESSAGE value="dialogue scene manager groundwork" />
@@ -534,6 +531,8 @@
     <MESSAGE value="scene deletion &amp; spacebardash added to control dialogue1.txt" />
     <MESSAGE value="space" />
     <MESSAGE value="set glider archetype speed cap" />
-    <option name="LAST_COMMIT_MESSAGE" value="set glider archetype speed cap" />
+    <MESSAGE value="comments" />
+    <MESSAGE value="title screen &amp; archetypeselect switch cooldown" />
+    <option name="LAST_COMMIT_MESSAGE" value="title screen &amp; archetypeselect switch cooldown" />
   </component>
 </project>

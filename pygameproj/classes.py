@@ -1574,7 +1574,7 @@ class archetypeselect:
         buttonspacingfactor = 203;
         numbuttons = 5;
         buttonyfactor = -50
-        print("screenwidth: ", screenwidth);
+        # print("screenwidth: ", screenwidth);
         text = ["athlete", "samurai", "tank", "ninja", "glider"]
         desctext = [
             "slightly fast, slightly high jump, 10 health", #athlete
@@ -1711,7 +1711,7 @@ class game:
             if self.archetypeselect.done:
                 del self.archetypeselect
                 self.archetypeselect = None;
-                print("archetype select screen is done")
+                # print("archetype select screen is done")
             return None;
 
         if self.state == "onlevel":
