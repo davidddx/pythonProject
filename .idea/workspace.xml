@@ -4,8 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e2939fcd-4fa2-4fa5-aa65-2d278de70d72" name="Changes" comment="title screen &amp; archetypeselect switch cooldown">
+    <list default="true" id="e2939fcd-4fa2-4fa5-aa65-2d278de70d72" name="Changes" comment="remove some prints">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pygameproj/classes.py" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/classes.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -100,14 +101,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1693604848291</updated>
-    </task>
-    <task id="LOCAL-00014" summary="sprite/image editing">
-      <option name="closed" value="true" />
-      <created>1694817089017</created>
-      <option name="number" value="00014" />
-      <option name="presentableId" value="LOCAL-00014" />
-      <option name="project" value="LOCAL" />
-      <updated>1694817089017</updated>
     </task>
     <task id="LOCAL-00015" summary="restart level with R button">
       <option name="closed" value="true" />
@@ -493,7 +486,15 @@
       <option name="project" value="LOCAL" />
       <updated>1699201816295</updated>
     </task>
-    <option name="localTasksCounter" value="63" />
+    <task id="LOCAL-00063" summary="remove some prints">
+      <option name="closed" value="true" />
+      <created>1699462238311</created>
+      <option name="number" value="00063" />
+      <option name="presentableId" value="LOCAL-00063" />
+      <option name="project" value="LOCAL" />
+      <updated>1699462238311</updated>
+    </task>
+    <option name="localTasksCounter" value="64" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -508,7 +509,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="game class, &#10;&#10;trying dialogue creation" />
     <MESSAGE value="trying dialogue creation" />
     <MESSAGE value="dialogue scene manager groundwork" />
     <MESSAGE value="making dialogue system" />
@@ -533,6 +533,7 @@
     <MESSAGE value="set glider archetype speed cap" />
     <MESSAGE value="comments" />
     <MESSAGE value="title screen &amp; archetypeselect switch cooldown" />
-    <option name="LAST_COMMIT_MESSAGE" value="title screen &amp; archetypeselect switch cooldown" />
+    <MESSAGE value="remove some prints" />
+    <option name="LAST_COMMIT_MESSAGE" value="remove some prints" />
   </component>
 </project>

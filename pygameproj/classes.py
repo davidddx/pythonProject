@@ -295,7 +295,7 @@ class Plr(pygame.sprite.Sprite):
             if not self.belowplatform:
                 if not self.physics.plrxvelocity >= 40:  # maxgliderspeed
 
-                    self.physics.plrxvelocity += 1;
+                    self.physics.plrxvelocity += 0.4;
         self.animate()
         self.inputmap()
         self.checkifdashdone(timelastdashed = self.timelastdashed, dashfactor = self.dashfactor) #dashfactor is how much player's x velocity increases on dash
