@@ -290,7 +290,9 @@ class Plr(pygame.sprite.Sprite):
         if self.onground:
             self.numberjumpsinair = 0;
             if globals.archetype == "glider":
-                self.physics.plrxvelocity = self.archetypespeed;
+                if not self.ondash:
+
+                    self.physics.plrxvelocity = self.archetypespeed;
         elif globals.archetype == "glider":
             if not self.belowplatform:
                 if not self.physics.plrxvelocity >= 40:  # maxgliderspeed
