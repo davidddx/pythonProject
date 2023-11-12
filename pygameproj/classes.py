@@ -286,7 +286,7 @@ class Plr(pygame.sprite.Sprite):
         thislist.append(pygame.image.load(cwd + '/tiles/plrdashframe5.png'));
         return thislist;
     def update(self, currmap):
-        print(f"{self.physics.plrxvelocity=}")
+        # print(f"{self.physics.plrxvelocity=}")
         if self.onground:
             self.numberjumpsinair = 0;
             if globals.archetype == "glider":
@@ -1257,6 +1257,10 @@ class dialoguescene:
             else:
                 self.signalcontinue = true;
                 return None;
+        elif key[pygame.K_g] and (self.rcooldown < timenow - self.timelastpressedr):
+            self.state = "done"
+            self.signalcontinue = true
+            return None
         textfont = self.textfont;
         self.currenttext = self.scroll(self.currentline)
         self.currenttextlist = self.scrolllist(self.currentline, self.currenttextlist)
@@ -1288,7 +1292,7 @@ class dialoguescene:
             textimg = textfont.render(element, 1, (50, 50, 50));
             screen.blit(textimg, (self.innerbox.x, self.innerbox.y - yfactor))
             yfactor -= 30
-        continueimg = textfont.render("X TO CONTINUE", 1, (50,50,50))
+        continueimg = textfont.render("press X to continue       press G to exit dialogue", 1, (50,50,50))
         screen.blit(continueimg, (self.innerbox.x, self.innerbox.y - 50))
         self.currentline = self.checklinestatus(currenttext=self.currenttext, currentline = self.currentline, idxcurrentline=self.fulltextidx, maxidx=self.maxfulltextidx, signalcontinue=self.signalcontinue);
     def checklinestatus(self, currenttext, currentline, idxcurrentline, maxidx, signalcontinue):
