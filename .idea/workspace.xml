@@ -4,9 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e2939fcd-4fa2-4fa5-aa65-2d278de70d72" name="Changes" comment="added dialogue scene skipping">
+    <list default="true" id="e2939fcd-4fa2-4fa5-aa65-2d278de70d72" name="Changes" comment="fixed glider dash glitch">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pygameproj/classes.py" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/classes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pygameproj/tiles/background/grassland/grass2background.png" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/tiles/background/grassland/grass2background.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pygameproj/tiles/background/grassland/grass3background.png" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/tiles/background/grassland/grass3background.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pygameproj/tiles/background/grassland/grass4background.png" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/tiles/background/grassland/grass4background.png" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -101,14 +103,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1693604848291</updated>
-    </task>
-    <task id="LOCAL-00017" summary=".">
-      <option name="closed" value="true" />
-      <created>1694821886951</created>
-      <option name="number" value="00017" />
-      <option name="presentableId" value="LOCAL-00017" />
-      <option name="project" value="LOCAL" />
-      <updated>1694821886951</updated>
     </task>
     <task id="LOCAL-00018" summary="trying to fix scrolling background">
       <option name="closed" value="true" />
@@ -494,7 +488,15 @@
       <option name="project" value="LOCAL" />
       <updated>1699756286890</updated>
     </task>
-    <option name="localTasksCounter" value="66" />
+    <task id="LOCAL-00066" summary="fixed glider dash glitch">
+      <option name="closed" value="true" />
+      <created>1699817905186</created>
+      <option name="number" value="00066" />
+      <option name="presentableId" value="LOCAL-00066" />
+      <option name="project" value="LOCAL" />
+      <updated>1699817905186</updated>
+    </task>
+    <option name="localTasksCounter" value="67" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -509,7 +511,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="making dialogue system" />
     <MESSAGE value="dialoguebox position edit" />
     <MESSAGE value="scene level/dialogue switching edit" />
     <MESSAGE value="added scrolling text" />
@@ -534,6 +535,7 @@
     <MESSAGE value="remove some prints" />
     <MESSAGE value="remove some prints, edit glider airspeed gain" />
     <MESSAGE value="added dialogue scene skipping" />
-    <option name="LAST_COMMIT_MESSAGE" value="added dialogue scene skipping" />
+    <MESSAGE value="fixed glider dash glitch" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed glider dash glitch" />
   </component>
 </project>
