@@ -4,11 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e2939fcd-4fa2-4fa5-aa65-2d278de70d72" name="Changes" comment="fixed glider dash glitch">
+    <list default="true" id="e2939fcd-4fa2-4fa5-aa65-2d278de70d72" name="Changes" comment="background size &amp; position changes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pygameproj/tiles/background/grassland/grass2background.png" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/tiles/background/grassland/grass2background.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pygameproj/tiles/background/grassland/grass3background.png" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/tiles/background/grassland/grass3background.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pygameproj/tiles/background/grassland/grass4background.png" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/tiles/background/grassland/grass4background.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pygameproj/Maps/testmap/level2.tmx" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/Maps/testmap/level2.tmx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pygameproj/Tilesets/objectTileSet.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/Tilesets/objectTileSet.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pygameproj/Tilesets/savannahgrasslands.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/Tilesets/savannahgrasslands.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pygameproj/classes.py" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/classes.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -103,22 +104,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1693604848291</updated>
-    </task>
-    <task id="LOCAL-00018" summary="trying to fix scrolling background">
-      <option name="closed" value="true" />
-      <created>1694908787349</created>
-      <option name="number" value="00018" />
-      <option name="presentableId" value="LOCAL-00018" />
-      <option name="project" value="LOCAL" />
-      <updated>1694908787349</updated>
-    </task>
-    <task id="LOCAL-00019" summary="fixing background">
-      <option name="closed" value="true" />
-      <created>1694908938638</created>
-      <option name="number" value="00019" />
-      <option name="presentableId" value="LOCAL-00019" />
-      <option name="project" value="LOCAL" />
-      <updated>1694908938638</updated>
     </task>
     <task id="LOCAL-00020" summary="background issue workaround">
       <option name="closed" value="true" />
@@ -496,7 +481,23 @@
       <option name="project" value="LOCAL" />
       <updated>1699817905186</updated>
     </task>
-    <option name="localTasksCounter" value="67" />
+    <task id="LOCAL-00067" summary="background color changes">
+      <option name="closed" value="true" />
+      <created>1699986333756</created>
+      <option name="number" value="00067" />
+      <option name="presentableId" value="LOCAL-00067" />
+      <option name="project" value="LOCAL" />
+      <updated>1699986333756</updated>
+    </task>
+    <task id="LOCAL-00068" summary="background size &amp; position changes">
+      <option name="closed" value="true" />
+      <created>1699986547531</created>
+      <option name="number" value="00068" />
+      <option name="presentableId" value="LOCAL-00068" />
+      <option name="project" value="LOCAL" />
+      <updated>1699986547531</updated>
+    </task>
+    <option name="localTasksCounter" value="69" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -511,8 +512,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="dialoguebox position edit" />
-    <MESSAGE value="scene level/dialogue switching edit" />
     <MESSAGE value="added scrolling text" />
     <MESSAGE value="dialogue system enhancements" />
     <MESSAGE value="dialogue works" />
@@ -536,6 +535,8 @@
     <MESSAGE value="remove some prints, edit glider airspeed gain" />
     <MESSAGE value="added dialogue scene skipping" />
     <MESSAGE value="fixed glider dash glitch" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed glider dash glitch" />
+    <MESSAGE value="background color changes" />
+    <MESSAGE value="background size &amp; position changes" />
+    <option name="LAST_COMMIT_MESSAGE" value="background size &amp; position changes" />
   </component>
 </project>

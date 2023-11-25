@@ -1029,11 +1029,9 @@ class levelhandler:
         self.nextmap = 0
         self.deletedlevel = false;
         self.levels = [
-            cwd + '/Maps/testmap/level1.tmx',
-            cwd + "/Maps/testmap/level2.tmx",
-            # cwd + '/Maps/testmap/testmappygame1.tmx',
-            # cwd + '/Maps/testmap/testmappygame2.tmx',
-            # cwd + '/Maps/testmap/testmappygame3.tmx',
+            cwd + '/Maps/testmap/level4.tmx',
+            cwd + "/Maps/testmap/level1.tmx",
+            cwd + "/Maps/testmap/level3.tmx",
         ]
         self.maxlevelnum = len(self.levels)
         self.currentlevel = self.initlevel(levelnum = self.levelnum)
@@ -1663,6 +1661,7 @@ class game:
             "dialogue",
             "level",
             "dialogue",
+            "level",
             "level",
         ]
         self.state = "on" + self.gamescenetypes[0];

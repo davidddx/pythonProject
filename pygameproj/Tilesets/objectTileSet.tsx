@@ -14,43 +14,43 @@
   </properties>
   <image width="512" height="128" source="../tiles/OutOfBounds.png"/>
  </tile>
- <tile id="4" type="PlrSpawnPoint">
+ <tile id="4" type="plrspawner">
   <properties>
    <property name="name" value="plrspawn"/>
   </properties>
   <image width="256" height="256" source="../tiles/PlrSpawnPoint.png"/>
  </tile>
- <tile id="5" type="EnemySpawner">
+ <tile id="5" type="enemyspawner">
   <properties>
    <property name="name" value="BlueEnemySpawner"/>
   </properties>
   <image width="128" height="128" source="../tiles/BlueEnemySpawner.png"/>
  </tile>
- <tile id="6" type="EnemySpawner">
+ <tile id="6" type="enemyspawner">
   <properties>
    <property name="name" value="RedEnemySpawner"/>
   </properties>
   <image width="128" height="128" source="../tiles/RedEnemySpawner.png"/>
  </tile>
- <tile id="7">
+ <tile id="7" type="enemyspawner">
   <properties>
    <property name="name" value="GreenEnemySpawner"/>
   </properties>
   <image width="128" height="128" source="../tiles/useAsTiledSpawners/greenenemyspawner.png"/>
  </tile>
- <tile id="8">
+ <tile id="8" type="enemyspawner">
   <properties>
    <property name="name" value="BlackEnemySpawner"/>
   </properties>
   <image width="128" height="128" source="../tiles/useAsTiledSpawners/camoenemyspawner.png"/>
  </tile>
- <tile id="9">
+ <tile id="9" type="enemyspawner">
   <properties>
    <property name="name" value="PurpleEnemySpawner"/>
   </properties>
   <image width="128" height="128" source="../tiles/useAsTiledSpawners/purpleenemyspawner.png"/>
  </tile>
- <tile id="10">
+ <tile id="10" type="enemyspawner">
   <properties>
    <property name="name" value="GrayEnemySpawner"/>
   </properties>
