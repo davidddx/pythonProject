@@ -1696,13 +1696,15 @@ class game:
         else:
             pygame.quit();
         levelhandler.levelcomplete = false;
+    def gameover(self):
+        sys.exit()
     def checkdialoguescenestate(self, dialoguehandler):
         if not dialoguehandler.dialoguedone:
             return None;
             # print("hello world dialogue");
         self.gamescenenum+=1;
         if self.gamescenetypes[self.gamescenenum] == "gameover":
-            sys.exit()
+            self.gameover()
         elif self.gamescenetypes[self.gamescenenum] == "dialogue":
             self.dialoguehandler.changescenetonext();
             self.state = "ondialogue";
