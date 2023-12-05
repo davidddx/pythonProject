@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="135" height="90" tilewidth="64" tileheight="64" infinite="0" nextlayerid="11" nextobjectid="944">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="135" height="90" tilewidth="64" tileheight="64" infinite="0" nextlayerid="11" nextobjectid="948">
  <tileset firstgid="1" source="../../Tilesets/TestTileSet.tsx"/>
  <tileset firstgid="36" source="../../Tilesets/objectTileSet.tsx"/>
  <tileset firstgid="47" source="../../Tilesets/backgroundimages.tsx"/>
@@ -261,5 +261,9 @@
   <object id="937" gid="70" x="5028" y="5256" width="256" height="256"/>
   <object id="941" gid="69" x="600" y="5180" width="256" height="256"/>
   <object id="942" gid="67" x="804" y="5210" width="256" height="256"/>
+  <object id="944" gid="42" x="3980" y="5010" width="128" height="128"/>
+  <object id="945" gid="42" x="2902" y="4976" width="128" height="128"/>
+  <object id="946" gid="41" x="5766" y="5016" width="128" height="128"/>
+  <object id="947" gid="41" x="6630" y="4960" width="128" height="128"/>
  </objectgroup>
 </map>

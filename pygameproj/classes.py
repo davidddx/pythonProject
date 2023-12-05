@@ -1029,9 +1029,10 @@ class levelhandler:
         self.nextmap = 0
         self.deletedlevel = false;
         self.levels = [
-            cwd + '/Maps/testmap/level4.tmx',
             cwd + "/Maps/testmap/level1.tmx",
+            cwd + "/Maps/testmap/level2.tmx",
             cwd + "/Maps/testmap/level3.tmx",
+            cwd + '/Maps/testmap/level4.tmx',
         ]
         self.maxlevelnum = len(self.levels)
         self.currentlevel = self.initlevel(levelnum = self.levelnum)
@@ -1209,7 +1210,7 @@ class dialoguescene:
     def __init__(self, background, dialogueloc): #backgroundlocation, dialoguelocation):
         self.finishedline = false;
         self.state = "typing"
-        print("Dialogue scene being initialized....")
+        # print("Dialogue scene being initialized....")
         self.background = pygame.image.load(background); #background represents a path to the image
         self.currenttext = "";
         self.currenttextlist = [];
@@ -1367,11 +1368,15 @@ class dialoguehandler:
             self.dialoguedir + '/world1/backgrounds/background0.png',
             self.dialoguedir + '/world1/backgrounds/background0.png',
             self.dialoguedir + '/world1/backgrounds/background0.png',
+            self.dialoguedir + '/world1/backgrounds/background0.png',
+            self.dialoguedir + '/world1/backgrounds/background0.png',
         ]
         self.dialoguelocations = [
             cwd + '\dialogue\world1\dialogue1.txt',
             cwd + '\dialogue\world1\dialogue2.txt',
             cwd + '\dialogue\world1\dialogue3.txt',
+            cwd + '\dialogue\world1\dialogue4.txt',
+            cwd + '\dialogue\world1\dialogue5.txt',
         ]
         self.scenestarted = true;
         self.currentscene = dialoguescene(background = self.backgrounds[self.dialoguescenenum], dialogueloc = self.dialoguelocations[self.dialoguescenenum]);
@@ -1662,8 +1667,14 @@ class game:
             "level",
             "dialogue",
             "level",
+            "dialogue",
             "level",
+            "dialogue",
+            "level",
+            "dialogue",
+            "gameover"
         ]
+        self.numlevels = len(self.gamescenetypes)
         self.state = "on" + self.gamescenetypes[0];
         self.levelhandler = levelhandler();
         self.dialoguehandler = dialoguehandler();
@@ -1690,7 +1701,9 @@ class game:
             return None;
             # print("hello world dialogue");
         self.gamescenenum+=1;
-        if self.gamescenetypes[self.gamescenenum] == "dialogue":
+        if self.gamescenetypes[self.gamescenenum] == "gameover":
+            sys.exit()
+        elif self.gamescenetypes[self.gamescenenum] == "dialogue":
             self.dialoguehandler.changescenetonext();
             self.state = "ondialogue";
 
@@ -1698,6 +1711,7 @@ class game:
         elif self.gamescenetypes[self.gamescenenum] == "level":
             self.levelhandler.changeleveltonext();
             self.state = "onlevel";
+
     def run(self):
         if self.titlescreen:
             self.titlescreen.update();
