@@ -4,13 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e2939fcd-4fa2-4fa5-aa65-2d278de70d72" name="Changes" comment="added levels">
-      <change afterPath="$PROJECT_DIR$/pygameproj/dialogue/world1/dialogue4.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pygameproj/dialogue/world1/dialogue5.txt" afterDir="false" />
+    <list default="true" id="e2939fcd-4fa2-4fa5-aa65-2d278de70d72" name="Changes" comment="added &quot;gameover&quot; scene type">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pygameproj/Maps/testmap/level1.tmx" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/Maps/testmap/level1.tmx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pygameproj/Maps/testmap/level2.tmx" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/Maps/testmap/level2.tmx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pygameproj/classes.py" beforeDir="false" afterPath="$PROJECT_DIR$/pygameproj/classes.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -105,22 +100,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1693604848291</updated>
-    </task>
-    <task id="LOCAL-00021" summary="small fix">
-      <option name="closed" value="true" />
-      <created>1694910547797</created>
-      <option name="number" value="00021" />
-      <option name="presentableId" value="LOCAL-00021" />
-      <option name="project" value="LOCAL" />
-      <updated>1694910547797</updated>
-    </task>
-    <task id="LOCAL-00022" summary="background">
-      <option name="closed" value="true" />
-      <created>1694924541259</created>
-      <option name="number" value="00022" />
-      <option name="presentableId" value="LOCAL-00022" />
-      <option name="project" value="LOCAL" />
-      <updated>1694924541259</updated>
     </task>
     <task id="LOCAL-00023" summary="background">
       <option name="closed" value="true" />
@@ -498,7 +477,23 @@
       <option name="project" value="LOCAL" />
       <updated>1700953506756</updated>
     </task>
-    <option name="localTasksCounter" value="70" />
+    <task id="LOCAL-00070" summary="added &quot;gameover&quot; scene type">
+      <option name="closed" value="true" />
+      <created>1701747676113</created>
+      <option name="number" value="00070" />
+      <option name="presentableId" value="LOCAL-00070" />
+      <option name="project" value="LOCAL" />
+      <updated>1701747676113</updated>
+    </task>
+    <task id="LOCAL-00071" summary="added &quot;gameover&quot; scene type">
+      <option name="closed" value="true" />
+      <created>1701747726938</created>
+      <option name="number" value="00071" />
+      <option name="presentableId" value="LOCAL-00071" />
+      <option name="project" value="LOCAL" />
+      <updated>1701747726938</updated>
+    </task>
+    <option name="localTasksCounter" value="72" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -513,7 +508,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="dialogue system enhancements" />
     <MESSAGE value="dialogue works" />
     <MESSAGE value="dialogue bug fix" />
     <MESSAGE value="added linelist" />
@@ -538,6 +532,7 @@
     <MESSAGE value="background color changes" />
     <MESSAGE value="background size &amp; position changes" />
     <MESSAGE value="added levels" />
-    <option name="LAST_COMMIT_MESSAGE" value="added levels" />
+    <MESSAGE value="added &quot;gameover&quot; scene type" />
+    <option name="LAST_COMMIT_MESSAGE" value="added &quot;gameover&quot; scene type" />
   </component>
 </project>
