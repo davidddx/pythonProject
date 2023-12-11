@@ -1,2 +1,4 @@
 Hello. This game is a demo, so bugs are expected.
 The controls are: X | go through dialouge, W | jump, AD | Left/right,   S | quickfall, R | restart level, SPACEBAR | dash, G | skip dialogue scene
+LEVEL 1
+This is an entry level where you can test the games controls and physics.

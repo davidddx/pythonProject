@@ -1,4 +1,2 @@
-this is dialogue 3.
-hello. welcome.
-this is dialogue 3.
-welcome to dialogue2.txt.
+LEVEL 3
+Avoid the raining projectiles

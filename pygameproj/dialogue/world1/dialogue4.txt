@@ -1,2 +1,2 @@
-This place is very high altitude.
-Many clouds are around, so be weary.
+LEVEL 4,
+You are at high altitude, so be careful with whatever is under you.
